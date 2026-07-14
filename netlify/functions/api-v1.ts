@@ -1,43 +1,33 @@
-import type { Handler, HandlerEvent } from '@netlify/functions';
 import { createNetlifyBlobStore } from './lib/netlify-blob-store.ts';
 import { ScenarioService, ServiceError } from './lib/scenario-service.ts';
 import {
-  decodeBody,
+  binaryResponse,
   errorResponse,
-  getQueryParams,
   isZipContentType,
   jsonResponse,
   parseApiPath,
 } from './lib/http.ts';
 
-function getService(): ScenarioService {
-  return new ScenarioService(createNetlifyBlobStore());
-}
-
-function getPath(event: HandlerEvent): string {
-  return event.rawPath ?? event.path;
-}
-
-export const handler: Handler = async (event) => {
-  const method = event.httpMethod.toUpperCase();
-  const path = getPath(event);
-  const { resource, id, action } = parseApiPath(path);
+export default async function handler(request: Request): Promise<Response> {
+  const method = request.method.toUpperCase();
+  const url = new URL(request.url);
+  const { resource, id, action } = parseApiPath(url.pathname);
 
   if (resource !== 'scenarios') {
     return errorResponse(404, 'Not found.');
   }
 
-  const service = getService();
+  const service = new ScenarioService(createNetlifyBlobStore());
 
   try {
     if (!id && method === 'GET') {
-      const query = Object.fromEntries(getQueryParams(event).entries());
+      const query = Object.fromEntries(url.searchParams.entries());
       const result = await service.listScenarios(query);
       return jsonResponse(200, result);
     }
 
     if (!id && method === 'POST') {
-      const contentType = event.headers['content-type'] ?? event.headers['Content-Type'];
+      const contentType = request.headers.get('content-type');
       if (!isZipContentType(contentType)) {
         return errorResponse(
           415,
@@ -45,7 +35,7 @@ export const handler: Handler = async (event) => {
         );
       }
 
-      const body = decodeBody(event);
+      const body = new Uint8Array(await request.arrayBuffer());
       if (body.byteLength === 0) {
         return errorResponse(400, 'Request body is empty.');
       }
@@ -68,15 +58,10 @@ export const handler: Handler = async (event) => {
         return errorResponse(404, 'Thumbnail not found.');
       }
 
-      return {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'image/webp',
-          'Cache-Control': 'public, max-age=3600',
-        },
-        body: Buffer.from(thumbnail).toString('base64'),
-        isBase64Encoded: true,
-      };
+      return binaryResponse(200, thumbnail, {
+        'Content-Type': 'image/webp',
+        'Cache-Control': 'public, max-age=3600',
+      });
     }
 
     if (id && action === 'download' && method === 'GET') {
@@ -85,29 +70,20 @@ export const handler: Handler = async (event) => {
         return errorResponse(404, 'Scenario not found.');
       }
 
-      return {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'application/zip',
-          'Content-Disposition': `attachment; filename="${id}.zip"`,
-          'X-Checksum-Sha256': result.metadata.checksumSha256,
-          'Cache-Control': 'no-store',
-        },
-        body: Buffer.from(result.packageBytes).toString('base64'),
-        isBase64Encoded: true,
-      };
+      return binaryResponse(200, result.packageBytes, {
+        'Content-Type': 'application/zip',
+        'Content-Disposition': `attachment; filename="${id}.zip"`,
+        'X-Checksum-Sha256': result.metadata.checksumSha256,
+        'Cache-Control': 'no-store',
+      });
     }
 
     if (id && action === 'ratings' && method === 'POST') {
       let body: unknown = {};
-      if (event.body) {
-        try {
-          body = JSON.parse(
-            event.isBase64Encoded ? Buffer.from(event.body, 'base64').toString('utf8') : event.body,
-          );
-        } catch {
-          return errorResponse(400, 'Request body must be valid JSON.');
-        }
+      try {
+        body = await request.json();
+      } catch {
+        return errorResponse(400, 'Request body must be valid JSON.');
       }
 
       const result = await service.submitRating(id, body);
@@ -123,4 +99,4 @@ export const handler: Handler = async (event) => {
     console.error('Unhandled API error', error);
     return errorResponse(500, 'Internal server error.');
   }
-};
+}

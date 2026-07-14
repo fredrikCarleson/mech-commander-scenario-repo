@@ -50,3 +50,6 @@
 [functions]
   node_bundler = "esbuild"
   included_files = ["shared/**"]
+
+[functions."api-v1"]
+  node_bundler = "esbuild"

@@ -32,13 +32,26 @@ npm install
 
 ### Run with Netlify CLI (recommended)
 
-Starts Vite on port 5173 and Netlify Dev on port 8888 with Functions + Blobs emulation:
+Starts Vite on port 5173 and Netlify Dev on port 8888 with Functions + Blobs emulation.
+
+**Important:** the dev server must be running before you open the site. In a terminal:
 
 ```bash
+cd C:\Users\fredr\Projects\mech-commander-scenario-repo
 npm run dev
 ```
 
-Open [http://localhost:8888](http://localhost:8888).
+Wait until you see:
+
+```
+Local dev server ready: http://localhost:8888
+```
+
+Then open [http://localhost:8888](http://localhost:8888).
+
+Use **port 8888**, not 5173. Port 5173 is Vite only and does not serve `/api/v1` routes unless Netlify Dev is proxying it.
+
+To stop the server, press `Ctrl+C` in the terminal where `npm run dev` is running.
 
 ### Vite only (UI without API)
 
@@ -46,7 +59,7 @@ Open [http://localhost:8888](http://localhost:8888).
 npm run dev:vite
 ```
 
-API calls proxy to `localhost:8888` when Netlify Dev is also running.
+API calls proxy to `localhost:8888` when Netlify Dev is also running. Without it, catalogue/upload API calls will fail.
 
 ## Scripts
 
@@ -120,6 +133,33 @@ npm test
 Covers schema validation, valid/invalid uploads, path traversal, oversized packages, listing filters, rating replacement, and compatibility detection.
 
 ## Deployment
+
+**Live site:** [https://mech-commander-scenario-repo.netlify.app](https://mech-commander-scenario-repo.netlify.app)
+
+**Netlify dashboard:** [https://app.netlify.com/projects/mech-commander-scenario-repo](https://app.netlify.com/projects/mech-commander-scenario-repo)
+
+### Netlify (already configured)
+
+This project is linked to Netlify site `mech-commander-scenario-repo`. Deploy updates with:
+
+```bash
+npx netlify deploy --prod
+```
+
+Or connect GitHub for automatic deploys on push (see below).
+
+### GitHub repository
+
+Create and push the repository (requires [GitHub CLI](https://cli.github.com/) login):
+
+```bash
+gh auth login
+gh repo create mech-commander-scenario-repo --public --source=. --remote=origin --push
+```
+
+Then connect the repo in Netlify: **Site configuration → Build & deploy → Link repository**.
+
+### Manual Netlify setup (new sites)
 
 1. Connect the repository to [Netlify](https://www.netlify.com/).
 2. Build command: `npm run build`
