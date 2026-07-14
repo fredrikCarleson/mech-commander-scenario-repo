@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "title": "Urban Night Raid",
+  "description": "A tense night operation through a contested industrial district.",
+  "author": "Captain Vance",
+  "gameVersion": "1.0.0",
+  "scenarioFormatVersion": "1.0.0",
+  "difficulty": "veteran",
+  "recommendedTonnage": 3600,
+  "maximumTonnage": 4800,
+  "estimatedPlayTimeMinutes": 55,
+  "tags": ["urban", "night", "pvp"]
+}
