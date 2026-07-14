@@ -2,6 +2,7 @@ import { createNetlifyBlobStore } from './lib/netlify-blob-store.ts';
 import { ScenarioService, ServiceError } from './lib/scenario-service.ts';
 import {
   binaryResponse,
+  corsPreflightResponse,
   errorResponse,
   isZipContentType,
   jsonResponse,
@@ -9,6 +10,10 @@ import {
 } from './lib/http.ts';
 
 export default async function handler(request: Request): Promise<Response> {
+  if (request.method.toUpperCase() === 'OPTIONS') {
+    return corsPreflightResponse();
+  }
+
   const method = request.method.toUpperCase();
   const url = new URL(request.url);
   const { resource, id, action } = parseApiPath(url.pathname);

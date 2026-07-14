@@ -1,3 +1,19 @@
+/** CORS headers for browser-based game clients. */
+export const CORS_HEADERS: Record<string, string> = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Accept',
+  'Access-Control-Max-Age': '86400',
+};
+
+export function withCors(headers: Record<string, string> = {}): Record<string, string> {
+  return { ...CORS_HEADERS, ...headers };
+}
+
+export function corsPreflightResponse(): Response {
+  return new Response(null, { status: 204, headers: withCors() });
+}
+
 export function jsonResponse(
   status: number,
   body: unknown,
@@ -5,11 +21,11 @@ export function jsonResponse(
 ): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: {
+    headers: withCors({
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store',
       ...extraHeaders,
-    },
+    }),
   });
 }
 
@@ -55,5 +71,5 @@ export function binaryResponse(
   bytes: Uint8Array,
   headers: Record<string, string>,
 ): Response {
-  return new Response(bytes, { status, headers });
+  return new Response(bytes, { status, headers: withCors(headers) });
 }
