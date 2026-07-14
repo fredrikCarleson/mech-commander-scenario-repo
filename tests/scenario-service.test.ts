@@ -12,12 +12,16 @@ describe('scenario service', () => {
     service = new ScenarioService(store);
   });
 
-  it('uploads a valid package and lists it', async () => {
+  it('uploads a valid package as draft and lists it after approval', async () => {
     const zipBytes = await buildScenarioZip();
     const metadata = await service.uploadScenario(zipBytes);
     expect(metadata.id).toMatch(/^[0-9a-f-]{36}$/);
-    expect(metadata.checksumSha256).toHaveLength(64);
+    expect(metadata.publicationStatus).toBe('draft');
 
+    const listBefore = await service.listScenarios({});
+    expect(listBefore.total).toBe(0);
+
+    await service.approveScenario(metadata.id, 'admin@example.com');
     const list = await service.listScenarios({});
     expect(list.total).toBe(1);
     expect(list.items[0]?.title).toBe('Urban Night Raid');
@@ -43,6 +47,8 @@ describe('scenario service', () => {
 
     await service.uploadScenario(veteran);
     await service.uploadScenario(recruit);
+    await service.approveScenario((await service.listPendingScenarios())[0]!.id, 'admin@example.com');
+    await service.approveScenario((await service.listPendingScenarios())[0]!.id, 'admin@example.com');
 
     const filtered = await service.listScenarios({
       difficulty: 'recruit',
@@ -56,6 +62,7 @@ describe('scenario service', () => {
   it('replaces ratings from the same client ID', async () => {
     const zipBytes = await buildScenarioZip();
     const metadata = await service.uploadScenario(zipBytes);
+    await service.approveScenario(metadata.id, 'admin@example.com');
     const clientId = '550e8400-e29b-41d4-a716-446655440000';
 
     await service.submitRating(metadata.id, { clientId, rating: 3 });
@@ -77,6 +84,7 @@ describe('scenario service', () => {
   it('updates an existing scenario package in place', async () => {
     const zipBytes = await buildScenarioZip();
     const created = await service.uploadScenario(zipBytes);
+    await service.approveScenario(created.id, 'admin@example.com');
     await service.submitRating(created.id, {
       clientId: '550e8400-e29b-41d4-a716-446655440000',
       rating: 4,
@@ -104,10 +112,51 @@ describe('scenario service', () => {
     expect(updated.ratingCount).toBe(1);
     expect(updated.averageRating).toBe(4);
     expect(updated.downloadCount).toBe(created.downloadCount);
+    expect(updated.publicationStatus).toBe('draft');
 
     const list = await service.listScenarios({});
-    expect(list.total).toBe(1);
-    expect(list.items[0]?.title).toBe('Urban Night Raid Revised');
+    expect(list.total).toBe(0);
+    expect(await service.listPendingScenarios()).toHaveLength(1);
+  });
+
+  it('rejects pending scenarios and keeps them out of the catalogue', async () => {
+    const zipBytes = await buildScenarioZip();
+    const metadata = await service.uploadScenario(zipBytes);
+    const rejected = await service.rejectScenario(metadata.id);
+    expect(rejected.publicationStatus).toBe('archived');
+
+    const list = await service.listScenarios({});
+    expect(list.total).toBe(0);
+    expect(await service.listPendingScenarios()).toHaveLength(0);
+  });
+
+  it('returns updates to draft for re-review', async () => {
+    const zipBytes = await buildScenarioZip();
+    const created = await service.uploadScenario(zipBytes);
+    await service.approveScenario(created.id, 'admin@example.com');
+
+    const updatedZip = await buildScenarioZip({
+      manifest: {
+        schemaVersion: '1.0.0',
+        title: 'Urban Night Raid Revised',
+        description: 'Updated night operation.',
+        author: 'Captain Vance',
+        gameVersion: '1.0.0',
+        scenarioFormatVersion: '1.0.0',
+        difficulty: 'veteran',
+        recommendedTonnage: 3600,
+        maximumTonnage: 4800,
+        estimatedPlayTimeMinutes: 55,
+        tags: ['urban', 'night', 'revised'],
+      },
+    });
+
+    const updated = await service.updateScenario(created.id, updatedZip);
+    expect(updated.publicationStatus).toBe('draft');
+
+    const list = await service.listScenarios({});
+    expect(list.total).toBe(0);
+    expect(await service.listPendingScenarios()).toHaveLength(1);
   });
 
   it('deletes a scenario and its blobs', async () => {
@@ -115,7 +164,7 @@ describe('scenario service', () => {
     const metadata = await service.uploadScenario(zipBytes);
     await service.deleteScenario(metadata.id);
 
-    expect(await service.getScenario(metadata.id)).toBeNull();
+    expect(await service.getScenarioAdmin(metadata.id)).toBeNull();
     const list = await service.listScenarios({});
     expect(list.total).toBe(0);
   });

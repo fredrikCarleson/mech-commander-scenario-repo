@@ -81,8 +81,12 @@ Base path: `/api/v1`
 | GET    | `/scenarios`              | Paginated list with `page`, `limit`, `search`, `difficulty`, `maxTonnage`, `tags`, `sort` |
 | GET    | `/scenarios/:id`          | Scenario metadata                                                                         |
 | GET    | `/scenarios/:id/download` | ZIP download (increments `downloadCount`)                                                 |
-| POST   | `/scenarios`              | Upload ZIP (`Content-Type: application/zip`)                                              |
+| POST   | `/scenarios`              | Upload ZIP (`Content-Type: application/zip`) — creates **draft** |
+| GET    | `/scenarios/:id/status`   | Submission status: `{ id, publicationStatus: draft \| published }` |
 | POST   | `/scenarios/:id/ratings`  | Body: `{ "rating": 1-5, "clientId": "uuid" }`                                             |
+| GET    | `/admin/scenarios`        | **Admin** — list pending (`draft`) scenarios |
+| POST   | `/admin/scenarios/:id/approve` | **Admin** — publish scenario |
+| POST   | `/admin/scenarios/:id/reject`  | **Admin** — archive scenario |
 
 ## Netlify Blob keys
 
@@ -106,10 +110,32 @@ Root-level files only:
 
 Example fixtures live in `fixtures/valid-package/`. Tests build ZIP archives programmatically via `fixtures/build-fixtures.ts`.
 
+## Admin review (approval workflow)
+
+Uploads are stored as **`draft`** until an admin approves them. Only **`published`** scenarios appear in the public catalogue and in the game client.
+
+1. Copy `.env.example` to `.env` and set:
+   - `GOOGLE_CLIENT_ID` / `VITE_GOOGLE_CLIENT_ID` — OAuth 2.0 Web client ID from [Google Cloud Console](https://console.cloud.google.com/)
+   - `ADMIN_EMAILS=fredrik.carleson@gmail.com` — comma-separated allowlist
+2. In Google Cloud, add authorized JavaScript origins:
+   - `http://localhost:8888`
+   - `https://mech-commander-scenario-repo.netlify.app`
+3. Open **`/admin`**, sign in with Google, and approve or reject pending uploads.
+
+Set the same variables in **Netlify → Site configuration → Environment variables** for production.
+
+Optional: `ADMIN_API_KEY` for scripted admin access (Bearer token).
+
 ## Environment variables
 
 | Variable                 | Default             | Description              |
 | ------------------------ | ------------------- | ------------------------ |
+| `GOOGLE_CLIENT_ID`       | —                   | Google OAuth client ID (Functions) |
+| `VITE_GOOGLE_CLIENT_ID`  | —                   | Google OAuth client ID (SPA) |
+| `ADMIN_EMAILS`           | —                   | Comma-separated admin emails |
+| `ADMIN_API_KEY`          | —                   | Optional bearer token for admin API |
+| `UPLOAD_RATE_LIMIT`      | `10`                | Max uploads per IP per window |
+| `UPLOAD_RATE_WINDOW_MS`  | `3600000`           | Upload rate-limit window |
 | `SCENARIO_BLOB_STORE`    | `mech-scenarios`    | Netlify Blobs store name |
 | `MAX_COMPRESSED_BYTES`   | `10485760` (10 MiB) | Max upload size          |
 | `MAX_DECOMPRESSED_BYTES` | `52428800` (50 MiB) | Max extracted size       |
@@ -173,5 +199,6 @@ Netlify automatically builds and deploys Functions defined in `netlify.toml` red
 
 1. `/` — Community scenario catalogue
 2. `/scenarios/:id` — Scenario detail, download, rating
-3. `/upload` — Package validation preview and upload
-4. `/api` — API and compatibility reference
+3. `/upload` — Package validation preview and upload (pending review)
+4. `/admin` — Approve or reject pending uploads (Google sign-in)
+5. `/api` — API and compatibility reference

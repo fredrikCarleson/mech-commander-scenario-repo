@@ -399,3 +399,67 @@ button.danger {
     grid-template-columns: 1fr;
   }
 }
+
+.admin-panel .panel__header {
+  align-items: center;
+}
+
+.admin-signin {
+  display: flex;
+  justify-content: flex-start;
+  padding: 12px 0 4px;
+}
+
+.admin-queue {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-card {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid rgba(111, 211, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(8, 12, 18, 0.72);
+}
+
+.admin-card__thumb {
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(111, 211, 255, 0.16);
+}
+
+.admin-card__thumb--empty {
+  display: grid;
+  place-items: center;
+  color: rgba(207, 216, 227, 0.58);
+  font-size: 12px;
+}
+
+.admin-card__author {
+  color: rgba(207, 216, 227, 0.72);
+  margin: 0 0 8px;
+}
+
+.admin-card__warnings {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: #f6c85f;
+}
+
+.admin-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+@media (max-width: 760px) {
+  .admin-card {
+    grid-template-columns: 1fr;
+  }
+}

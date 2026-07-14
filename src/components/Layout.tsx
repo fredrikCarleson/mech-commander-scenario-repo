@@ -12,6 +12,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <nav className="app-nav" aria-label="Main navigation">
             <Link to="/">Catalogue</Link>
             <Link to="/upload">Upload</Link>
+            <Link to="/admin">Admin</Link>
             <Link to="/api">API</Link>
           </nav>
         </div>

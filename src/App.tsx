@@ -4,6 +4,7 @@ import { CataloguePage } from './pages/CataloguePage.tsx';
 import { DetailPage } from './pages/DetailPage.tsx';
 import { UploadPage } from './pages/UploadPage.tsx';
 import { ApiInfoPage } from './pages/ApiInfoPage.tsx';
+import { AdminPage } from './pages/AdminPage.tsx';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/" element={<CataloguePage />} />
         <Route path="/scenarios/:id" element={<DetailPage />} />
         <Route path="/upload" element={<UploadPage />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="/api" element={<ApiInfoPage />} />
       </Routes>
     </Layout>

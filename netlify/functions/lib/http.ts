@@ -2,7 +2,7 @@
 export const CORS_HEADERS: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Accept',
+  'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization',
   'Access-Control-Max-Age': '86400',
 };
 
@@ -42,6 +42,15 @@ export function parseApiPath(pathname: string): {
   action: string | null;
 } {
   const normalized = pathname.replace(/\/+$/, '');
+  const adminMatch = normalized.match(/\/api\/v1\/admin\/scenarios(?:\/([^/]+))?(?:\/([^/]+))?$/);
+  if (adminMatch) {
+    return {
+      resource: 'admin-scenarios',
+      id: adminMatch[1] ?? null,
+      action: adminMatch[2] ?? null,
+    };
+  }
+
   const match = normalized.match(/\/api\/v1\/scenarios(?:\/([^/]+))?(?:\/([^/]+))?$/);
   if (!match) {
     return { resource: null, id: null, action: null };

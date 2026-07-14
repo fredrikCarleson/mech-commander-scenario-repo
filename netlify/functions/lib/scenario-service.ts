@@ -209,7 +209,7 @@ export class ScenarioService {
       checksumSha256: sha256Hex(packageBytes),
       createdAt: now,
       updatedAt: now,
-      publicationStatus: 'published',
+      publicationStatus: 'draft',
       compatibility,
     };
 
@@ -223,7 +223,7 @@ export class ScenarioService {
 
   async updateScenario(id: string, packageBytes: Uint8Array): Promise<ScenarioMetadata> {
     const existing = await this.store.getMetadata(id);
-    if (!existing || existing.publicationStatus !== 'published') {
+    if (!existing || existing.publicationStatus === 'archived') {
       throw new ServiceError(404, 'Scenario not found.');
     }
 
@@ -261,6 +261,7 @@ export class ScenarioService {
       packageFileSize: packageBytes.byteLength,
       checksumSha256: sha256Hex(packageBytes),
       updatedAt: now,
+      publicationStatus: 'draft',
       compatibility,
     };
 
@@ -330,6 +331,68 @@ export class ScenarioService {
       ratingCount: updatedMetadata.ratingCount,
       yourRating: rating,
     };
+  }
+
+  async getSubmissionStatus(id: string): Promise<{ id: string; publicationStatus: 'draft' | 'published' } | null> {
+    const metadata = await this.store.getMetadata(id);
+    if (!metadata || metadata.publicationStatus === 'archived') {
+      return null;
+    }
+    if (metadata.publicationStatus !== 'draft' && metadata.publicationStatus !== 'published') {
+      return null;
+    }
+    return { id: metadata.id, publicationStatus: metadata.publicationStatus };
+  }
+
+  async listPendingScenarios(): Promise<ScenarioMetadata[]> {
+    const items = await loadAllMetadata(this.store);
+    return items
+      .filter((item) => item.publicationStatus === 'draft')
+      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  }
+
+  async getScenarioAdmin(id: string): Promise<ScenarioMetadata | null> {
+    return this.store.getMetadata(id);
+  }
+
+  async getThumbnailAdmin(id: string): Promise<Uint8Array | null> {
+    const metadata = await this.store.getMetadata(id);
+    if (!metadata) {
+      return null;
+    }
+    return this.store.getThumbnail(id);
+  }
+
+  async approveScenario(id: string, reviewerEmail: string): Promise<ScenarioMetadata> {
+    const existing = await this.store.getMetadata(id);
+    if (!existing || existing.publicationStatus !== 'draft') {
+      throw new ServiceError(404, 'Pending scenario not found.');
+    }
+
+    const now = new Date().toISOString();
+    console.info(`Scenario ${id} approved by ${reviewerEmail}`);
+    const metadata: ScenarioMetadata = {
+      ...existing,
+      publicationStatus: 'published',
+      updatedAt: now,
+    };
+    await this.store.setMetadata(metadata);
+    return metadata;
+  }
+
+  async rejectScenario(id: string): Promise<ScenarioMetadata> {
+    const existing = await this.store.getMetadata(id);
+    if (!existing || existing.publicationStatus !== 'draft') {
+      throw new ServiceError(404, 'Pending scenario not found.');
+    }
+
+    const metadata: ScenarioMetadata = {
+      ...existing,
+      publicationStatus: 'archived',
+      updatedAt: new Date().toISOString(),
+    };
+    await this.store.setMetadata(metadata);
+    return metadata;
   }
 }
 

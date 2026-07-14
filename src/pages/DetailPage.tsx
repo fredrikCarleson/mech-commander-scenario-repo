@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { downloadScenario, deleteScenario, fetchScenario, submitRating } from '../api/client.ts';
+import { downloadScenario, fetchScenario, submitRating } from '../api/client.ts';
 import { getClientId } from '../lib/client-id.ts';
 import type { ScenarioMetadata } from '../../shared/schemas/metadata.ts';
 
@@ -11,7 +11,6 @@ export function DetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [rating, setRating] = useState(4);
   const [ratingMessage, setRatingMessage] = useState<string | null>(null);
-  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -189,31 +188,6 @@ export function DetailPage() {
           <span>{rating} / 5</span>
           <button type="submit">Submit rating</button>
         </form>
-
-        <button
-          type="button"
-          className="danger"
-          disabled={deleting}
-          onClick={async () => {
-            if (
-              !window.confirm(
-                `Permanently delete "${scenario.title}" from the community repository? This cannot be undone.`,
-              )
-            ) {
-              return;
-            }
-            setDeleting(true);
-            try {
-              await deleteScenario(scenario.id);
-              window.location.href = '/';
-            } catch (err) {
-              setError(err instanceof Error ? err.message : 'Delete failed.');
-              setDeleting(false);
-            }
-          }}
-        >
-          {deleting ? 'Deleting…' : 'Delete scenario'}
-        </button>
       </div>
       {ratingMessage && <p className="status">{ratingMessage}</p>}
     </section>
