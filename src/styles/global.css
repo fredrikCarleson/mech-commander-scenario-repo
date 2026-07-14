@@ -162,6 +162,12 @@ button:disabled {
   cursor: not-allowed;
 }
 
+button.danger {
+  background: #3a1515;
+  color: #ffb4b4;
+  border-color: #7a3030;
+}
+
 .scenario-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

@@ -77,6 +77,20 @@ export function createNetlifyBlobStore(): ScenarioBlobStore {
         metadata: { contentType: 'application/json' },
       });
     },
+
+    async deleteScenario(id) {
+      const existing = await store.get(metadataKey(id), { type: 'text' });
+      if (!existing) {
+        return false;
+      }
+      await Promise.all([
+        store.delete(metadataKey(id)),
+        store.delete(packageKey(id)),
+        store.delete(thumbnailKey(id)),
+        store.delete(ratingsKey(id)),
+      ]);
+      return true;
+    },
   };
 }
 
@@ -120,5 +134,16 @@ export class InMemoryBlobStore implements ScenarioBlobStore {
 
   async setRatings(id: string, ratings: ScenarioRatings): Promise<void> {
     this.ratings.set(id, ratings);
+  }
+
+  async deleteScenario(id: string): Promise<boolean> {
+    if (!this.metadata.has(id)) {
+      return false;
+    }
+    this.metadata.delete(id);
+    this.packages.delete(id);
+    this.thumbnails.delete(id);
+    this.ratings.delete(id);
+    return true;
   }
 }

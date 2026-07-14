@@ -37,6 +37,13 @@ export function ApiInfoPage() {
           <code>POST /scenarios</code> — upload raw ZIP (`Content-Type: application/zip`).
         </li>
         <li>
+          <code>PUT /scenarios/:id</code> — replace an existing package ZIP (preserves ratings and
+          download count).
+        </li>
+        <li>
+          <code>DELETE /scenarios/:id</code> — permanently remove a scenario and all stored blobs.
+        </li>
+        <li>
           <code>POST /scenarios/:id/ratings</code> — JSON body{' '}
           <code>{'{ "rating": 1-5, "clientId": "uuid" }'}</code>. Replaces prior rating from the
           same client ID.

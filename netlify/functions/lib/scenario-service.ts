@@ -221,6 +221,63 @@ export class ScenarioService {
     return metadata;
   }
 
+  async updateScenario(id: string, packageBytes: Uint8Array): Promise<ScenarioMetadata> {
+    const existing = await this.store.getMetadata(id);
+    if (!existing || existing.publicationStatus !== 'published') {
+      throw new ServiceError(404, 'Scenario not found.');
+    }
+
+    const validation = await validateScenarioPackage(packageBytes, {
+      maxCompressedBytes: Number(process.env.MAX_COMPRESSED_BYTES ?? DEFAULT_MAX_COMPRESSED_BYTES),
+      maxDecompressedBytes: Number(
+        process.env.MAX_DECOMPRESSED_BYTES ?? DEFAULT_MAX_DECOMPRESSED_BYTES,
+      ),
+    });
+
+    if (!validation.ok) {
+      throw new ServiceError(400, 'Scenario package validation failed.', validation.errors);
+    }
+
+    const { manifest, map, thumbnail } = validation.contents;
+    const now = new Date().toISOString();
+    const compatibility = detectCompatibility(manifest.gameVersion, manifest.scenarioFormatVersion);
+
+    const metadata: ScenarioMetadata = {
+      ...existing,
+      title: manifest.title,
+      description: manifest.description,
+      authorDisplayName: manifest.author,
+      gameVersion: manifest.gameVersion,
+      scenarioFormatVersion: manifest.scenarioFormatVersion,
+      difficulty: manifest.difficulty,
+      recommendedTonnage: manifest.recommendedTonnage,
+      maximumTonnage: manifest.maximumTonnage,
+      estimatedPlayTimeMinutes: manifest.estimatedPlayTimeMinutes,
+      tags: manifest.tags,
+      mapDimensions: {
+        width: map.width,
+        height: map.height,
+      },
+      packageFileSize: packageBytes.byteLength,
+      checksumSha256: sha256Hex(packageBytes),
+      updatedAt: now,
+      compatibility,
+    };
+
+    await this.store.setPackage(id, packageBytes);
+    await this.store.setThumbnail(id, thumbnail);
+    await this.store.setMetadata(metadata);
+
+    return metadata;
+  }
+
+  async deleteScenario(id: string): Promise<void> {
+    const deleted = await this.store.deleteScenario(id);
+    if (!deleted) {
+      throw new ServiceError(404, 'Scenario not found.');
+    }
+  }
+
   async getThumbnail(id: string): Promise<Uint8Array | null> {
     const metadata = await this.getScenario(id);
     if (!metadata) {

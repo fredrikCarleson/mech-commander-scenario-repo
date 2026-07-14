@@ -73,4 +73,50 @@ describe('scenario service', () => {
     const zipBytes = await buildScenarioZip({ omit: ['map.json'] });
     await expect(service.uploadScenario(zipBytes)).rejects.toBeInstanceOf(ServiceError);
   });
+
+  it('updates an existing scenario package in place', async () => {
+    const zipBytes = await buildScenarioZip();
+    const created = await service.uploadScenario(zipBytes);
+    await service.submitRating(created.id, {
+      clientId: '550e8400-e29b-41d4-a716-446655440000',
+      rating: 4,
+    });
+
+    const updatedZip = await buildScenarioZip({
+      manifest: {
+        schemaVersion: '1.0.0',
+        title: 'Urban Night Raid Revised',
+        description: 'Updated night operation.',
+        author: 'Captain Vance',
+        gameVersion: '1.0.0',
+        scenarioFormatVersion: '1.0.0',
+        difficulty: 'veteran',
+        recommendedTonnage: 3600,
+        maximumTonnage: 4800,
+        estimatedPlayTimeMinutes: 55,
+        tags: ['urban', 'night', 'revised'],
+      },
+    });
+
+    const updated = await service.updateScenario(created.id, updatedZip);
+    expect(updated.id).toBe(created.id);
+    expect(updated.title).toBe('Urban Night Raid Revised');
+    expect(updated.ratingCount).toBe(1);
+    expect(updated.averageRating).toBe(4);
+    expect(updated.downloadCount).toBe(created.downloadCount);
+
+    const list = await service.listScenarios({});
+    expect(list.total).toBe(1);
+    expect(list.items[0]?.title).toBe('Urban Night Raid Revised');
+  });
+
+  it('deletes a scenario and its blobs', async () => {
+    const zipBytes = await buildScenarioZip();
+    const metadata = await service.uploadScenario(zipBytes);
+    await service.deleteScenario(metadata.id);
+
+    expect(await service.getScenario(metadata.id)).toBeNull();
+    const list = await service.listScenarios({});
+    expect(list.total).toBe(0);
+  });
 });

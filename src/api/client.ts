@@ -75,3 +75,10 @@ export async function submitRating(
   });
   return handleJson<SubmitRatingResponse>(response);
 }
+
+export async function deleteScenario(id: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/scenarios/${id}`, {
+    method: 'DELETE',
+  });
+  await handleJson<{ id: string; deleted: boolean }>(response);
+}

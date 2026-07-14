@@ -49,6 +49,29 @@ export default async function handler(request: Request): Promise<Response> {
       return jsonResponse(201, { id: metadata.id, metadata });
     }
 
+    if (id && !action && method === 'PUT') {
+      const contentType = request.headers.get('content-type');
+      if (!isZipContentType(contentType)) {
+        return errorResponse(
+          415,
+          'Update requires Content-Type application/zip or application/octet-stream.',
+        );
+      }
+
+      const body = new Uint8Array(await request.arrayBuffer());
+      if (body.byteLength === 0) {
+        return errorResponse(400, 'Request body is empty.');
+      }
+
+      const metadata = await service.updateScenario(id, body);
+      return jsonResponse(200, { id: metadata.id, metadata });
+    }
+
+    if (id && !action && method === 'DELETE') {
+      await service.deleteScenario(id);
+      return jsonResponse(200, { id, deleted: true });
+    }
+
     if (id && !action && method === 'GET') {
       const metadata = await service.getScenario(id);
       if (!metadata) {

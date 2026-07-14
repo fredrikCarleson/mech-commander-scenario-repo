@@ -11,7 +11,7 @@ import {
 import { detectCompatibility, isFullyCompatible } from '../compatibility.ts';
 import { manifestSchema, type Manifest } from '../schemas/manifest.ts';
 import { mapFileSchema, type MapFile } from '../schemas/map.ts';
-import { scenarioFileSchema, type ScenarioFile } from '../schemas/scenario-file.ts';
+import { scenarioFileSchema, type ScenarioFile, isGameScenarioFile } from '../schemas/scenario-file.ts';
 import {
   getRootFileName,
   hasDangerousExtension,
@@ -206,12 +206,24 @@ export async function validateScenarioPackage(
     ]);
   }
 
-  if (
+  if (isGameScenarioFile(scenario)) {
+    if (map.rows?.length) {
+      if (map.rows.length !== map.height) {
+        errors.push('map.json rows length must match height.');
+      } else if (map.rows.some((row) => row.length !== map.width)) {
+        errors.push('Each map.json row width must match map width.');
+      }
+    }
+  } else if (
     !(SUPPORTED_SCENARIO_FILE_SCHEMA_VERSIONS as readonly string[]).includes(scenario.schemaVersion)
   ) {
     return fail([
       `Unsupported scenario schema version: ${scenario.schemaVersion}. Supported: ${SUPPORTED_SCENARIO_FILE_SCHEMA_VERSIONS.join(', ')}.`,
     ]);
+  }
+
+  if (errors.length > 0) {
+    return fail(errors);
   }
 
   if (manifest.maximumTonnage < manifest.recommendedTonnage) {

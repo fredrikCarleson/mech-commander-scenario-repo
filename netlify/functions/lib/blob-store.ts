@@ -14,4 +14,5 @@ export interface ScenarioBlobStore {
   setThumbnail(id: string, data: Uint8Array): Promise<void>;
   getRatings(id: string): Promise<ScenarioRatings>;
   setRatings(id: string, ratings: ScenarioRatings): Promise<void>;
+  deleteScenario(id: string): Promise<boolean>;
 }
