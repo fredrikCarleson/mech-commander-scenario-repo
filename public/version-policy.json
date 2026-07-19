@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-07-19T08:47:27Z",
+  "channels": {
+    "standalone": {
+      "latestVersion": "0.1.0",
+      "minimumSupportedVersion": "0.1.0",
+      "updateMode": "recommended",
+      "releaseNotesUrl": "/releases/0.1.0"
+    },
+    "steam": {
+      "latestVersion": "0.1.0",
+      "minimumSupportedVersion": "0.1.0",
+      "updateMode": "managed-by-steam"
+    }
+  },
+  "services": {
+    "scenarioRepository": {
+      "minimumClientVersion": "0.1.0",
+      "minimumScenarioFormatVersion": 1,
+      "currentScenarioFormatVersion": 1
+    }
+  },
+  "messages": {
+    "recommendedUpdate": "A new Meridian Strike update is available.",
+    "requiredUpdate": "This version can no longer access community scenarios. Update Meridian Strike to continue."
+  }
+}
