@@ -83,3 +83,8 @@
 
 [functions."api-v1"]
   node_bundler = "esbuild"
+
+[[headers]]
+  for = "/version-policy.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
