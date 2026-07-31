@@ -60,7 +60,7 @@ export function DetailPage() {
           <meta name="robots" content="noindex" />
         </Helmet>
         <p className="status error">{error ?? 'Scenario not found.'}</p>
-        <Link to="/">Back to catalogue</Link>
+        <Link to="/catalogue">Back to catalogue</Link>
       </section>
     );
   }
@@ -75,7 +75,7 @@ export function DetailPage() {
         <meta name="description" content={`Download ${scenario.title} by ${scenario.authorDisplayName}. ${scenario.description.slice(0, 150)}...`} />
       </Helmet>
       <p>
-        <Link to="/">← Back to catalogue</Link>
+        <Link to="/catalogue">← Back to catalogue</Link>
       </p>
       <header className="detail__header">
         <div>

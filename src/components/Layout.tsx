@@ -23,8 +23,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <h1 className="app-title">Community Scenario Repository</h1>
           </div>
           <nav className="app-nav" aria-label="Main navigation">
-            <Link to="/">Catalogue</Link>
-            <Link to="/wiki">Wiki</Link>
+            <Link to="/">Wiki</Link>
+            <Link to="/catalogue">Catalogue</Link>
             {isAdmin && <Link to="/upload">Upload</Link>}
             <Link to="/admin">Admin</Link>
             {isAdmin && <Link to="/api">API</Link>}

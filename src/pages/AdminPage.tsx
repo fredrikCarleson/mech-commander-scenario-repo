@@ -205,7 +205,7 @@ function AdminReviewPanel() {
         <div className="callout">
           <p>No scenarios are waiting for review.</p>
           <p>
-            <Link to="/">Back to catalogue</Link>
+            <Link to="/catalogue">Back to catalogue</Link>
           </p>
         </div>
       ) : (

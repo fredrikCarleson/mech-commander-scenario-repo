@@ -25,7 +25,8 @@ export default function App() {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<CataloguePage />} />
+        <Route path="/" element={<Navigate to="/wiki/HOW_TO_PLAY" replace />} />
+        <Route path="/catalogue" element={<CataloguePage />} />
         <Route path="/scenarios/:id" element={<DetailPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/admin" element={<AdminPage />} />

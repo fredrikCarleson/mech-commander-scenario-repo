@@ -10,7 +10,7 @@ const BASE_URL = 'https://mech-commander-scenario-repo.netlify.app';
 
 function generateSitemap() {
   const routes = [
-    { path: '/', priority: '1.0', changefreq: 'daily' },
+    { path: '/catalogue', priority: '1.0', changefreq: 'daily' },
     { path: '/upload', priority: '0.8', changefreq: 'monthly' }
   ];
 
