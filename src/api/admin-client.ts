@@ -10,9 +10,10 @@ export function getAdminToken(): string | null {
 export function setAdminToken(token: string | null): void {
   if (!token) {
     sessionStorage.removeItem(ADMIN_TOKEN_KEY);
-    return;
+  } else {
+    sessionStorage.setItem(ADMIN_TOKEN_KEY, token);
   }
-  sessionStorage.setItem(ADMIN_TOKEN_KEY, token);
+  window.dispatchEvent(new Event('auth-change'));
 }
 
 function adminHeaders(): HeadersInit {

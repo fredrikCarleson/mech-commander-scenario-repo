@@ -1,5 +1,11 @@
 import { getStore } from '@netlify/blobs';
-import { metadataKey, packageKey, ratingsKey, thumbnailKey, METADATA_PREFIX } from '../../../shared/blob-keys.ts';
+import {
+  metadataKey,
+  packageKey,
+  ratingsKey,
+  thumbnailKey,
+  METADATA_PREFIX,
+} from '../../../shared/blob-keys.ts';
 import {
   scenarioMetadataSchema,
   scenarioRatingsSchema,

@@ -1,6 +1,19 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getAdminToken } from '../api/admin-client.ts';
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsAdmin(!!getAdminToken());
+    };
+    checkAuth();
+    window.addEventListener('auth-change', checkAuth);
+    return () => window.removeEventListener('auth-change', checkAuth);
+  }, []);
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -11,9 +24,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
           <nav className="app-nav" aria-label="Main navigation">
             <Link to="/">Catalogue</Link>
-            <Link to="/upload">Upload</Link>
+            <Link to="/wiki">Wiki</Link>
+            {isAdmin && <Link to="/upload">Upload</Link>}
             <Link to="/admin">Admin</Link>
-            <Link to="/api">API</Link>
+            {isAdmin && <Link to="/api">API</Link>}
           </nav>
         </div>
       </header>

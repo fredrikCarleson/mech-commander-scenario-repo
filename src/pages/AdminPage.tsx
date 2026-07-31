@@ -181,7 +181,9 @@ function AdminReviewPanel() {
       <div className="panel__header">
         <div>
           <h2>Pending review</h2>
-          <p>{items.length} scenario{items.length === 1 ? '' : 's'} awaiting approval.</p>
+          <p>
+            {items.length} scenario{items.length === 1 ? '' : 's'} awaiting approval.
+          </p>
         </div>
         <button
           type="button"

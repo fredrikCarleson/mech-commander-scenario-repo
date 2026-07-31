@@ -76,17 +76,17 @@ API calls proxy to `localhost:8888` when Netlify Dev is also running. Without it
 
 Base path: `/api/v1`
 
-| Method | Path                      | Description                                                                               |
-| ------ | ------------------------- | ----------------------------------------------------------------------------------------- |
-| GET    | `/scenarios`              | Paginated list with `page`, `limit`, `search`, `difficulty`, `maxTonnage`, `tags`, `sort` |
-| GET    | `/scenarios/:id`          | Scenario metadata                                                                         |
-| GET    | `/scenarios/:id/download` | ZIP download (increments `downloadCount`)                                                 |
-| POST   | `/scenarios`              | Upload ZIP (`Content-Type: application/zip`) — creates **draft** |
-| GET    | `/scenarios/:id/status`   | Submission status: `{ id, publicationStatus: draft \| published }` |
-| POST   | `/scenarios/:id/ratings`  | Body: `{ "rating": 1-5, "clientId": "uuid" }`                                             |
-| GET    | `/admin/scenarios`        | **Admin** — list pending (`draft`) scenarios |
-| POST   | `/admin/scenarios/:id/approve` | **Admin** — publish scenario |
-| POST   | `/admin/scenarios/:id/reject`  | **Admin** — archive scenario |
+| Method | Path                           | Description                                                                               |
+| ------ | ------------------------------ | ----------------------------------------------------------------------------------------- |
+| GET    | `/scenarios`                   | Paginated list with `page`, `limit`, `search`, `difficulty`, `maxTonnage`, `tags`, `sort` |
+| GET    | `/scenarios/:id`               | Scenario metadata                                                                         |
+| GET    | `/scenarios/:id/download`      | ZIP download (increments `downloadCount`)                                                 |
+| POST   | `/scenarios`                   | Upload ZIP (`Content-Type: application/zip`) — creates **draft**                          |
+| GET    | `/scenarios/:id/status`        | Submission status: `{ id, publicationStatus: draft \| published }`                        |
+| POST   | `/scenarios/:id/ratings`       | Body: `{ "rating": 1-5, "clientId": "uuid" }`                                             |
+| GET    | `/admin/scenarios`             | **Admin** — list pending (`draft`) scenarios                                              |
+| POST   | `/admin/scenarios/:id/approve` | **Admin** — publish scenario                                                              |
+| POST   | `/admin/scenarios/:id/reject`  | **Admin** — archive scenario                                                              |
 
 ## Netlify Blob keys
 
@@ -128,17 +128,17 @@ Optional: `ADMIN_API_KEY` for scripted admin access (Bearer token).
 
 ## Environment variables
 
-| Variable                 | Default             | Description              |
-| ------------------------ | ------------------- | ------------------------ |
-| `GOOGLE_CLIENT_ID`       | —                   | Google OAuth client ID (Functions) |
-| `VITE_GOOGLE_CLIENT_ID`  | —                   | Google OAuth client ID (SPA) |
-| `ADMIN_EMAILS`           | —                   | Comma-separated admin emails |
+| Variable                 | Default             | Description                         |
+| ------------------------ | ------------------- | ----------------------------------- |
+| `GOOGLE_CLIENT_ID`       | —                   | Google OAuth client ID (Functions)  |
+| `VITE_GOOGLE_CLIENT_ID`  | —                   | Google OAuth client ID (SPA)        |
+| `ADMIN_EMAILS`           | —                   | Comma-separated admin emails        |
 | `ADMIN_API_KEY`          | —                   | Optional bearer token for admin API |
-| `UPLOAD_RATE_LIMIT`      | `10`                | Max uploads per IP per window |
-| `UPLOAD_RATE_WINDOW_MS`  | `3600000`           | Upload rate-limit window |
-| `SCENARIO_BLOB_STORE`    | `mech-scenarios`    | Netlify Blobs store name |
-| `MAX_COMPRESSED_BYTES`   | `10485760` (10 MiB) | Max upload size          |
-| `MAX_DECOMPRESSED_BYTES` | `52428800` (50 MiB) | Max extracted size       |
+| `UPLOAD_RATE_LIMIT`      | `10`                | Max uploads per IP per window       |
+| `UPLOAD_RATE_WINDOW_MS`  | `3600000`           | Upload rate-limit window            |
+| `SCENARIO_BLOB_STORE`    | `mech-scenarios`    | Netlify Blobs store name            |
+| `MAX_COMPRESSED_BYTES`   | `10485760` (10 MiB) | Max upload size                     |
+| `MAX_DECOMPRESSED_BYTES` | `52428800` (50 MiB) | Max extracted size                  |
 
 ## Security
 

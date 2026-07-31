@@ -11,7 +11,11 @@ import {
 import { detectCompatibility, isFullyCompatible } from '../compatibility.ts';
 import { manifestSchema, type Manifest } from '../schemas/manifest.ts';
 import { mapFileSchema, type MapFile } from '../schemas/map.ts';
-import { scenarioFileSchema, type ScenarioFile, isGameScenarioFile } from '../schemas/scenario-file.ts';
+import {
+  scenarioFileSchema,
+  type ScenarioFile,
+  isGameScenarioFile,
+} from '../schemas/scenario-file.ts';
 import {
   getRootFileName,
   hasDangerousExtension,

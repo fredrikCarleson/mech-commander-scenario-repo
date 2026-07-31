@@ -1,10 +1,11 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout.tsx';
 import { CataloguePage } from './pages/CataloguePage.tsx';
 import { DetailPage } from './pages/DetailPage.tsx';
 import { UploadPage } from './pages/UploadPage.tsx';
 import { ApiInfoPage } from './pages/ApiInfoPage.tsx';
 import { AdminPage } from './pages/AdminPage.tsx';
+import { WikiPage } from './pages/WikiPage.tsx';
 
 export default function App() {
   return (
@@ -15,6 +16,8 @@ export default function App() {
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/api" element={<ApiInfoPage />} />
+        <Route path="/wiki" element={<Navigate to="/wiki/HOW_TO_PLAY" replace />} />
+        <Route path="/wiki/:pageId" element={<WikiPage />} />
       </Routes>
     </Layout>
   );

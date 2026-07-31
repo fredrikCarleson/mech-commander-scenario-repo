@@ -333,7 +333,9 @@ export class ScenarioService {
     };
   }
 
-  async getSubmissionStatus(id: string): Promise<{ id: string; publicationStatus: 'draft' | 'published' } | null> {
+  async getSubmissionStatus(
+    id: string,
+  ): Promise<{ id: string; publicationStatus: 'draft' | 'published' } | null> {
     const metadata = await this.store.getMetadata(id);
     if (!metadata || metadata.publicationStatus === 'archived') {
       return null;

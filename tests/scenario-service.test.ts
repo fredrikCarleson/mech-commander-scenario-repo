@@ -47,8 +47,14 @@ describe('scenario service', () => {
 
     await service.uploadScenario(veteran);
     await service.uploadScenario(recruit);
-    await service.approveScenario((await service.listPendingScenarios())[0]!.id, 'admin@example.com');
-    await service.approveScenario((await service.listPendingScenarios())[0]!.id, 'admin@example.com');
+    await service.approveScenario(
+      (await service.listPendingScenarios())[0]!.id,
+      'admin@example.com',
+    );
+    await service.approveScenario(
+      (await service.listPendingScenarios())[0]!.id,
+      'admin@example.com',
+    );
 
     const filtered = await service.listScenarios({
       difficulty: 'recruit',
