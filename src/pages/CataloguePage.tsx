@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { fetchScenarios } from '../api/client.ts';
 import { ScenarioCard } from '../components/ScenarioCard.tsx';
 import { DIFFICULTIES, SORT_OPTIONS } from '../../shared/constants.ts';
@@ -52,8 +53,28 @@ export function CataloguePage() {
     };
   }, [page, search, difficulty, maxTonnage, tags, sort]);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Meridian Strike",
+    "description": "Command a mercenary company in Meridian Strike, a turn-based hex-grid mech combat game featuring localized damage, heat management, and persistent pilots.",
+    "genre": ["Strategy", "Tactical RPG"],
+    "playMode": "SinglePlayer"
+  };
+
   return (
     <section className="panel">
+      <Helmet>
+        <title>Meridian Strike | Turn-Based Tactical Mech Game</title>
+        <meta name="description" content="Command a mercenary company in Meridian Strike, a turn-based hex-grid mech combat game featuring localized damage, heat management, and persistent pilots." />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+      
+      <div className="panel__intro" style={{ marginBottom: '2rem' }}>
+        <h1>Meridian Strike</h1>
+        <p>Command a mercenary company in Meridian Strike, a turn-based hex-grid mech combat game featuring localized damage, heat management, and persistent pilots.</p>
+      </div>
+
       <div className="panel__header">
         <div>
           <h2>Scenario catalogue</h2>

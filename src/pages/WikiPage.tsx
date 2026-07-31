@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { Helmet } from 'react-helmet-async';
 import { getAdminToken } from '../api/admin-client.ts';
 import '../styles/wiki.css';
 
@@ -60,6 +61,15 @@ export function WikiPage() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const location = useLocation();
+  const currentId = pageId || 'HOW_TO_PLAY';
+
+  const pageTitle = useMemo(() => {
+    for (const group of SIDEBAR_GROUPS) {
+      const link = group.links.find((l) => l.id === currentId);
+      if (link) return link.label;
+    }
+    return 'Wiki';
+  }, [currentId]);
 
   useEffect(() => {
     fetch('/version-policy.json')
@@ -87,8 +97,7 @@ export function WikiPage() {
       setLoading(true);
       setError(null);
       try {
-        const targetPage = pageId || 'HOW_TO_PLAY';
-        const fileName = targetPage;
+        const fileName = currentId;
         const response = await fetch(`/wiki/${fileName}.md`);
         if (!response.ok) {
           throw new Error('Page not found');
@@ -112,10 +121,49 @@ export function WikiPage() {
     return () => {
       isMounted = false;
     };
-  }, [pageId]);
+  }, [currentId]);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": `${pageTitle} | Meridian Strike Wiki`,
+    "articleSection": "Game Guide"
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Wiki",
+        "item": "https://mech-commander-scenario-repo.netlify.app/wiki"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": pageTitle
+      }
+    ]
+  };
 
   return (
     <div className="wiki-layout">
+      {error ? (
+        <Helmet>
+          <title>Page Not Found | Meridian Strike</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
+      ) : (
+        <Helmet>
+          <title>{pageTitle} | Meridian Strike</title>
+          <meta name="description" content={`Read the ${pageTitle} guide for Meridian Strike, a turn-based hex-grid tactical mech game.`} />
+          <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+          <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
+        </Helmet>
+      )}
+
       <aside className="wiki-sidebar">
         {version !== 'Unknown' && (
           <div className="wiki-version-indicator">

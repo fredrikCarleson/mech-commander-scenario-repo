@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { downloadScenario, fetchScenario, submitRating } from '../api/client.ts';
 import { getClientId } from '../lib/client-id.ts';
+import { Helmet } from 'react-helmet-async';
 import type { ScenarioMetadata } from '../../shared/schemas/metadata.ts';
 
 export function DetailPage() {
@@ -54,6 +55,10 @@ export function DetailPage() {
   if (error || !scenario) {
     return (
       <section className="panel">
+        <Helmet>
+          <title>Scenario Not Found | Meridian Strike</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
         <p className="status error">{error ?? 'Scenario not found.'}</p>
         <Link to="/">Back to catalogue</Link>
       </section>
@@ -65,6 +70,10 @@ export function DetailPage() {
 
   return (
     <section className="panel detail">
+      <Helmet>
+        <title>{scenario.title} | Meridian Strike Scenarios</title>
+        <meta name="description" content={`Download ${scenario.title} by ${scenario.authorDisplayName}. ${scenario.description.slice(0, 150)}...`} />
+      </Helmet>
       <p>
         <Link to="/">← Back to catalogue</Link>
       </p>

@@ -19,7 +19,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="app-header">
         <div className="app-header__inner">
           <div>
-            <p className="app-eyebrow">Mech Commander</p>
+            <p className="app-eyebrow">Meridian Strike</p>
             <h1 className="app-title">Community Scenario Repository</h1>
           </div>
           <nav className="app-nav" aria-label="Main navigation">
@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </header>
       <main className="app-main">{children}</main>
       <footer className="app-footer">
-        <p>Community scenarios for Mech Commander. Packages are validated server-side.</p>
+        <p>Community scenarios for Meridian Strike. Packages are validated server-side.</p>
       </footer>
     </div>
   );

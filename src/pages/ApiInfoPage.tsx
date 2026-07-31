@@ -11,7 +11,7 @@ export function ApiInfoPage() {
       <div className="panel__header">
         <div>
           <h2>API & compatibility</h2>
-          <p>Versioned HTTP API for the Mech Commander client and community tools.</p>
+          <p>Versioned HTTP API for the Meridian Strike client and community tools.</p>
         </div>
       </div>
 

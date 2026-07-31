@@ -10,7 +10,7 @@ export const SUPPORTED_MAP_SCHEMA_VERSIONS = ['1.0.0'] as const;
 /** Supported scenario.json schema versions */
 export const SUPPORTED_SCENARIO_FILE_SCHEMA_VERSIONS = ['1.0.0'] as const;
 
-/** Mech Commander game versions this repository accepts */
+/** Meridian Strike game versions this repository accepts */
 export const SUPPORTED_GAME_VERSIONS = ['1.0.0', '1.1.0'] as const;
 
 /** Scenario format versions accepted for upload */
