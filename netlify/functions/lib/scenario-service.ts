@@ -5,7 +5,6 @@ import {
   MAX_PAGE_SIZE,
   METADATA_SCHEMA_VERSION,
 } from '../../../shared/constants.ts';
-import { metadataKey } from '../../../shared/blob-keys.ts';
 import { detectCompatibility } from '../../../shared/compatibility.ts';
 import {
   scenarioListQuerySchema,

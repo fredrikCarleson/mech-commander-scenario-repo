@@ -124,28 +124,28 @@ export function WikiPage() {
   }, [currentId]);
 
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": `${pageTitle} | Meridian Strike Wiki`,
-    "articleSection": "Game Guide"
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${pageTitle} | Meridian Strike Wiki`,
+    articleSection: 'Game Guide',
   };
 
   const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
       {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Wiki",
-        "item": "https://mech-commander-scenario-repo.netlify.app/wiki"
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Wiki',
+        item: 'https://meridian-strike-wiki.netlify.app/wiki',
       },
       {
-        "@type": "ListItem",
-        "position": 2,
-        "name": pageTitle
-      }
-    ]
+        '@type': 'ListItem',
+        position: 2,
+        name: pageTitle,
+      },
+    ],
   };
 
   return (
@@ -158,7 +158,10 @@ export function WikiPage() {
       ) : (
         <Helmet>
           <title>{pageTitle} | Meridian Strike</title>
-          <meta name="description" content={`Read the ${pageTitle} guide for Meridian Strike, a turn-based hex-grid tactical mech game.`} />
+          <meta
+            name="description"
+            content={`Read the ${pageTitle} guide for Meridian Strike, a turn-based hex-grid tactical mech game.`}
+          />
           <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
           <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
         </Helmet>

@@ -119,7 +119,7 @@ Uploads are stored as **`draft`** until an admin approves them. Only **`publishe
    - `ADMIN_EMAILS=fredrik.carleson@gmail.com` — comma-separated allowlist
 2. In Google Cloud, add authorized JavaScript origins:
    - `http://localhost:8888`
-   - `https://mech-commander-scenario-repo.netlify.app`
+   - `https://meridian-strike-wiki.netlify.app`
 3. Open **`/admin`**, sign in with Google, and approve or reject pending uploads.
 
 Set the same variables in **Netlify → Site configuration → Environment variables** for production.
@@ -160,7 +160,7 @@ Covers schema validation, valid/invalid uploads, path traversal, oversized packa
 
 ## Deployment
 
-**Live site:** [https://mech-commander-scenario-repo.netlify.app](https://mech-commander-scenario-repo.netlify.app)
+**Live site:** [https://meridian-strike-wiki.netlify.app](https://meridian-strike-wiki.netlify.app)
 
 **Netlify dashboard:** [https://app.netlify.com/projects/mech-commander-scenario-repo](https://app.netlify.com/projects/mech-commander-scenario-repo)
 

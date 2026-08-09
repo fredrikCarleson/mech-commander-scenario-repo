@@ -5,13 +5,12 @@ const PUBLIC_DIR = path.resolve('public');
 const WIKI_DIR = path.join(PUBLIC_DIR, 'wiki');
 const SITEMAP_PATH = path.join(PUBLIC_DIR, 'sitemap.xml');
 
-// Change this to the new domain when migrating
-const BASE_URL = 'https://mech-commander-scenario-repo.netlify.app';
+const BASE_URL = 'https://meridian-strike-wiki.netlify.app';
 
 function generateSitemap() {
   const routes = [
     { path: '/catalogue', priority: '1.0', changefreq: 'daily' },
-    { path: '/upload', priority: '0.8', changefreq: 'monthly' }
+    { path: '/upload', priority: '0.8', changefreq: 'monthly' },
   ];
 
   // Read wiki pages
@@ -23,7 +22,7 @@ function generateSitemap() {
         routes.push({
           path: `/wiki/${pageId}`,
           priority: '0.9',
-          changefreq: 'weekly'
+          changefreq: 'weekly',
         });
       }
     }
@@ -38,7 +37,7 @@ ${routes
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${route.priority}</priority>
-  </url>`
+  </url>`,
   )
   .join('\n')}
 </urlset>`;

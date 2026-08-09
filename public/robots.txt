@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mech-commander-scenario-repo.netlify.app/sitemap.xml
+Sitemap: https://meridian-strike-wiki.netlify.app/sitemap.xml
