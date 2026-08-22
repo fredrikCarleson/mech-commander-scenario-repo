@@ -25,7 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <nav className="app-nav" aria-label="Main navigation">
             <Link to="/">Wiki</Link>
             <Link to="/catalogue">Catalogue</Link>
-            {isAdmin && <Link to="/upload">Upload</Link>}
+            <Link to="/campaigns">Campaigns</Link>
             <Link to="/admin">Admin</Link>
             {isAdmin && <Link to="/api">API</Link>}
           </nav>
@@ -33,7 +33,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </header>
       <main className="app-main">{children}</main>
       <footer className="app-footer">
-        <p>Community scenarios for Meridian Strike. Packages are validated server-side.</p>
+        <p>
+          Community scenarios and campaigns for Meridian Strike. Packages are validated server-side.
+        </p>
       </footer>
     </div>
   );

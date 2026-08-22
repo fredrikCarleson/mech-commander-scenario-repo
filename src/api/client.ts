@@ -5,6 +5,7 @@ import type {
   UploadResponse,
 } from '../../shared/schemas/api.ts';
 import type { ScenarioMetadata } from '../../shared/schemas/metadata.ts';
+import type { CampaignMetadata } from '../../shared/schemas/campaign.ts';
 
 const API_BASE = '/api/v1';
 
@@ -81,4 +82,49 @@ export async function deleteScenario(id: string): Promise<void> {
     method: 'DELETE',
   });
   await handleJson<{ id: string; deleted: boolean }>(response);
+}
+
+export async function fetchCampaigns(params: Record<string, string | number | undefined>): Promise<{
+  items: CampaignMetadata[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}> {
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== '') searchParams.set(key, String(value));
+  }
+  return handleJson(await fetch(`${API_BASE}/campaigns?${searchParams}`));
+}
+
+export async function fetchCampaign(id: string): Promise<CampaignMetadata> {
+  return handleJson(await fetch(`${API_BASE}/campaigns/${id}`));
+}
+
+export async function downloadCampaign(id: string): Promise<Blob> {
+  const response = await fetch(`${API_BASE}/campaigns/${id}/download`);
+  if (!response.ok) throw new Error('Download failed.');
+  return response.blob();
+}
+
+export async function submitCampaignRating(
+  id: string,
+  body: SubmitRatingBody,
+): Promise<SubmitRatingResponse> {
+  return handleJson(
+    await fetch(`${API_BASE}/campaigns/${id}/ratings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
+  );
+}
+
+export function campaignThumbnailUrl(id: string): string {
+  return `${API_BASE}/campaigns/${id}/thumbnail`;
+}
+
+export function campaignDownloadUrl(id: string): string {
+  return `${API_BASE}/campaigns/${id}/download`;
 }

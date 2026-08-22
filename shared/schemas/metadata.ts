@@ -34,6 +34,11 @@ export const scenarioMetadataSchema = z.object({
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   publicationStatus: z.enum(PUBLICATION_STATUSES),
+  revision: z.number().int().positive().optional(),
+  publishedRevision: z.number().int().positive().optional(),
+  pendingRevision: z.number().int().positive().optional(),
+  releaseId: z.string().min(1).optional(),
+  availableRevisions: z.array(z.number().int().positive()).optional(),
   compatibility: compatibilitySchema,
 });
 
@@ -51,3 +56,63 @@ export const scenarioRatingsSchema = z.object({
 
 export type RatingEntry = z.infer<typeof ratingEntrySchema>;
 export type ScenarioRatings = z.infer<typeof scenarioRatingsSchema>;
+
+export const creatorOwnershipSchema = z.object({
+  schemaVersion: z.literal(1),
+  contentType: z.enum(['scenario', 'campaign']),
+  contentId: z.string().uuid(),
+  ownerSub: z.string().min(1),
+  ownerEmail: z.string().email(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+export type CreatorOwnership = z.infer<typeof creatorOwnershipSchema>;
+
+export const scenarioSubmissionSchema = z.object({
+  schemaVersion: z.literal(1),
+  id: z.string().uuid(),
+  revision: z.number().int().positive(),
+  metadata: scenarioMetadataSchema,
+  submittedAt: z.string().datetime(),
+  activation: z
+    .object({
+      command: z.literal('approve'),
+      revision: z.number().int().positive(),
+      moderatorSub: z.string().min(1),
+      startedAt: z.string().datetime(),
+    })
+    .optional(),
+  rejection: z
+    .object({
+      reason: z.string().trim().min(1).max(1000),
+      moderatorSub: z.string().min(1),
+      moderatedAt: z.string().datetime(),
+    })
+    .optional(),
+});
+
+export type ScenarioSubmission = z.infer<typeof scenarioSubmissionSchema>;
+
+export const scenarioReleaseSchema = z.object({
+  schemaVersion: z.literal(1),
+  releaseId: z.string().min(1),
+  id: z.string().uuid(),
+  revision: z.number().int().positive(),
+  metadata: scenarioMetadataSchema,
+  approvedAt: z.string().datetime(),
+  approvedBySub: z.string().min(1),
+});
+
+export type ScenarioRelease = z.infer<typeof scenarioReleaseSchema>;
+
+export const administrativeDeletionSchema = z.object({
+  schemaVersion: z.literal(1),
+  contentType: z.enum(['scenario', 'campaign']),
+  contentId: z.string().uuid(),
+  deletedAt: z.string().datetime(),
+  deletedBySub: z.string().min(1),
+  retainedImmutableRevisions: z.literal(true),
+});
+
+export type AdministrativeDeletion = z.infer<typeof administrativeDeletionSchema>;

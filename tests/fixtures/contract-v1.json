@@ -1,0 +1,192 @@
+{
+  "fixtureSchemaVersion": "community-contract/v1",
+  "scenario": {
+    "metadata": {
+      "metadataSchemaVersion": "1.0.0",
+      "id": "33333333-3333-4333-8333-333333333333",
+      "title": "Contract Fixture",
+      "description": "Cross-repository scenario contract.",
+      "authorDisplayName": "Fixture Commander",
+      "gameVersion": "1.0.0",
+      "scenarioFormatVersion": "1.0.0",
+      "difficulty": "regular",
+      "recommendedTonnage": 60,
+      "maximumTonnage": 80,
+      "estimatedPlayTimeMinutes": 20,
+      "tags": ["fixture"],
+      "mapDimensions": { "width": 6, "height": 6 },
+      "averageRating": 4,
+      "ratingCount": 1,
+      "downloadCount": 2,
+      "packageFileSize": 1024,
+      "checksumSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "createdAt": "2026-08-22T00:00:00.000Z",
+      "updatedAt": "2026-08-22T00:00:00.000Z",
+      "publicationStatus": "published",
+      "revision": 1,
+      "publishedRevision": 1,
+      "releaseId": "33333333-3333-4333-8333-333333333333:r1",
+      "availableRevisions": [1],
+      "compatibility": {
+        "gameVersionSupported": true,
+        "scenarioFormatSupported": true,
+        "warnings": []
+      }
+    },
+    "release": {
+      "schemaVersion": 1,
+      "releaseId": "33333333-3333-4333-8333-333333333333:r1",
+      "id": "33333333-3333-4333-8333-333333333333",
+      "revision": 1,
+      "approvedAt": "2026-08-22T00:00:00.000Z",
+      "approvedBySub": "fixture-admin-sub"
+    },
+    "revisionDownloadHeaders": {
+      "Content-Type": "application/zip",
+      "X-Checksum-Sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "X-Community-Release-Id": "33333333-3333-4333-8333-333333333333:r1"
+    },
+    "manifest": {
+      "schemaVersion": "1.0.0",
+      "title": "Contract Fixture",
+      "description": "Cross-repository scenario contract.",
+      "author": "Fixture Commander",
+      "gameVersion": "1.0.0",
+      "scenarioFormatVersion": "1.0.0",
+      "difficulty": "regular",
+      "recommendedTonnage": 60,
+      "maximumTonnage": 80,
+      "estimatedPlayTimeMinutes": 20,
+      "tags": ["fixture"]
+    },
+    "scenario": {
+      "version": 1,
+      "schemaVersion": "1.0.0",
+      "id": "custom-contract-mission",
+      "name": "Contract Fixture",
+      "description": "Cross-repository scenario contract.",
+      "environment": "Test range",
+      "biome": "temperate",
+      "massLimit": 80,
+      "objective": { "kind": "destroyAll", "description": "Destroy all hostiles." },
+      "playerDeployZone": [{ "x": 0, "y": 0 }],
+      "escapeZone": [{ "x": 5, "y": 5 }],
+      "enemyForce": [{ "chassisId": "wisp-20", "skill": 3, "pos": { "x": 5, "y": 4 } }]
+    },
+    "map": {
+      "schemaVersion": "1.0.0",
+      "width": 6,
+      "height": 6,
+      "rows": ["......", "......", "......", "......", "......", "......"]
+    }
+  },
+  "campaign": {
+    "metadata": {
+      "metadataSchemaVersion": "1.0.0",
+      "id": "44444444-4444-4444-8444-444444444444",
+      "stableCampaignId": "custom-contract-campaign",
+      "title": "Contract Campaign",
+      "tagline": "A cross-repository campaign contract.",
+      "authorDisplayName": "Fixture Commander",
+      "gameVersion": "1.0.0",
+      "campaignFormatVersion": "2.0.0",
+      "difficulty": "regular",
+      "missionCount": 1,
+      "estimatedPlayTimeMinutes": 20,
+      "tags": ["fixture"],
+      "averageRating": 0,
+      "ratingCount": 0,
+      "downloadCount": 0,
+      "packageFileSize": 2048,
+      "checksumSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "createdAt": "2026-08-22T00:00:00.000Z",
+      "updatedAt": "2026-08-22T00:00:00.000Z",
+      "publicationStatus": "published",
+      "revision": 1,
+      "publishedRevision": 1,
+      "releaseId": "44444444-4444-4444-8444-444444444444:r1",
+      "availableRevisions": [1],
+      "compatibility": {
+        "gameVersionSupported": true,
+        "campaignFormatSupported": true,
+        "warnings": []
+      }
+    },
+    "release": {
+      "schemaVersion": 1,
+      "releaseId": "44444444-4444-4444-8444-444444444444:r1",
+      "id": "44444444-4444-4444-8444-444444444444",
+      "stableCampaignId": "custom-contract-campaign",
+      "revision": 1,
+      "orderedMissionIds": ["custom-contract-mission"],
+      "approvedAt": "2026-08-22T00:00:00.000Z",
+      "approvedBySub": "fixture-admin-sub"
+    },
+    "manifest": {
+      "schemaVersion": "1.0.0",
+      "stableCampaignId": "custom-contract-campaign",
+      "title": "Contract Campaign",
+      "tagline": "A cross-repository campaign contract.",
+      "author": "Fixture Commander",
+      "gameVersion": "1.0.0",
+      "campaignFormatVersion": "2.0.0",
+      "difficulty": "regular",
+      "missionCount": 1,
+      "estimatedPlayTimeMinutes": 20,
+      "tags": ["fixture"]
+    },
+    "campaign": {
+      "version": 2,
+      "id": "custom-contract-campaign",
+      "name": "Contract Campaign",
+      "tagline": "A cross-repository campaign contract.",
+      "author": { "displayName": "Fixture Commander" },
+      "designTargets": { "difficulty": "regular" },
+      "defaultCompanyName": "Meridian Strike Company",
+      "startingFunds": 250000,
+      "startingReputation": 0,
+      "startingMachines": ["wisp-20"],
+      "missions": [{ "scenarioId": "custom-contract-mission", "opCode": "FIXTURE-001" }],
+      "intro": {
+        "slides": [
+          {
+            "id": "opening",
+            "kicker": "Fixture",
+            "title": "Contract Campaign",
+            "body": "Validate the cross-repository package."
+          }
+        ]
+      }
+    }
+  },
+  "packagePolicy": {
+    "version": 1,
+    "maxCompressedBytes": 4000000,
+    "maxExpandedBytes": 20971520,
+    "maxImageBytes": 1048576,
+    "scenarioEntryLimit": 16,
+    "campaignEntryLimit": 200,
+    "maxImageDimension": 8192,
+    "communityVideoAllowed": false
+  },
+  "layouts": {
+    "nativeScenario": ["manifest.json", "scenario.json", "map.json", "thumbnail.webp"],
+    "nativeCampaign": [
+      "manifest.json",
+      "thumbnail.webp",
+      "Campaigns/custom-contract-campaign/campaign.json",
+      "Campaigns/custom-contract-campaign/missions/custom-contract-mission/scenario.json",
+      "Campaigns/custom-contract-campaign/missions/custom-contract-mission/scenariomap.webp"
+    ],
+    "legacyScenario": [
+      "Scenarios/custom-contract-mission/scenario.json",
+      "Scenarios/custom-contract-mission/scenariomap.webp"
+    ],
+    "legacyCampaignScenarioRoot": "Scenarios/"
+  },
+  "lifecycle": {
+    "withdrawn": { "publicationStatus": "archived", "revisionSpecificRetrieval": true },
+    "deleted": { "httpStatus": 410, "publicRevisionRetrieval": false, "immutableRetention": true }
+  },
+  "minimalWebpBase64": "UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAgA0JaQAA3AA/vv9UAA="
+}

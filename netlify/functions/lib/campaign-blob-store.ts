@@ -1,22 +1,21 @@
 import type {
+  CampaignMetadata,
+  CampaignRelease,
+  CampaignSubmission,
+  StableCampaignClaim,
+} from '../../../shared/schemas/campaign.ts';
+import type {
   AdministrativeDeletion,
   CreatorOwnership,
-  ScenarioRelease,
-  ScenarioMetadata,
   ScenarioRatings,
-  ScenarioSubmission,
 } from '../../../shared/schemas/metadata.ts';
 import type { ConditionalWriteResult, VersionedValue, WriteCondition } from './blob-concurrency.ts';
 
-export interface BlobListItem {
-  key: string;
-}
-
-export interface ScenarioBlobStore {
-  getMetadata(id: string): Promise<ScenarioMetadata | null>;
-  getMetadataVersioned(id: string): Promise<VersionedValue<ScenarioMetadata> | null>;
+export interface CampaignBlobStore {
+  getMetadata(id: string): Promise<CampaignMetadata | null>;
+  getMetadataVersioned(id: string): Promise<VersionedValue<CampaignMetadata> | null>;
   setMetadata(
-    metadata: ScenarioMetadata,
+    metadata: CampaignMetadata,
     condition?: WriteCondition,
   ): Promise<ConditionalWriteResult>;
   listMetadataKeys(): Promise<string[]>;
@@ -36,10 +35,10 @@ export interface ScenarioBlobStore {
     ownership: CreatorOwnership,
     condition?: WriteCondition,
   ): Promise<ConditionalWriteResult>;
-  getSubmission(id: string): Promise<ScenarioSubmission | null>;
-  getSubmissionVersioned(id: string): Promise<VersionedValue<ScenarioSubmission> | null>;
+  getSubmission(id: string): Promise<CampaignSubmission | null>;
+  getSubmissionVersioned(id: string): Promise<VersionedValue<CampaignSubmission> | null>;
   setSubmission(
-    submission: ScenarioSubmission,
+    submission: CampaignSubmission,
     condition?: WriteCondition,
   ): Promise<ConditionalWriteResult>;
   deleteSubmission(id: string): Promise<void>;
@@ -48,17 +47,25 @@ export interface ScenarioBlobStore {
   setRevisionPackage(
     id: string,
     revision: number,
-    data: Uint8Array,
+    bytes: Uint8Array,
   ): Promise<ConditionalWriteResult>;
   getRevisionThumbnail(id: string, revision: number): Promise<Uint8Array | null>;
   setRevisionThumbnail(
     id: string,
     revision: number,
-    data: Uint8Array,
+    bytes: Uint8Array,
   ): Promise<ConditionalWriteResult>;
-  getRelease(id: string, revision: number): Promise<ScenarioRelease | null>;
-  setRelease(release: ScenarioRelease): Promise<ConditionalWriteResult>;
+  getRelease(id: string, revision: number): Promise<CampaignRelease | null>;
+  setRelease(release: CampaignRelease): Promise<ConditionalWriteResult>;
+  getStableIdClaim(stableCampaignId: string): Promise<StableCampaignClaim | null>;
+  getStableIdClaimVersioned(
+    stableCampaignId: string,
+  ): Promise<VersionedValue<StableCampaignClaim> | null>;
+  setStableIdClaim(
+    claim: StableCampaignClaim,
+    condition: WriteCondition,
+  ): Promise<ConditionalWriteResult>;
   getDeletion(id: string): Promise<AdministrativeDeletion | null>;
   setDeletion(deletion: AdministrativeDeletion): Promise<ConditionalWriteResult>;
-  deleteMutableScenario(id: string): Promise<boolean>;
+  deleteMutableCampaign(id: string): Promise<boolean>;
 }

@@ -7,6 +7,8 @@ import { UploadPage } from './pages/UploadPage.tsx';
 import { ApiInfoPage } from './pages/ApiInfoPage.tsx';
 import { AdminPage } from './pages/AdminPage.tsx';
 import { WikiPage } from './pages/WikiPage.tsx';
+import { CampaignCataloguePage } from './pages/CampaignCataloguePage.tsx';
+import { CampaignDetailPage } from './pages/CampaignDetailPage.tsx';
 
 function NotFoundPage() {
   return (
@@ -27,6 +29,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/wiki/HOW_TO_PLAY" replace />} />
         <Route path="/catalogue" element={<CataloguePage />} />
+        <Route path="/campaigns" element={<CampaignCataloguePage />} />
+        <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
         <Route path="/scenarios/:id" element={<DetailPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/admin" element={<AdminPage />} />

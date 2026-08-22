@@ -1,6 +1,7 @@
-import JSZip from 'jszip';
 import {
   ALLOWED_PACKAGE_FILES,
+  COMMUNITY_MAX_SCENARIO_ZIP_ENTRIES,
+  COMMUNITY_MAX_CAMPAIGN_IMAGE_BYTES,
   DEFAULT_MAX_COMPRESSED_BYTES,
   DEFAULT_MAX_DECOMPRESSED_BYTES,
   REQUIRED_PACKAGE_FILES,
@@ -23,6 +24,8 @@ import {
   isValidJsonExtension,
   isValidWebp,
 } from './zip-security.ts';
+import { inspectCommunityImage } from './image-validation.ts';
+import { unzipSafe } from './safe-zip.ts';
 
 export interface ValidatedPackageContents {
   manifest: Manifest;
@@ -97,26 +100,21 @@ export async function validateScenarioPackage(
     return fail([`Compressed package exceeds maximum size of ${maxCompressed} bytes.`]);
   }
 
-  let zip: JSZip;
+  let files: Record<string, Uint8Array>;
   try {
-    zip = await JSZip.loadAsync(compressedBytes);
-  } catch {
-    return fail(['Package is not a valid ZIP archive.']);
+    files = unzipSafe(compressedBytes, {
+      maxCompressedBytes: maxCompressed,
+      maxDecompressedBytes: maxDecompressed,
+      maxEntries: COMMUNITY_MAX_SCENARIO_ZIP_ENTRIES,
+    });
+  } catch (error) {
+    return fail([error instanceof Error ? error.message : 'Package is not a valid ZIP archive.']);
   }
 
-  const entries = Object.keys(zip.files);
-  const rootFiles = new Map<string, JSZip.JSZipObject>();
-  let decompressedTotal = 0;
+  const entries = Object.keys(files);
+  const rootFiles = new Map<string, Uint8Array>();
 
   for (const entryPath of entries) {
-    const entry = zip.files[entryPath];
-    if (!entry || entry.dir) {
-      if (entry?.dir && !isUnsafeZipPath(entryPath)) {
-        errors.push(`Directories are not allowed in scenario packages: ${entryPath}`);
-      }
-      continue;
-    }
-
     if (isUnsafeZipPath(entryPath)) {
       errors.push(`Unsafe ZIP path rejected: ${entryPath}`);
       continue;
@@ -143,13 +141,7 @@ export async function validateScenarioPackage(
       continue;
     }
 
-    const uncompressed = await entry.async('uint8array');
-    decompressedTotal += uncompressed.byteLength;
-    if (decompressedTotal > maxDecompressed) {
-      return fail([`Decompressed package exceeds maximum size of ${maxDecompressed} bytes.`]);
-    }
-
-    rootFiles.set(rootName, entry);
+    rootFiles.set(rootName, files[entryPath]!);
   }
 
   for (const required of REQUIRED_PACKAGE_FILES) {
@@ -162,10 +154,16 @@ export async function validateScenarioPackage(
     return fail(errors);
   }
 
-  const manifestBytes = await rootFiles.get('manifest.json')!.async('uint8array');
-  const scenarioBytes = await rootFiles.get('scenario.json')!.async('uint8array');
-  const mapBytes = await rootFiles.get('map.json')!.async('uint8array');
-  const thumbnailBytes = await rootFiles.get('thumbnail.webp')!.async('uint8array');
+  const manifestBytes = rootFiles.get('manifest.json')!;
+  const scenarioBytes = rootFiles.get('scenario.json')!;
+  const mapBytes = rootFiles.get('map.json')!;
+  const thumbnailBytes = rootFiles.get('thumbnail.webp')!;
+
+  if (thumbnailBytes.byteLength > COMMUNITY_MAX_CAMPAIGN_IMAGE_BYTES) {
+    return fail([
+      `thumbnail.webp exceeds the ${COMMUNITY_MAX_CAMPAIGN_IMAGE_BYTES}-byte image limit.`,
+    ]);
+  }
 
   if (
     !isValidJsonExtension('manifest.json') ||
@@ -177,6 +175,13 @@ export async function validateScenarioPackage(
 
   if (!isValidWebp(thumbnailBytes)) {
     return fail(['thumbnail.webp is not a valid WebP image.']);
+  }
+  try {
+    inspectCommunityImage(thumbnailBytes, 'image/webp');
+  } catch (error) {
+    return fail([
+      `thumbnail.webp failed image validation: ${error instanceof Error ? error.message : 'Invalid image.'}`,
+    ]);
   }
 
   const manifestResult = parseJson('manifest.json', manifestBytes, manifestSchema);

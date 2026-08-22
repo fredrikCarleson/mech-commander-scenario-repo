@@ -1,5 +1,10 @@
 # Mech Commander Community Scenario Repository — Implementation Plan
 
+> **Superseded for community publishing release work (2026-08-22).** This original scaffold plan
+> is retained as historical context. The authenticated, revisioned, environment-isolated release
+> authority is `docs/COMMUNITY_PUBLISHING_RELEASE_PLAN.md`; where the documents conflict, follow the
+> release plan, current schemas, and `README.md`.
+
 ## 1. Repository structure
 
 ```
