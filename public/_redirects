@@ -1,3 +1,7 @@
+# API first. A catch-all SPA rewrite above this would return index.html for
+# /api/v1/scenarios and take the community catalogue down.
+/api/v1/*  /.netlify/functions/api-v1  200
+
 # Production SPA fallback. Keep this out of netlify.toml so `netlify dev`
 # does not rewrite Vite module URLs such as /src/main.tsx to index.html.
 /*    /index.html   200
