@@ -1,57 +1,60 @@
-# Campaign Editor
+# Campaign Workshop
 
-In-game authoring for custom theaters. Compose local Custom Scenarios into a playable `CampaignPack`.
+The Campaign Workshop composes your local custom scenarios into a linear theater you can play, export, or publish to the community catalogue.
 
-## Workflow
+Official Meridian Strike / Ember Reach campaigns are a separate bundled workflow. Do not copy official campaign IDs into community packs.
 
-1. **Build scenarios** in Title → Custom Scenarios (map, enemies, objective, map art).
-2. **Open Campaign Workshop** (Title → Campaign Workshop).
-3. **New campaign** → fill Meta (id must start with `custom-` or `user-`).
-4. **Missions** → add scenarios in order (linear unlock: 1 → 2 → … → final).
-5. **Dialogue / Intro / Aftermath** → author talks and media paths.
-6. **Validate** → fix hard errors; warnings are advisory.
-7. **Save**, then **Play** (or start from Theaters if listed).
-8. **Export ZIP** → share / sell / re-import a self-contained pack folder.
+The Steam **demo** does not include Campaign Workshop.
 
-## Media paths
+---
 
-Each campaign pack owns media under:
+## Play community campaigns
 
-```
-public/assets/campaigns/<campaign_id>/
-```
+Approved campaigns appear on this site under [Campaigns](/campaigns) and inside the Full Edition game. Installing a campaign also installs its embedded missions. Updating an installed campaign is always an **explicit** player action; a failed update keeps the last playable local revision.
 
-Shared company UI chrome:
+Imported community campaigns are read-only. Use **Fork to edit** before changing one as your own work. Forking creates new campaign and scenario IDs so you do not overwrite someone else's content.
 
-```
-public/assets/campaigns/shared/
-```
+---
 
-Suggested filenames (also shown as placeholders in the editor):
+## Authoring workflow
 
-| Role                  | Path                                                     |
-| --------------------- | -------------------------------------------------------- |
-| Theater card          | `/assets/campaigns/<id>/theater-card.jpeg`               |
-| Intro video           | `/assets/campaigns/<id>/campaign-intro.mp4`              |
-| Intro poster / slides | `/assets/campaigns/<id>/intro-01.jpeg` … `intro-04.jpeg` |
-| Aftermath video       | `/assets/campaigns/<id>/campaign-aftermath.mp4`          |
-| Aftermath poster      | `/assets/campaigns/shared/hq-command-hangar.png`         |
+1. Build and playtest each mission in **Custom Scenarios**.
+2. Open **Campaign Workshop** and create a campaign. The stable ID must start with `custom-` or `user-` and cannot change after save.
+3. Add missions in play order.
+4. Author dialogue, intro, and aftermath. Use PNG, JPEG, or WebP images. **Community campaigns cannot include video.**
+5. Fix validation errors. Balance warnings are advisory.
+6. Save and playtest locally. This works signed out and offline.
+7. Export a ZIP to share privately, or sign in with Google and **publish** for community review.
 
-Helpers: `src/campaigns/mediaPaths.ts`.
+Do not publish an imported campaign as your own. Fork it first.
 
-## ZIP format
+---
 
-```
-Campaigns/<id>/
+## Community package
+
+The game adds catalogue files on top of the workshop ZIP:
+
+```text
+manifest.json
+thumbnail.webp
+Campaigns/<stable-id>/
   campaign.json
-  README.md
-  PACK.md
   dialogues/<missionId>.json
-  media/ASSETS.md
+  media/   (images only)
   missions/<scenarioId>/scenario.json
   missions/<scenarioId>/scenariomap.png|jpg|webp
 ```
 
-Legacy zips with top-level `Scenarios/` still import.
+The same size and image limits as scenarios apply (4,000,000 compressed bytes, 20 MiB expanded, 1 MiB per image). Mission IDs and order are locked after the first approved revision; a later update that reorders or replaces missions is rejected and must be published as a new campaign fork.
 
-Import upserts embedded scenarios, then the campaign.
+---
+
+## Publish from the game
+
+1. Full Edition **desktop** app, Google sign-in from the creator panel.
+2. Publish from Campaign Workshop. The first upload is revision 1 and stays pending until an admin approves it.
+3. Later **Update** uploads create revision 2, 3, … The last **approved** revision stays public while the new one is reviewed.
+4. **Withdraw** removes the public listing. Existing local installs keep working. Immutable approved revisions remain addressable for reinstall.
+5. Approval and rejection happen at [Community Review](./SCENARIO_APPROVAL).
+
+The website has no public upload form. Admin review is at `https://meridian-strike-wiki.netlify.app/admin`.

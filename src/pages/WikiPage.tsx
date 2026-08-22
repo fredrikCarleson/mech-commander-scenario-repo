@@ -4,7 +4,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { Helmet } from 'react-helmet-async';
-import { getAdminToken } from '../api/admin-client.ts';
 import '../styles/wiki.css';
 
 const SIDEBAR_GROUPS = [
@@ -34,10 +33,10 @@ const SIDEBAR_GROUPS = [
   {
     title: 'Modding & Studio',
     links: [
-      { id: 'CAMPAIGN_EDITOR', label: 'Campaign Editor' },
+      { id: 'CAMPAIGN_EDITOR', label: 'Campaign Workshop' },
       { id: 'MAP_DESIGN_GUIDE', label: 'Map Design Guide' },
       { id: 'MODDING_AND_CUSTOM_SCENARIOS', label: 'Custom Scenarios' },
-      { id: 'SCENARIO_APPROVAL', label: 'Scenario Approval' },
+      { id: 'SCENARIO_APPROVAL', label: 'Community Review' },
     ],
   },
 ];
@@ -58,7 +57,6 @@ export function WikiPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [version, setVersion] = useState<string>('Loading...');
-  const [isAdmin, setIsAdmin] = useState(false);
 
   const location = useLocation();
   const currentId = pageId || 'HOW_TO_PLAY';
@@ -82,13 +80,6 @@ export function WikiPage() {
         }
       })
       .catch(() => setVersion('Unknown'));
-  }, []);
-
-  useEffect(() => {
-    const checkAuth = () => setIsAdmin(!!getAdminToken());
-    checkAuth();
-    window.addEventListener('auth-change', checkAuth);
-    return () => window.removeEventListener('auth-change', checkAuth);
   }, []);
 
   useEffect(() => {
@@ -179,17 +170,15 @@ export function WikiPage() {
           <div key={group.title} className="wiki-sidebar-group">
             <h3>{group.title}</h3>
             <nav className="wiki-sidebar-nav">
-              {group.links
-                .filter((link) => isAdmin || link.id !== 'CAMPAIGN_EDITOR')
-                .map((link) => (
-                  <Link
-                    key={link.id}
-                    to={`/wiki/${link.id}`}
-                    className={location.pathname === `/wiki/${link.id}` ? 'active' : ''}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+              {group.links.map((link) => (
+                <Link
+                  key={link.id}
+                  to={`/wiki/${link.id}`}
+                  className={location.pathname === `/wiki/${link.id}` ? 'active' : ''}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </nav>
           </div>
         ))}

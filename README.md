@@ -102,6 +102,13 @@ npm run migration:dry-run -- --input ./path/to/exported-snapshot.json
 
 Add `--output ./path/to/new-local-file.json` only to create a migrated local snapshot. It uses exclusive creation, preserves legacy public keys and byte payloads for rollback compatibility, emits source SHA-256 values, creates no ownership claims, and can be rerun idempotently. Exporting, backing up, applying, or restoring production Blob data remains a separately authorized operator action.
 
+After an authorized backup and dry-run review, apply additive writes with an explicit confirmation (never pass the token on the command line):
+
+```bash
+node scripts/community-blob-apply.mjs --store mech-scenarios --environment production --input <path-outside-repository> --confirm production
+```
+
+
 ## Package validation
 
 Scenario ZIPs contain four root files: `manifest.json`, `scenario.json`, `map.json`, and `thumbnail.webp`.
@@ -122,3 +129,6 @@ Both validators enforce compressed and decompressed limits, safe paths, allowed 
 | `npm run build`        | Production build                           |
 
 Live site: `https://meridian-strike-wiki.netlify.app`
+
+Owner/operator runbook (upload flow, dev vs staging vs production, testing): [docs/OWNER_COMMUNITY_GUIDE.md](docs/OWNER_COMMUNITY_GUIDE.md).
+

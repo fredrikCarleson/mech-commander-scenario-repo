@@ -2,6 +2,9 @@
 
 This is the work I cannot do from the repositories: Google Cloud, the Netlify dashboard, and local secret files. Do these steps, then tell me when you are done using the **report back** section at the end.
 
+Day-to-day upload, admin review, and **development / staging / production** testing: [OWNER_COMMUNITY_GUIDE.md](./OWNER_COMMUNITY_GUIDE.md).
+
+
 Do **not** paste secrets, session tokens, Netlify tokens, or Google client secrets into chat, tickets, or git.
 
 Do **not** run production Blob migration yet. Do **not** remove `ADMIN_EMAILS` yet. Do **not** add `ADMIN_API_KEY`. Do **not** change Cloudflare.

@@ -1,124 +1,76 @@
-# Modding & Custom Scenarios Guide
+# Custom Scenarios
 
-Welcome to the **Meridian Strike Content Studio** guide. This comprehensive tutorial will walk you through building your own custom scenario from scratch, packaging it, and publishing it to the Community Repository.
+Meridian Strike **Full Edition** includes in-game tools to design, playtest, and publish scenarios. The Steam demo does not include Custom Scenarios, Campaign Workshop, or the Mercenary Board.
+
+You do **not** upload from this website. Publishing happens in the desktop game after Google sign-in.
 
 ---
 
-## The Scenario Authoring Flow
+## Play community scenarios
 
-Creating a complete custom scenario involves four main phases, moving from the physical terrain up through logic, narrative, and finally distribution.
+1. Open **Custom Scenarios** from the title screen, or browse the **Mercenary Board** for approved side contracts.
+2. Install from the community catalogue, or import a local ZIP.
+3. Play from Custom Scenarios or accept the contract from the Mercenary Board.
+
+Ratings are optional and anonymous. A Netlify outage only blocks community network features; local and official play still work.
+
+---
+
+## Create a scenario
 
 ```mermaid
 flowchart LR
-    A[1. Map Design] -->|Terrain & Zones| B[2. Scenario Setup]
-    B -->|Enemies & Objectives| C[3. Narrative & Dialogues]
-    C -->|Briefings & Chatter| D[4. Packaging & Export]
-    D -->|ZIP Bundle| E((Community Repo))
+    A[1. Map Design] -->|Terrain and zones| B[2. Scenario Setup]
+    B -->|Enemies and objectives| C[3. Narrative]
+    C -->|Briefing and chatter| D[4. Playtest]
+    D -->|Desktop sign-in| E((Community review))
 ```
 
----
+### 1. Map design
 
-## Step 1: Map Design
+Open the **Map Editor** from Content Studio / Custom Scenarios. Paint terrain, then paint **deploy** and optional **extraction** zones. Units and zones must sit on real map hexes or the server will reject the package.
 
-The first step in any scenario is creating the battlefield. Launch the **Map Editor** from the Content Studio.
+See the [Map Design Guide](./MAP_DESIGN_GUIDE) for layout advice.
 
-### Painting Terrain
+### 2. Scenario setup
 
-You are presented with a blank hexagonal grid (typically 15x15 to 20x20). Use the terrain brushes to paint the environment:
+Configure the objective (`destroyAll`, `holdHex`, `surviveRounds`, `assassinate`, `extract`), turn limit, drop-weight cap, and enemy waves with AI profiles.
 
-- **Forest:** Grants cover (reducing incoming damage and accuracy) but costs more AP to move through.
-- **Crater / Rock Walls:** Block line of sight entirely or provide partial cover for smaller mechs.
-- **Elevation:** Use the elevation layers (+1, +2) to create sniper perches and ridges. Mechs firing from higher elevation gain an accuracy bonus.
+### 3. Narrative
 
-### Painting Zones
+Write the pre-drop briefing and optional in-combat radio chatter (round start, unit destroyed, objective reached).
 
-Once the physical layout is complete, you must define logical zones:
+### 4. Playtest locally
 
-- **Deploy Zones:** Paint the hexes where the player can drop their lance.
-- **Extraction Zones (Optional):** Paint the hexes the player must reach if the objective is an extraction mission.
-
-> [!TIP]
-> Do not scatter terrain randomly. Create deliberate "features" like forest clusters, continuous ridge lines, and clear fire lanes. (See the [Map Design Guide](./MAP_DESIGN_GUIDE) for tactical layout tips).
+Save and play from Custom Scenarios while signed out. Local authoring does not need Google or the internet.
 
 ---
 
-## Step 2: Scenario Setup
+## Package rules
 
-With the map saved as `map.json`, switch to the **Scenario Builder** to configure the rules of engagement.
+The game builds the ZIP for you. Do not hand-zip folders unless you know the layout. A scenario package is a **flat** ZIP:
 
-### 1. Victory Conditions
+- `manifest.json` — title, author, description, tags, versions
+- `scenario.json` — rules, enemies, objectives
+- `map.json` — hex terrain
+- `thumbnail.webp` — catalogue image
 
-Every scenario needs an objective. You can choose from standard modes like:
+Limits the server also enforces:
 
-- `destroyAll`: Eliminate all enemy units.
-- `holdHex`: Defend a specific hex for a set number of rounds.
-- `surviveRounds`: Survive an endless onslaught until the turn limit is reached.
-- `assassinate`: Destroy a specific high-value enemy target.
-- `extract`: Reach the extraction zone by a specific round.
-
-### 2. Turn Limits & Difficulty
-
-Set the maximum number of rounds before the player fails the mission, and define the `massLimit` (maximum drop weight in tons) allowed for the player's lance.
-
-### 3. Enemy Spawn Waves & AI
-
-You must define the opposing force. For each enemy mech, you will assign a chassis, a starting location, a skill level, and an **AI Profile**.
-
-| AI Profile   | Behavior                                                             |
-| :----------- | :------------------------------------------------------------------- |
-| `aggressive` | Pushes forward to engage at optimal range regardless of cover.       |
-| `flank`      | Attempts to circle around to the player's rear arc.                  |
-| `sniper`     | Seeks highest elevation and fires from maximum range.                |
-| `objective`  | Ignores players to prioritize holding or destroying objective hexes. |
+- Compressed ZIP at most 4,000,000 bytes; expanded at most 20 MiB
+- Each image at most 1 MiB; PNG, JPEG, or WebP only
+- No videos, no nested folders, no reserved official campaign IDs
 
 ---
 
-## Step 3: Narrative & Dialogues
+## Publish from the game
 
-A great scenario tells a story. Use the **Narrative Composer** to inject life into the battle.
+1. Use the **Full Edition desktop app** (not the browser hot-reload session, not the demo).
+2. Sign in with Google from the community creator panel. The system browser opens; the game never stores a Google client secret.
+3. On your scenario card, click **Upload** (or **Update** if it is already linked).
+4. The game validates the package, then the server validates it again. On success it enters the **pending** queue. It is **not** public yet.
+5. An admin reviews it on the wiki. See [Community Review](./SCENARIO_APPROVAL).
 
-### Briefing Transmissions
-
-Write the pre-drop briefing that the player reads before launching the mission. Set the tone, explain the stakes, and provide hints about the enemy composition.
-
-### In-Combat Radio Chatter
-
-You can set up triggers for in-game dialogue that appear during combat. Triggers can be tied to:
-
-- **Round Start:** (e.g., "Reinforcements arriving on round 3!")
-- **Unit Destroyed:** (e.g., The enemy commander shouting when their bodyguard dies)
-- **Objective Reached:** (e.g., "The data is secured, get to the extraction zone!")
-
----
-
-## Step 4: Packaging & Export
-
-Once your map, scenario logic, and narrative are complete, it's time to package them for the community.
-
-### 1. The Package Bundle
-
-A complete scenario is packaged as a standard `.zip` file containing the following:
-
-- `manifest.json` _(Your title, author name, description, and tags)_
-- `scenario.json` _(The rules, enemies, and objectives)_
-- `map.json` _(The hex terrain grid)_
-- `thumbnail.webp` _(A 16:9 screenshot of your map to display in the catalog)_
-
-> [!IMPORTANT]
-> The Content Studio will automatically bundle these files for you when you click **Export ZIP**. Do not manually zip the files unless you know what you are doing, as the internal structure must be flat (no sub-folders).
-
-### 2. Publishing to the Community Repository
-
-Once your bundle is exported, it is ready to be sent to the community!
-
-1. From the **Campaign Editor**, click on your scenario to view its details.
-2. Click the **Upload** button.
+Only the Google account that first published an item can update or withdraw it. Legacy maps that predate ownership cannot be claimed by guessing an email; they stay playable and ownerless until an admin assigns them or you publish a new fork.
 
 ![Upload Scenario](/wiki/images/upload-scenario.jpg)
-
-3. The server will run an automated validation check on your package.
-4. If successful, your scenario enters the **Pending** queue.
-
-Once an administrator reviews your submission to ensure it meets community guidelines, it will be marked as **Published** and become available for all players to download and play!
-
-For more information on how the approval queue works, see the [Scenario Approval Guide](./SCENARIO_APPROVAL).
