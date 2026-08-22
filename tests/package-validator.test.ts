@@ -69,6 +69,21 @@ describe('package validator', () => {
     }
   });
 
+  it('rejects dangerous extensions and case-insensitive duplicate paths', async () => {
+    const dangerous = await buildScenarioZip({
+      extraFiles: { 'payload.exe': new Uint8Array([1]) },
+    });
+    const dangerousResult = await validateScenarioPackage(dangerous);
+    expect(dangerousResult.ok).toBe(false);
+    if (!dangerousResult.ok)
+      expect(dangerousResult.errors.join(' ')).toMatch(/active-content|Unexpected/i);
+
+    const duplicate = await buildScenarioZip({ extraFiles: { 'MANIFEST.JSON': '{}' } });
+    const duplicateResult = await validateScenarioPackage(duplicate);
+    expect(duplicateResult.ok).toBe(false);
+    if (!duplicateResult.ok) expect(duplicateResult.errors.join(' ')).toMatch(/duplicate/i);
+  });
+
   it('rejects invalid metadata', async () => {
     const zipBytes = await buildScenarioZip({
       manifest: {

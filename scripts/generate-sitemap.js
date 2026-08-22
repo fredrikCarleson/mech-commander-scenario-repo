@@ -10,6 +10,7 @@ const BASE_URL = 'https://meridian-strike-wiki.netlify.app';
 function generateSitemap() {
   const routes = [
     { path: '/catalogue', priority: '1.0', changefreq: 'daily' },
+    { path: '/campaigns', priority: '1.0', changefreq: 'daily' },
     { path: '/upload', priority: '0.8', changefreq: 'monthly' },
   ];
 

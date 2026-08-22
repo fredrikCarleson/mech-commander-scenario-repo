@@ -1,6 +1,6 @@
-# Scenario Approval & Guidelines
+# Community Publishing Approval & Guidelines
 
-To ensure a high-quality, safe, and stable experience for all players, every custom scenario uploaded to the **Meridian Strike Community Repository** must pass through a two-phase approval process before becoming publicly visible in the catalog.
+To ensure a high-quality, safe, and stable experience for all players, every custom scenario or campaign submitted to the **Meridian Strike Community Repository** must pass through a two-phase approval process before becoming publicly visible in the catalogue.
 
 This process consists of **Automated Technical Validation** followed by a **Manual Community Review**.
 
@@ -8,10 +8,10 @@ This process consists of **Automated Technical Validation** followed by a **Manu
 
 ## Phase 1: Automated Technical Validation
 
-When you click the **Upload** button for your scenario in the **Campaign Editor**, your client automatically bundles your content and sends it to the repository server. The server immediately subjects this package to a series of technical checks. If any of these checks fail, your upload will be rejected immediately with an error code.
+Create, import, export, fork, and playtest local content from the in-game **Scenario Library** or **Campaign Workshop**, even while signed out or offline. Sign in only when you choose to submit a new item, submit a revision, view its private moderation status, or withdraw it. The game validates the complete package before making a network request, and the server independently repeats those checks.
 
 1. **Data Completeness:**
-   The server ensures your scenario has all the required settings to function properly, such as enemy forces, lance drop limits, and environmental conditions. If you missed a critical setting in the Campaign Editor, it will catch it here.
+   The server validates the complete scenario or campaign, including each embedded mission, map, dialogue, media manifest, mission identity, and progression link.
 
 2. **Map Stability Check:**
    The server verifies that all units, player deploy zones, and extraction zones actually exist within the physical bounds of the map you painted. This prevents scenarios from crashing the game for other players.
@@ -20,7 +20,7 @@ When you click the **Upload** button for your scenario in the **Campaign Editor*
    Your scenario is checked against the current version of the live game. If your scenario relies on an outdated format that is no longer supported, it will be rejected to prevent unexpected errors.
 
 4. **Safety & Security Scanning:**
-   The scenario bundle is scanned to guarantee it only contains safe, game-approved data files and screenshots. This ensures the community is protected from malicious content and excessively large files.
+   Packages are limited to 4,000,000 compressed bytes and 20 MiB expanded, with bounded entry counts and strict safe paths. Every image, including a campaign thumbnail, is limited to 1 MiB and must match its declared image type. Community `.mp4`, `.webm`, video roles, dangerous files, and attempts to use reserved official campaign IDs are rejected.
 
 _If your package passes Phase 1, it enters the **Pending** queue for Phase 2._
 
@@ -60,5 +60,7 @@ While we encourage brutally difficult challenge maps and creative narratives, a 
 
 ## The Verdict
 
-- **Approved:** If the admin approves your scenario, its status changes to `published`. It will instantly appear in the public catalog for all players to download, play, and rate!
-- **Rejected:** If the admin rejects your scenario, you will need to fix the issues listed in the rejection reason and upload the scenario again from the Campaign Editor.
+- **Approved:** The reviewed immutable revision becomes `published` and appears in the public catalogue for players to download, play, and rate.
+- **Revision pending:** A new revision stays private while the previously approved revision remains public. Updating an installed campaign is always an explicit player action.
+- **Rejected:** The private owner status shows the moderator's reason. Correct the local content and submit a new revision; rejection does not take the last approved revision offline.
+- **Withdrawn:** The item leaves the public catalogue, but existing offline installations continue to work and retained immutable revisions remain available according to the compatibility policy.

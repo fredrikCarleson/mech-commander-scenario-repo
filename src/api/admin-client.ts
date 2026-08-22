@@ -1,4 +1,5 @@
 import type { ScenarioMetadata } from '../../shared/schemas/metadata.ts';
+import type { CampaignMetadata } from '../../shared/schemas/campaign.ts';
 
 const API_BASE = '/api/v1';
 const ADMIN_TOKEN_KEY = 'scenario-repo-admin-token';
@@ -46,6 +47,12 @@ export async function fetchPendingScenarios(): Promise<ScenarioMetadata[]> {
   return data.items;
 }
 
+export async function fetchPendingCampaigns(): Promise<CampaignMetadata[]> {
+  const response = await fetch(`${API_BASE}/admin/campaigns`, { headers: adminHeaders() });
+  const data = await handleJson<{ items: CampaignMetadata[] }>(response);
+  return data.items;
+}
+
 export function adminScenarioThumbnailUrl(id: string): string {
   return `${API_BASE}/admin/scenarios/${id}/thumbnail`;
 }
@@ -61,22 +68,70 @@ export async function fetchAdminScenarioThumbnail(id: string): Promise<string | 
   return URL.createObjectURL(blob);
 }
 
-export async function approveScenario(id: string): Promise<ScenarioMetadata> {
+export async function fetchAdminCampaignThumbnail(id: string): Promise<string | null> {
+  const response = await fetch(`${API_BASE}/admin/campaigns/${id}/thumbnail`, {
+    headers: adminHeaders(),
+  });
+  if (!response.ok) return null;
+  return URL.createObjectURL(await response.blob());
+}
+
+function moderationHeaders(): HeadersInit {
+  return { ...adminHeaders(), 'Content-Type': 'application/json' };
+}
+
+export async function approveScenario(id: string, revision: number): Promise<ScenarioMetadata> {
   const response = await fetch(`${API_BASE}/admin/scenarios/${id}/approve`, {
     method: 'POST',
-    headers: adminHeaders(),
+    headers: moderationHeaders(),
+    body: JSON.stringify({ revision }),
   });
   const data = await handleJson<{ metadata: ScenarioMetadata }>(response);
   return data.metadata;
 }
 
-export async function rejectScenario(id: string): Promise<ScenarioMetadata> {
+export async function rejectScenario(
+  id: string,
+  revision: number,
+  reason: string,
+): Promise<ScenarioMetadata> {
   const response = await fetch(`${API_BASE}/admin/scenarios/${id}/reject`, {
     method: 'POST',
-    headers: adminHeaders(),
+    headers: moderationHeaders(),
+    body: JSON.stringify({ revision, reason }),
   });
   const data = await handleJson<{ metadata: ScenarioMetadata }>(response);
   return data.metadata;
+}
+
+export async function approveCampaign(id: string, revision: number): Promise<CampaignMetadata> {
+  const response = await fetch(`${API_BASE}/admin/campaigns/${id}/approve`, {
+    method: 'POST',
+    headers: moderationHeaders(),
+    body: JSON.stringify({ revision }),
+  });
+  return (await handleJson<{ metadata: CampaignMetadata }>(response)).metadata;
+}
+
+export async function rejectCampaign(
+  id: string,
+  revision: number,
+  reason: string,
+): Promise<CampaignMetadata> {
+  const response = await fetch(`${API_BASE}/admin/campaigns/${id}/reject`, {
+    method: 'POST',
+    headers: moderationHeaders(),
+    body: JSON.stringify({ revision, reason }),
+  });
+  return (await handleJson<{ metadata: CampaignMetadata }>(response)).metadata;
+}
+
+export async function deleteCampaignAdmin(id: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/admin/campaigns/${id}`, {
+    method: 'DELETE',
+    headers: adminHeaders(),
+  });
+  await handleJson<{ id: string; deleted: boolean }>(response);
 }
 
 export async function deleteScenarioAdmin(id: string): Promise<void> {

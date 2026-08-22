@@ -9,8 +9,45 @@
   port = 8888
   autoLaunch = false
 
+[context.dev.environment]
+  COMMUNITY_ENVIRONMENT = "development"
+  COMMUNITY_API_ORIGIN = "http://localhost:8888/api/v1"
+  SCENARIO_BLOB_STORE = "mech-scenarios-development-v1"
+  SESSION_SIGNING_SECRET_ID = "development-v1"
+  COMMUNITY_MUTATION_MODE = "authenticated"
+  COMMUNITY_CORS_ORIGINS = "http://localhost:5173,http://localhost:8888,http://127.0.0.1:42647,http://127.0.0.1:42648"
+
+[context.deploy-preview.environment]
+  COMMUNITY_ENVIRONMENT = "staging"
+  COMMUNITY_API_ORIGIN = "https://candidate--meridian-strike-wiki.netlify.app/api/v1"
+  SCENARIO_BLOB_STORE = "mech-scenarios-candidate-v1"
+  SESSION_SIGNING_SECRET_ID = "candidate-v1"
+  COMMUNITY_MUTATION_MODE = "authenticated"
+  COMMUNITY_CORS_ORIGINS = "http://127.0.0.1:42647,http://127.0.0.1:42648"
+
+[context.branch-deploy.environment]
+  COMMUNITY_ENVIRONMENT = "staging"
+  COMMUNITY_API_ORIGIN = "https://candidate--meridian-strike-wiki.netlify.app/api/v1"
+  SCENARIO_BLOB_STORE = "mech-scenarios-candidate-v1"
+  SESSION_SIGNING_SECRET_ID = "candidate-v1"
+  COMMUNITY_MUTATION_MODE = "authenticated"
+  COMMUNITY_CORS_ORIGINS = "http://127.0.0.1:42647,http://127.0.0.1:42648"
+
+[context.production.environment]
+  COMMUNITY_ENVIRONMENT = "production"
+  COMMUNITY_API_ORIGIN = "https://meridian-strike-wiki.netlify.app/api/v1"
+  SCENARIO_BLOB_STORE = "mech-scenarios"
+  SESSION_SIGNING_SECRET_ID = "production-v1"
+  COMMUNITY_MUTATION_MODE = "authenticated"
+  COMMUNITY_CORS_ORIGINS = "https://meridian-strike-wiki.netlify.app,http://127.0.0.1:42647"
+
 [[redirects]]
   from = "/api/v1/scenarios"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/auth/:action"
   to = "/.netlify/functions/api-v1"
   status = 200
 
@@ -61,6 +98,71 @@
 
 [[redirects]]
   from = "/api/v1/admin/scenarios/:id/reject"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/admin/scenarios/:id/rollback"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/scenarios/:id/releases/:revision"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/scenarios/:id/releases/:revision/:action"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/admin/scenarios/:id/owner"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/campaigns"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/campaigns/:id"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/campaigns/:id/:action"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/campaigns/:id/releases/:revision"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/campaigns/:id/releases/:revision/:action"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/admin/campaigns"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/admin/campaigns/:id"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/admin/campaigns/:id/:action"
+  to = "/.netlify/functions/api-v1"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/*"
   to = "/.netlify/functions/api-v1"
   status = 200
 

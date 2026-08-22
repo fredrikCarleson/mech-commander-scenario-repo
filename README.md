@@ -1,204 +1,124 @@
-# Mech Commander Community Scenario Repository
+# Meridian Strike Community Repository
 
-Production-ready MVP for browsing, uploading, downloading, and rating community scenario packages for Mech Commander.
+Moderated distribution service for Meridian Strike scenarios and complete linear campaigns.
 
 ## Architecture
 
-- **Frontend**: React + TypeScript + Vite SPA with a restrained military sci-fi UI
-- **API**: Netlify Functions (`netlify/functions/api-v1.ts`) exposing versioned REST endpoints under `/api/v1`
-- **Storage**: Netlify Blobs — one metadata blob and one package blob per scenario (no monolithic JSON catalogue)
-- **Shared layer**: `shared/` contains Zod schemas, constants, and ZIP validation used by both client preview and server upload
+- React/Vite catalogue and admin review UI
+- Netlify Function API under `/api/v1`
+- Netlify Blobs for public assets, ownership records, pending submissions, and immutable revisions
+- Shared Zod schemas and bounded ZIP validation
 
-```
-Browser ──► Vite SPA ──► /api/v1/* ──► Netlify Function ──► Netlify Blobs
-                              │
-                              └── shared validation (server re-validates everything)
-```
-
-See [PLAN.md](./PLAN.md) for the full design document.
+Only approved packages appear publicly. Submitting an update never takes the currently approved revision offline.
 
 ## Local development
 
-### Prerequisites
-
-- Node.js 20+
-- npm
-
-### Setup
-
 ```bash
 npm install
-```
-
-### Run with Netlify CLI (recommended)
-
-Starts Vite on port 5173 and Netlify Dev on port 8888 with Functions + Blobs emulation.
-
-**Important:** the dev server must be running before you open the site. In a terminal:
-
-```bash
-cd C:\Users\fredr\Projects\mech-commander-scenario-repo
 npm run dev
 ```
 
-Wait until you see:
+Open `http://localhost:8888`; port 5173 is the Vite UI without the Netlify API.
 
+## Authentication
+
+Public browsing, downloads, thumbnails, and ratings are anonymous. Upload, update, status, and withdrawal operations require a short-lived creator session issued from a verified Google identity token.
+
+Authorization uses the immutable Google `sub` claim:
+
+- The first uploader becomes the content owner.
+- Only that owner can submit revisions or withdraw the listing.
+- Admin access requires a subject listed in `ADMIN_GOOGLE_SUBS`; email is not an authorization key.
+
+Configure:
+
+| Variable                    | Purpose                                                              |
+| --------------------------- | -------------------------------------------------------------------- |
+| `GOOGLE_WEB_CLIENT_IDS`     | Accepted Web OAuth audiences                                         |
+| `GOOGLE_DESKTOP_CLIENT_IDS` | Accepted installed-app OAuth audiences                               |
+| `GOOGLE_CLIENT_ID(S)`       | Development-only migration fallback                                  |
+| `VITE_GOOGLE_CLIENT_ID`     | Public Web client ID for the wiki admin sign-in button               |
+| `ADMIN_GOOGLE_SUBS`         | Comma-separated immutable admin subject IDs                          |
+| `SESSION_SIGNING_SECRET`    | At least 32 random bytes for one-hour creator sessions               |
+| `SESSION_SIGNING_SECRET_ID` | Non-secret environment identity (`development/candidate/production`) |
+| `COMMUNITY_ENVIRONMENT`     | Explicit `development`, `staging`, or `production`                   |
+| `COMMUNITY_API_ORIGIN`      | Exact API origin from the environment matrix                         |
+| `SCENARIO_BLOB_STORE`       | Exact isolated Blob namespace from the environment matrix            |
+| `COMMUNITY_MUTATION_MODE`   | `authenticated`, or `disabled` for the forward-compatible rollback   |
+| `COMMUNITY_CORS_ORIGINS`    | Comma-separated trusted wiki and packaged desktop origins            |
+
+Google Web authorized JavaScript origins should include `http://localhost:8888` and `https://meridian-strike-wiki.netlify.app`.
+
+## API
+
+Scenario routes use `/scenarios`; campaign routes use the equivalent `/campaigns` paths.
+
+| Method   | Path                        | Access                | Purpose                                                                |
+| -------- | --------------------------- | --------------------- | ---------------------------------------------------------------------- |
+| `POST`   | `/auth/session`             | Google identity token | Issue creator session                                                  |
+| `GET`    | `/auth/me`                  | Creator               | Verify creator session                                                 |
+| `GET`    | `/:type`                    | Public                | Paginated approved catalogue                                           |
+| `POST`   | `/:type`                    | Creator               | Submit new content for review                                          |
+| `GET`    | `/:type/:id`                | Public                | Approved metadata                                                      |
+| `PUT`    | `/:type/:id`                | Owner                 | Submit immutable revision                                              |
+| `DELETE` | `/:type/:id`                | Owner                 | Withdraw/archive listing                                               |
+| `GET`    | `/:type/:id/status`         | Owner                 | Submission and revision state                                          |
+| `GET`    | `/:type/:id/thumbnail`      | Public                | Approved WebP preview                                                  |
+| `GET`    | `/:type/:id/download`       | Public                | Approved ZIP                                                           |
+| `POST`   | `/:type/:id/ratings`        | Public                | Rate approved content                                                  |
+| `GET`    | `/admin/:type`              | Admin                 | Pending review queue                                                   |
+| `POST`   | `/admin/:type/:id/approve`  | Admin                 | Promote pending revision                                               |
+| `POST`   | `/admin/:type/:id/reject`   | Admin                 | Archive pending revision                                               |
+| `POST`   | `/admin/:type/:id/rollback` | Admin                 | Reactivate a verified immutable revision                               |
+| `DELETE` | `/admin/:type/:id`          | Admin                 | Tombstone public access; retain immutable revisions for audit/recovery |
+
+Here `:type` is `scenarios` or `campaigns`.
+
+## Revision storage
+
+Public keys retain the approved package and metadata. Private ownership and submission sidecars control mutations and moderation. Revision assets are append-only under:
+
+```text
+revisions/scenarios/<repository-id>/<revision>/...
+revisions/campaigns/<repository-id>/<revision>/...
 ```
-Local dev server ready: http://localhost:8888
-```
 
-Then open [http://localhost:8888](http://localhost:8888).
+Legacy records without ownership must be assigned to a verified Google identity by an admin, or republished as a new fork.
 
-Use **port 8888**, not 5173. Port 5173 is Vite only and does not serve `/api/v1` routes unless Netlify Dev is proxying it.
-
-To stop the server, press `Ctrl+C` in the terminal where `npm run dev` is running.
-
-### Vite only (UI without API)
+An authorized release operator can create a read-only, byte-preserving inventory outside this
+repository. It requires `NETLIFY_SITE_ID` and `NETLIFY_AUTH_TOKEN`, records each Blob's ETag,
+metadata, byte count, and SHA-256, and fails if the inventory changes while it runs:
 
 ```bash
-npm run dev:vite
+npm run inventory:export -- --store <store-name> --environment production --output <path-outside-repository>
 ```
 
-API calls proxy to `localhost:8888` when Netlify Dev is also running. Without it, catalogue/upload API calls will fail.
-
-## Scripts
-
-| Command                | Purpose                               |
-| ---------------------- | ------------------------------------- |
-| `npm run dev`          | Netlify Dev (SPA + Functions + Blobs) |
-| `npm run build`        | Typecheck + production SPA build      |
-| `npm run typecheck`    | TypeScript project build              |
-| `npm test`             | Vitest unit/integration tests         |
-| `npm run format`       | Prettier write                        |
-| `npm run format:check` | Prettier check                        |
-
-## API endpoints
-
-Base path: `/api/v1`
-
-| Method | Path                           | Description                                                                               |
-| ------ | ------------------------------ | ----------------------------------------------------------------------------------------- |
-| GET    | `/scenarios`                   | Paginated list with `page`, `limit`, `search`, `difficulty`, `maxTonnage`, `tags`, `sort` |
-| GET    | `/scenarios/:id`               | Scenario metadata                                                                         |
-| GET    | `/scenarios/:id/download`      | ZIP download (increments `downloadCount`)                                                 |
-| POST   | `/scenarios`                   | Upload ZIP (`Content-Type: application/zip`) — creates **draft**                          |
-| GET    | `/scenarios/:id/status`        | Submission status: `{ id, publicationStatus: draft \| published }`                        |
-| POST   | `/scenarios/:id/ratings`       | Body: `{ "rating": 1-5, "clientId": "uuid" }`                                             |
-| GET    | `/admin/scenarios`             | **Admin** — list pending (`draft`) scenarios                                              |
-| POST   | `/admin/scenarios/:id/approve` | **Admin** — publish scenario                                                              |
-| POST   | `/admin/scenarios/:id/reject`  | **Admin** — archive scenario                                                              |
-
-## Netlify Blob keys
-
-Store name: `mech-scenarios` (override with `SCENARIO_BLOB_STORE`).
-
-| Key                 | Contents                      |
-| ------------------- | ----------------------------- |
-| `meta/{id}.json`    | `ScenarioMetadata` record     |
-| `pkg/{id}.zip`      | Raw package bytes (immutable) |
-| `thumb/{id}.webp`   | Extracted thumbnail image     |
-| `ratings/{id}.json` | Per-client rating entries     |
-
-## Scenario package specification
-
-Root-level files only:
-
-- `manifest.json` — title, author, versions, difficulty, tonnage, tags
-- `scenario.json` — game scenario definition (`schemaVersion`, `name` minimum)
-- `map.json` — `width`, `height`, `schemaVersion`
-- `thumbnail.webp` — WebP preview image
-
-Example fixtures live in `fixtures/valid-package/`. Tests build ZIP archives programmatically via `fixtures/build-fixtures.ts`.
-
-## Admin review (approval workflow)
-
-Uploads are stored as **`draft`** until an admin approves them. Only **`published`** scenarios appear in the public catalogue and in the game client.
-
-1. Copy `.env.example` to `.env` and set:
-   - `GOOGLE_CLIENT_ID` / `VITE_GOOGLE_CLIENT_ID` — OAuth 2.0 Web client ID from [Google Cloud Console](https://console.cloud.google.com/)
-   - `ADMIN_EMAILS=fredrik.carleson@gmail.com` — comma-separated allowlist
-2. In Google Cloud, add authorized JavaScript origins:
-   - `http://localhost:8888`
-   - `https://meridian-strike-wiki.netlify.app`
-3. Open **`/admin`**, sign in with Google, and approve or reject pending uploads.
-
-Set the same variables in **Netlify → Site configuration → Environment variables** for production.
-
-Optional: `ADMIN_API_KEY` for scripted admin access (Bearer token).
-
-## Environment variables
-
-| Variable                 | Default             | Description                         |
-| ------------------------ | ------------------- | ----------------------------------- |
-| `GOOGLE_CLIENT_ID`       | —                   | Google OAuth client ID (Functions)  |
-| `VITE_GOOGLE_CLIENT_ID`  | —                   | Google OAuth client ID (SPA)        |
-| `ADMIN_EMAILS`           | —                   | Comma-separated admin emails        |
-| `ADMIN_API_KEY`          | —                   | Optional bearer token for admin API |
-| `UPLOAD_RATE_LIMIT`      | `10`                | Max uploads per IP per window       |
-| `UPLOAD_RATE_WINDOW_MS`  | `3600000`           | Upload rate-limit window            |
-| `SCENARIO_BLOB_STORE`    | `mech-scenarios`    | Netlify Blobs store name            |
-| `MAX_COMPRESSED_BYTES`   | `10485760` (10 MiB) | Max upload size                     |
-| `MAX_DECOMPRESSED_BYTES` | `52428800` (50 MiB) | Max extracted size                  |
-
-## Security
-
-- Server-side ID generation and SHA-256 checksums
-- ZIP path traversal, absolute path, and directory rejection
-- Compressed and decompressed size limits
-- Allow-listed root files and extensions only
-- Malformed JSON and unsupported schema versions rejected
-- No rendering of uploaded HTML; CSP headers on static responses
-- Client validation is preview-only; server never trusts the client
-
-## Testing
+Do not run that command merely to test it; it reads the configured external store. The local
+migration planner itself is dry-run by default and never connects to Netlify:
 
 ```bash
-npm test
+npm run migration:dry-run -- --input ./path/to/exported-snapshot.json
 ```
 
-Covers schema validation, valid/invalid uploads, path traversal, oversized packages, listing filters, rating replacement, and compatibility detection.
+Add `--output ./path/to/new-local-file.json` only to create a migrated local snapshot. It uses exclusive creation, preserves legacy public keys and byte payloads for rollback compatibility, emits source SHA-256 values, creates no ownership claims, and can be rerun idempotently. Exporting, backing up, applying, or restoring production Blob data remains a separately authorized operator action.
 
-## Deployment
+## Package validation
 
-**Live site:** [https://meridian-strike-wiki.netlify.app](https://meridian-strike-wiki.netlify.app)
+Scenario ZIPs contain four root files: `manifest.json`, `scenario.json`, `map.json`, and `thumbnail.webp`.
 
-**Netlify dashboard:** [https://app.netlify.com/projects/mech-commander-scenario-repo](https://app.netlify.com/projects/mech-commander-scenario-repo)
+Campaign ZIPs contain root `manifest.json` and `thumbnail.webp`, plus a self-contained `Campaigns/<stable-id>/` tree with `campaign.json`, embedded mission scenarios, and optional managed media.
 
-### Netlify (already configured)
+Both validators enforce compressed and decompressed limits, safe paths, allowed extensions, schemas, supported versions, and valid WebP thumbnails. The server never trusts client-side validation.
 
-This project is linked to Netlify site `mech-commander-scenario-repo`. Deploy updates with:
+## Commands
 
-```bash
-npx netlify deploy --prod
-```
+| Command                | Purpose                                    |
+| ---------------------- | ------------------------------------------ |
+| `npm run dev`          | Netlify Dev with Functions and local Blobs |
+| `npm run typecheck`    | TypeScript project build                   |
+| `npm test`             | Unit and service tests                     |
+| `npm run lint`         | Oxlint                                     |
+| `npm run format:check` | Prettier verification                      |
+| `npm run build`        | Production build                           |
 
-Or connect GitHub for automatic deploys on push (see below).
-
-### GitHub repository
-
-Create and push the repository (requires [GitHub CLI](https://cli.github.com/) login):
-
-```bash
-gh auth login
-gh repo create mech-commander-scenario-repo --public --source=. --remote=origin --push
-```
-
-Then connect the repo in Netlify: **Site configuration → Build & deploy → Link repository**.
-
-### Manual Netlify setup (new sites)
-
-1. Connect the repository to [Netlify](https://www.netlify.com/).
-2. Build command: `npm run build`
-3. Publish directory: `dist`
-4. Functions directory: `netlify/functions` (configured in `netlify.toml`)
-5. Enable Netlify Blobs for the site.
-
-Netlify automatically builds and deploys Functions defined in `netlify.toml` redirects.
-
-## Pages
-
-1. `/` — Community scenario catalogue
-2. `/scenarios/:id` — Scenario detail, download, rating
-3. `/upload` — Package validation preview and upload (pending review)
-4. `/admin` — Approve or reject pending uploads (Google sign-in)
-5. `/api` — API and compatibility reference
+Live site: `https://meridian-strike-wiki.netlify.app`
