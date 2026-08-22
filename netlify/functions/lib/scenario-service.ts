@@ -132,10 +132,13 @@ export class ScenarioService {
   async getScenarioRelease(id: string, revision: number): Promise<ScenarioMetadata | null> {
     if (await this.store.getDeletion(id)) return null;
     const pointer = await this.store.getMetadata(id);
+    if (!pointer) return null;
     const isActivated =
-      pointer?.availableRevisions?.includes(revision) ||
-      (pointer?.publishedRevision ?? pointer?.revision ?? 1) === revision;
-    if (!pointer || !isActivated) return null;
+      pointer.availableRevisions?.includes(revision) ||
+      pointer.publishedRevision === revision ||
+      (pointer.publicationStatus === 'published' &&
+        (pointer.publishedRevision ?? pointer.revision ?? 1) === revision);
+    if (!isActivated) return null;
     const release = await this.store.getRelease(id, revision);
     if (release) return release.metadata;
     const legacyRevision = pointer.publishedRevision ?? pointer.revision ?? 1;

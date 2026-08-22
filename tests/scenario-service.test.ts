@@ -43,6 +43,11 @@ describe('scenario service', () => {
 
     const listBefore = await service.listScenarios({});
     expect(listBefore.total).toBe(0);
+    expect(await service.getScenario(metadata.id)).toBeNull();
+    expect(await service.getScenarioRelease(metadata.id, 1)).toBeNull();
+    expect(await service.downloadScenario(metadata.id)).toBeNull();
+    expect(await service.downloadScenario(metadata.id, 1)).toBeNull();
+    expect(await service.getThumbnail(metadata.id, 1)).toBeNull();
 
     await service.approveScenario(metadata.id, 1, ADMIN);
     const list = await service.listScenarios({});

@@ -97,6 +97,11 @@ describe('community scenario API lifecycle', () => {
     };
     expect(created.metadata.revision).toBe(1);
     expect(await (await request('/api/v1/scenarios')).json()).toMatchObject({ total: 0 });
+    expect((await request(`/api/v1/scenarios/${created.id}`)).status).toBe(404);
+    expect((await request(`/api/v1/scenarios/${created.id}/download`)).status).toBe(404);
+    expect((await request(`/api/v1/scenarios/${created.id}/releases/1/download`)).status).toBe(
+      404,
+    );
     expect((await request(`/api/v1/scenarios/${created.id}/status`, {}, 'other')).status).toBe(403);
 
     const rejected = await request(

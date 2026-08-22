@@ -205,6 +205,10 @@ describe('campaign service revisions', () => {
     const draft = await service.uploadCampaign(await buildCampaignZip(), CREATOR);
     expect(draft.publicationStatus).toBe('draft');
     expect((await service.listCampaigns({})).total).toBe(0);
+    expect(await service.getCampaign(draft.id)).toBeNull();
+    expect(await service.getCampaignRelease(draft.id, 1)).toBeNull();
+    expect(await service.downloadCampaign(draft.id)).toBeNull();
+    expect(await service.downloadCampaign(draft.id, 1)).toBeNull();
     const published = await service.approveCampaign(draft.id, 1, ADMIN);
     expect(published.publishedRevision).toBe(1);
     expect((await service.listCampaigns({})).items[0]?.title).toBe('Border Fire');
