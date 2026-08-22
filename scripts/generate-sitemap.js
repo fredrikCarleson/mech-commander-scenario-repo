@@ -11,6 +11,7 @@ function generateSitemap() {
   const routes = [
     { path: '/catalogue', priority: '1.0', changefreq: 'daily' },
     { path: '/campaigns', priority: '1.0', changefreq: 'daily' },
+    { path: '/support', priority: '0.7', changefreq: 'daily' },
     { path: '/upload', priority: '0.8', changefreq: 'monthly' },
   ];
 

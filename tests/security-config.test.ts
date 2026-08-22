@@ -232,6 +232,10 @@ describe('production-wide rate-limit declarations', () => {
         '/api/v1/campaigns',
         '/api/v1/campaigns/:id',
         '/api/v1/campaigns/:id/ratings',
+        '/api/v1/support',
+        '/api/v1/support/:id',
+        '/api/v1/support/:id/votes',
+        '/api/v1/support/:id/status',
       ]),
     );
   });

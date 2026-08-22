@@ -80,3 +80,13 @@ export function campaignStableIdClaimKey(stableCampaignId: string): string {
 export function campaignDeletionKey(id: string): string {
   return `deletions/campaigns/${id}.json`;
 }
+
+export function supportTicketKey(id: string): string {
+  return `support/tickets/${id}.json`;
+}
+
+export const SUPPORT_TICKET_PREFIX = 'support/tickets/';
+
+export function supportVotesKey(id: string): string {
+  return `support/votes/${id}.json`;
+}

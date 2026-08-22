@@ -138,13 +138,19 @@ button {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
   background: var(--bg-elevated);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.55rem 0.65rem;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 4.5rem;
 }
 
 button {
@@ -462,4 +468,108 @@ button.danger {
   .admin-card {
     grid-template-columns: 1fr;
   }
+}
+
+.support-form {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elevated);
+}
+
+.support-form h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.support-form label,
+.support-card__body label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.support-form__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.support-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.support-card {
+  padding: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elevated);
+}
+
+.support-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.support-card__title {
+  background: none;
+  border: 0;
+  color: var(--accent-strong);
+  padding: 0;
+  text-align: left;
+  font-weight: 600;
+}
+
+.support-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.support-card__votes,
+.support-card__meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.support-card__meta {
+  margin: 0.35rem 0 0;
+}
+
+.support-card__body {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.support-card__text {
+  color: var(--text);
+}
+
+.support-card__repro {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+button.secondary {
+  background: var(--bg-panel);
+  color: var(--text);
+  border-color: var(--border);
 }

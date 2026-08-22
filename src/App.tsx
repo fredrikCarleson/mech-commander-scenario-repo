@@ -9,6 +9,7 @@ import { AdminPage } from './pages/AdminPage.tsx';
 import { WikiPage } from './pages/WikiPage.tsx';
 import { CampaignCataloguePage } from './pages/CampaignCataloguePage.tsx';
 import { CampaignDetailPage } from './pages/CampaignDetailPage.tsx';
+import { SupportPage } from './pages/SupportPage.tsx';
 
 function NotFoundPage() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/catalogue" element={<CataloguePage />} />
         <Route path="/campaigns" element={<CampaignCataloguePage />} />
         <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
+        <Route path="/support" element={<SupportPage />} />
         <Route path="/scenarios/:id" element={<DetailPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/admin" element={<AdminPage />} />

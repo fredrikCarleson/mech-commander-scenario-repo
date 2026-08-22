@@ -21,9 +21,12 @@ describe('API HTTP boundary', () => {
       action: 'download',
       revision: 2,
     });
-    expect(
-      parseApiPath('/api/v1/admin/scenarios/11111111-1111-4111-8111-111111111111/rollback'),
-    ).toMatchObject({ resource: 'admin-scenarios', action: 'rollback' });
+    expect(parseApiPath('/api/v1/support/11111111-1111-4111-8111-111111111111/votes')).toEqual({
+      resource: 'support',
+      id: '11111111-1111-4111-8111-111111111111',
+      action: 'votes',
+      revision: null,
+    });
   });
 
   it('returns explicit allowlisted CORS and JSON for rejected preflights', async () => {

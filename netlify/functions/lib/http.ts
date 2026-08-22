@@ -99,6 +99,16 @@ export function parseApiPath(pathname: string): {
     };
   }
 
+  const supportMatch = normalized.match(/\/api\/v1\/support(?:\/([^/]+))?(?:\/([^/]+))?$/);
+  if (supportMatch) {
+    return {
+      resource: 'support',
+      id: supportMatch[1] ?? null,
+      action: supportMatch[2] ?? null,
+      revision: null,
+    };
+  }
+
   const campaignMatch = normalized.match(/\/api\/v1\/campaigns(?:\/([^/]+))?(?:\/([^/]+))?$/);
   if (campaignMatch) {
     return {

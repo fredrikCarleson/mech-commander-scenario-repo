@@ -57,3 +57,50 @@ export type SortOption = (typeof SORT_OPTIONS)[number];
 
 export const PUBLICATION_STATUSES = ['published', 'draft', 'archived'] as const;
 export type PublicationStatus = (typeof PUBLICATION_STATUSES)[number];
+
+export const SUPPORT_TICKET_SCHEMA_VERSION = 1 as const;
+
+export const SUPPORT_TYPES = ['bug', 'request'] as const;
+export type SupportType = (typeof SUPPORT_TYPES)[number];
+
+export const SUPPORT_SEVERITIES = ['low', 'medium', 'high', 'crash'] as const;
+export type SupportSeverity = (typeof SUPPORT_SEVERITIES)[number];
+
+export const SUPPORT_STATUSES = ['open', 'closed', 'not_doing', 'hidden'] as const;
+export type SupportStatus = (typeof SUPPORT_STATUSES)[number];
+
+export const SUPPORT_PUBLIC_STATUSES = ['open', 'closed', 'not_doing'] as const;
+export type SupportPublicStatus = (typeof SUPPORT_PUBLIC_STATUSES)[number];
+
+export const SUPPORT_LIST_STATUS_FILTERS = [...SUPPORT_STATUSES, 'all'] as const;
+export type SupportListStatusFilter = (typeof SUPPORT_LIST_STATUS_FILTERS)[number];
+
+export const SUPPORT_SORT_OPTIONS = ['votes', 'newest'] as const;
+export type SupportSortOption = (typeof SUPPORT_SORT_OPTIONS)[number];
+
+export const SUPPORT_TITLE_MIN = 8;
+export const SUPPORT_TITLE_MAX = 100;
+export const SUPPORT_DESCRIPTION_MIN = 8;
+export const SUPPORT_DESCRIPTION_MAX = 500;
+export const SUPPORT_REPRO_MIN = 8;
+export const SUPPORT_REPRO_MAX = 4000;
+export const SUPPORT_GAME_VERSION_MAX = 32;
+
+export const SUPPORT_STATUS_LABELS: Record<SupportStatus, string> = {
+  open: 'Open',
+  closed: 'Closed',
+  not_doing: 'Not doing',
+  hidden: 'Hidden',
+};
+
+export const SUPPORT_TYPE_LABELS: Record<SupportType, string> = {
+  bug: 'Bug',
+  request: 'Request',
+};
+
+export const SUPPORT_SEVERITY_LABELS: Record<SupportSeverity, string> = {
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High',
+  crash: 'Crash',
+};

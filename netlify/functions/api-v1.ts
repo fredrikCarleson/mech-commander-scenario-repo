@@ -3,6 +3,7 @@ import { createNetlifyCampaignBlobStore } from './lib/netlify-campaign-blob-stor
 
 import {
   AuthError,
+  isAdminSubject,
   issueCreatorSession,
   requireAdmin,
   requireCreator,
@@ -11,6 +12,8 @@ import {
 
 import { ScenarioService, ServiceError } from './lib/scenario-service.ts';
 import { CampaignService } from './lib/campaign-service.ts';
+import { SupportService } from './lib/support-service.ts';
+import { createNetlifySupportBlobStore } from './lib/netlify-support-blob-store.ts';
 
 import {
   DEFAULT_MAX_CAMPAIGN_COMPRESSED_BYTES,
@@ -80,7 +83,11 @@ async function routeRequest(request: Request): Promise<Response> {
       }
       if (action === 'me' && method === 'GET') {
         const creator = await requireCreator(request);
-        return jsonResponse(200, { email: creator.email, role: 'creator' });
+        return jsonResponse(200, {
+          email: creator.email,
+          role: 'creator',
+          isAdmin: isAdminSubject(creator.sub),
+        });
       }
       return errorResponse(405, 'Method not allowed.');
     }
@@ -320,6 +327,48 @@ async function routeRequest(request: Request): Promise<Response> {
       return errorResponse(405, 'Method not allowed.');
     }
 
+    if (resource === 'support') {
+      const supportService = new SupportService(createNetlifySupportBlobStore());
+      if (!id && method === 'GET') {
+        const viewer = await optionalCreator(request);
+        return jsonResponse(
+          200,
+          await supportService.listTickets(Object.fromEntries(url.searchParams.entries()), viewer),
+        );
+      }
+      if (!id && method === 'POST') {
+        assertMutationEnabled();
+        const creator = await requireCreator(request);
+        const ticket = await supportService.createTicket(await readJsonBody(request), creator);
+        return jsonResponse(201, ticket);
+      }
+      if (id && !action && method === 'GET') {
+        const viewer = await optionalCreator(request);
+        const ticket = await supportService.getTicket(id, viewer);
+        return ticket ? jsonResponse(200, ticket) : errorResponse(404, 'Support ticket not found.');
+      }
+      if (id && !action && method === 'PUT') {
+        assertMutationEnabled();
+        const creator = await requireCreator(request);
+        const ticket = await supportService.updateTicket(id, await readJsonBody(request), creator);
+        return jsonResponse(200, ticket);
+      }
+      if (id && action === 'votes' && method === 'POST') {
+        assertMutationEnabled();
+        const creator = await requireCreator(request);
+        return jsonResponse(200, await supportService.toggleVote(id, creator));
+      }
+      if (id && action === 'status' && method === 'POST') {
+        assertMutationEnabled();
+        const admin = await requireAdmin(request);
+        return jsonResponse(
+          200,
+          await supportService.updateStatus(id, await readJsonBody(request), admin),
+        );
+      }
+      return errorResponse(405, 'Method not allowed.');
+    }
+
     if (resource !== 'scenarios') {
       return errorResponse(404, 'Not found.');
     }
@@ -501,6 +550,11 @@ async function routeRequest(request: Request): Promise<Response> {
 
     return errorResponse(500, 'Internal server error.');
   }
+}
+
+async function optionalCreator(request: Request) {
+  if (!request.headers.get('Authorization')) return null;
+  return requireCreator(request);
 }
 
 async function readJsonBody(request: Request): Promise<unknown> {
