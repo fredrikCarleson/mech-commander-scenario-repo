@@ -1,0 +1,3 @@
+# Production SPA fallback. Keep this out of netlify.toml so `netlify dev`
+# does not rewrite Vite module URLs such as /src/main.tsx to index.html.
+/*    /index.html   200

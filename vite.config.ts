@@ -4,6 +4,7 @@ import path from 'node:path';
 
 export default defineConfig({
   plugins: [react()],
+  appType: 'spa',
   resolve: {
     alias: {
       '@shared': path.resolve(__dirname, 'shared'),

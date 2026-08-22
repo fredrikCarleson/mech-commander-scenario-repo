@@ -15,6 +15,7 @@ vi.mock('@netlify/blobs', () => ({ getStore: mock.getStore }));
 
 import { createNetlifyBlobStore } from '../netlify/functions/lib/netlify-blob-store.ts';
 import { createNetlifyCampaignBlobStore } from '../netlify/functions/lib/netlify-campaign-blob-store.ts';
+import { createNetlifySupportBlobStore } from '../netlify/functions/lib/netlify-support-blob-store.ts';
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -77,6 +78,39 @@ describe('Netlify Blob production adapter contract', () => {
       'revisions/campaigns/22222222-2222-4222-8222-222222222222/1/package.zip',
       expect.any(Uint8Array),
       expect.objectContaining({ onlyIfNew: true }),
+    );
+  });
+
+  it('lists support tickets when the local Blob sandbox omits ETags', async () => {
+    const ticket = {
+      schemaVersion: 1,
+      id: '97bccb41-9843-456d-a2e9-792cee18fc8b',
+      type: 'bug',
+      severity: 'medium',
+      status: 'open',
+      title: 'Mechs fall through the map after deploy',
+      description: 'A lance falls through the terrain after the second turn.',
+      repro: 'Start a mission, move two hexes, wait until turn 2.',
+      reporterSub: 'google-sub',
+      reporterEmail: 'player@example.com',
+      voteCount: 0,
+      createdAt: '2026-08-22T12:00:00.000Z',
+      updatedAt: '2026-08-22T12:00:00.000Z',
+    };
+    mock.store.list.mockResolvedValue({
+      blobs: [{ key: `support/tickets/${ticket.id}.json` }],
+    });
+    mock.store.getWithMetadata.mockResolvedValue({
+      data: JSON.stringify(ticket),
+      metadata: { contentType: 'application/json' },
+    });
+    const store = createNetlifySupportBlobStore();
+    await expect(store.getTicket(ticket.id)).resolves.toMatchObject({ id: ticket.id });
+    await store.setTicket(ticket, { onlyIfMatch: `sandbox:support/tickets/${ticket.id}.json` });
+    expect(mock.store.set).toHaveBeenCalledWith(
+      `support/tickets/${ticket.id}.json`,
+      expect.any(String),
+      expect.not.objectContaining({ onlyIfMatch: expect.anything() }),
     );
   });
 });

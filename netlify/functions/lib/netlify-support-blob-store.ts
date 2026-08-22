@@ -14,9 +14,10 @@ import type { WriteCondition } from './blob-concurrency.ts';
 import { resolveCommunityEnvironment } from './community-environment.ts';
 import type { SupportBlobStore } from './support-blob-store.ts';
 
-function requireEtag(etag: string | undefined, key: string): string {
-  if (!etag) throw new Error(`Blob ${key} did not include an ETag.`);
-  return etag;
+function blobEtag(etag: string | undefined, key: string): string {
+  if (etag) return etag;
+  // The local Netlify Blobs sandbox often omits ETags. Production Blobs include them.
+  return `sandbox:${key}`;
 }
 
 export function createNetlifySupportBlobStore(): SupportBlobStore {
@@ -28,15 +29,19 @@ export function createNetlifySupportBlobStore(): SupportBlobStore {
   async function getJsonVersioned<T>(key: string, parse: (input: unknown) => T) {
     const result = await store.getWithMetadata(key, { type: 'text' });
     return result
-      ? { value: parse(JSON.parse(result.data)), etag: requireEtag(result.etag, key) }
+      ? { value: parse(JSON.parse(result.data)), etag: blobEtag(result.etag, key) }
       : null;
   }
 
   async function setJson(key: string, value: unknown, condition?: WriteCondition) {
-    return store.set(key, JSON.stringify(value), {
+    const options: Record<string, unknown> = {
       metadata: { contentType: 'application/json' },
-      ...condition,
-    });
+    };
+    if (condition?.onlyIfNew) options.onlyIfNew = true;
+    if (condition?.onlyIfMatch && !condition.onlyIfMatch.startsWith('sandbox:')) {
+      options.onlyIfMatch = condition.onlyIfMatch;
+    }
+    return store.set(key, JSON.stringify(value), options);
   }
 
   return {

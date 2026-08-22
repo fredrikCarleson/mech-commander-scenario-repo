@@ -138,8 +138,9 @@ function SupportPanel() {
     event.preventDefault();
     setBusy(true);
     setMessage(null);
+    setError(null);
     try {
-      await createSupportTicket({
+      const created = await createSupportTicket({
         ...form,
         gameVersion: form.gameVersion?.trim() ? form.gameVersion.trim() : undefined,
       });
@@ -147,6 +148,7 @@ function SupportPanel() {
       setStatus('open');
       setPage(1);
       setMessage('Ticket submitted.');
+      setItems((current) => [created, ...current.filter((item) => item.id !== created.id)]);
       await loadTickets();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Could not submit ticket.');
