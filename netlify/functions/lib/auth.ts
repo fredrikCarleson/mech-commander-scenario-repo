@@ -118,6 +118,147 @@ export async function verifyGoogleIdentityToken(
   return verifyGoogleIdentityTokenWithKey(token, GOOGLE_JWKS, googleClientIds(), expectedNonce);
 }
 
+const PKCE_VERIFIER = /^[A-Za-z0-9\-._~]{43,128}$/;
+const AUTH_CODE_MAX_LENGTH = 2048;
+
+export interface DesktopGoogleAuthorization {
+  authorizationCode: string;
+  redirectUri: string;
+  codeVerifier: string;
+  nonce: string;
+  clientId?: string;
+}
+
+function readNonce(value: unknown): string {
+  if (typeof value !== 'string' || value.length < 16 || value.length > 256) {
+    throw new AuthError(400, 'OAuth nonce is required.');
+  }
+  return value;
+}
+
+export function isLoopbackOAuthRedirect(value: string): boolean {
+  try {
+    const url = new URL(value);
+    const port = Number(url.port);
+    return (
+      url.protocol === 'http:' &&
+      url.hostname === '127.0.0.1' &&
+      url.pathname === '/oauth/callback' &&
+      Number.isInteger(port) &&
+      port >= 1 &&
+      port <= 65535 &&
+      url.search === '' &&
+      url.hash === '' &&
+      url.username === '' &&
+      url.password === ''
+    );
+  } catch {
+    return false;
+  }
+}
+
+function desktopClientIds(): string[] {
+  const ids = [...configuredValues('GOOGLE_DESKTOP_CLIENT_IDS')];
+  if (ids.length > 0) return ids;
+  const fallback = process.env.GOOGLE_CLIENT_ID?.trim();
+  if (resolveCommunityEnvironment().name === 'development' && fallback) return [fallback];
+  throw new AuthError(503, 'Desktop Google sign-in is not configured.');
+}
+
+function desktopClientSecret(): string {
+  const secret = process.env.GOOGLE_DESKTOP_CLIENT_SECRET?.trim();
+  if (!secret) {
+    throw new AuthError(503, 'Desktop Google sign-in is not configured.');
+  }
+  return secret;
+}
+
+export async function exchangeDesktopGoogleAuthorizationCode(
+  input: DesktopGoogleAuthorization,
+  deps: {
+    fetchImpl?: typeof fetch;
+    verifyIdentityToken?: (token: string, expectedNonce?: string) => Promise<AuthenticatedCreator>;
+  } = {},
+): Promise<AuthenticatedCreator> {
+  if (!isLoopbackOAuthRedirect(input.redirectUri)) {
+    throw new AuthError(400, 'Desktop sign-in redirect URI is invalid.');
+  }
+  if (!PKCE_VERIFIER.test(input.codeVerifier)) {
+    throw new AuthError(400, 'Desktop sign-in code verifier is invalid.');
+  }
+  if (input.authorizationCode.length < 1 || input.authorizationCode.length > AUTH_CODE_MAX_LENGTH) {
+    throw new AuthError(400, 'Desktop sign-in authorization code is invalid.');
+  }
+  const allowedDesktopIds = desktopClientIds();
+  const clientId = input.clientId?.trim() || allowedDesktopIds[0];
+  if (!clientId || !allowedDesktopIds.includes(clientId)) {
+    throw new AuthError(401, 'Desktop Google client is not allowed.');
+  }
+
+  const fetchImpl = deps.fetchImpl ?? fetch;
+  const response = await fetchImpl('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
+    body: new URLSearchParams({
+      code: input.authorizationCode,
+      client_id: clientId,
+      client_secret: desktopClientSecret(),
+      redirect_uri: input.redirectUri,
+      grant_type: 'authorization_code',
+      code_verifier: input.codeVerifier,
+    }),
+  });
+  const payload = (await response.json().catch(() => undefined)) as
+    { id_token?: unknown; error?: unknown } | undefined;
+  if (!response.ok || typeof payload?.id_token !== 'string') {
+    const googleError =
+      typeof payload?.error === 'string' ? payload.error : `HTTP ${response.status}`;
+    console.error('Google desktop token exchange failed', googleError);
+    throw new AuthError(401, 'Google desktop sign-in exchange failed.');
+  }
+  const verifyIdentityToken = deps.verifyIdentityToken ?? verifyGoogleIdentityToken;
+  return verifyIdentityToken(payload.id_token, input.nonce);
+}
+
+export async function authenticateGoogleCreator(body: unknown): Promise<AuthenticatedCreator> {
+  if (!body || typeof body !== 'object') {
+    throw new AuthError(400, 'Request body must be a JSON object.');
+  }
+  const record = body as Record<string, unknown>;
+  const nonce = readNonce(record.nonce);
+  const hasIdentity = typeof record.identityToken === 'string' && record.identityToken.length > 0;
+  const hasDesktop =
+    record.authorizationCode !== undefined ||
+    record.redirectUri !== undefined ||
+    record.codeVerifier !== undefined;
+  if (hasIdentity && hasDesktop) {
+    throw new AuthError(400, 'Use either a Google identity token or a desktop authorization code.');
+  }
+  if (hasDesktop) {
+    if (
+      typeof record.authorizationCode !== 'string' ||
+      typeof record.redirectUri !== 'string' ||
+      typeof record.codeVerifier !== 'string'
+    ) {
+      throw new AuthError(
+        400,
+        'Desktop sign-in requires authorizationCode, redirectUri, and codeVerifier.',
+      );
+    }
+    return exchangeDesktopGoogleAuthorizationCode({
+      authorizationCode: record.authorizationCode,
+      redirectUri: record.redirectUri,
+      codeVerifier: record.codeVerifier,
+      nonce,
+      clientId: typeof record.clientId === 'string' ? record.clientId : undefined,
+    });
+  }
+  if (!hasIdentity) {
+    throw new AuthError(400, 'Google identity token or desktop authorization code is required.');
+  }
+  return verifyGoogleIdentityToken(record.identityToken as string, nonce);
+}
+
 export async function issueCreatorSession(identity: AuthenticatedCreator): Promise<{
   token: string;
   expiresAt: number;

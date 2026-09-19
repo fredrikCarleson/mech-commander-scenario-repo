@@ -15,21 +15,21 @@ Do not mix these up.
 
 ### 1. Game build environment (how the `.exe` is compiled)
 
-| Game env | What it is | Community API it should call |
-| --- | --- | --- |
+| Game env        | What it is                                          | Community API it should call                               |
+| --------------- | --------------------------------------------------- | ---------------------------------------------------------- |
 | **development** | `npm run dev` / unpackaged Electron on your machine | Local Netlify **or** production, depending on `.env.local` |
-| **staging** | Packaged candidate / Steam private branch | Candidate API only |
-| **production** | Steam public Full build | Production API only |
+| **staging**     | Packaged candidate / Steam private branch           | Candidate API only                                         |
+| **production**  | Steam public Full build                             | Production API only                                        |
 
 Edition is separate: **Full** has Custom Scenarios, Campaign Workshop, Mercenary Board, and publishing. **Demo** has none of those.
 
 ### 2. Community API environment (Netlify identity + Blob store)
 
-| API env | URL | Blob store | When to use |
-| --- | --- | --- | --- |
-| **development** | `http://localhost:8888/api/v1` | `mech-scenarios-development-v1` | Throwaway uploads, validator tests, admin-queue practice |
-| **staging** | `https://candidate--meridian-strike-wiki.netlify.app/api/v1` | `mech-scenarios-candidate-v1` | Packaged sign-in and publish tests that must not touch live maps |
-| **production** | `https://meridian-strike-wiki.netlify.app/api/v1` | `mech-scenarios` | Real players. Live catalogue. |
+| API env         | URL                                                          | Blob store                      | When to use                                                      |
+| --------------- | ------------------------------------------------------------ | ------------------------------- | ---------------------------------------------------------------- |
+| **development** | `http://localhost:8888/api/v1`                               | `mech-scenarios-development-v1` | Throwaway uploads, validator tests, admin-queue practice         |
+| **staging**     | `https://candidate--meridian-strike-wiki.netlify.app/api/v1` | `mech-scenarios-candidate-v1`   | Packaged sign-in and publish tests that must not touch live maps |
+| **production**  | `https://meridian-strike-wiki.netlify.app/api/v1`            | `mech-scenarios`                | Real players. Live catalogue.                                    |
 
 Each store, session secret, and API origin is isolated on purpose. A staging Function **cannot** be pointed at the production Blob store; it fail-closes.
 
@@ -44,7 +44,7 @@ Publishing is **only** from the Full Edition desktop app. Not the website, not t
 1. Run the **desktop** game (Electron), Full Edition.
 2. Confirm it is talking to the API you intend (see [Pointing the game](#pointing-the-game-at-dev-staging-or-prod)).
 3. Open **Custom Scenarios**. Build, save, and **playtest** the map locally.
-4. Sign in with Google on the creator panel. A system browser opens (PKCE, no client secret).
+4. Sign in with Google on the creator panel. A system browser opens Google, then a local `http://127.0.0.1:<port>/oauth/callback` page. That loopback page belongs to the game. Wiki `/admin` is only for reviewers.
 5. Click **Upload**. Wait for validation. Status becomes pending.
 6. Open `/admin` **on the same environment**, sign in with the **Web** Google button (wiki admin, not the Desktop client).
 7. Approve only if you want that environment’s catalogue to show it.
@@ -89,11 +89,11 @@ COMMUNITY_GOOGLE_OAUTH_CLIENT_ID=<Desktop client ID only>
 # VITE_SCENARIO_REPO_API_BASE=http://localhost:8888/api/v1
 ```
 
-| Goal | What to run | `VITE_SCENARIO_REPO_API_BASE` |
-| --- | --- | --- |
-| Local end-to-end | Wiki: `npm run dev` (port 8888). Game: desktop Full. | `http://localhost:8888/api/v1` |
+| Goal                  | What to run                                                      | `VITE_SCENARIO_REPO_API_BASE`                                                      |
+| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Local end-to-end      | Wiki: `npm run dev` (port 8888). Game: desktop Full.             | `http://localhost:8888/api/v1`                                                     |
 | Staging packaged test | Candidate Netlify site healthy. Packaged Full **staging** build. | Baked in at package time to the candidate origin. Do not ship production URL here. |
-| Live players | Packaged Full **production** / Steam. | Production origin. No `.env.local` override in the artifact. |
+| Live players          | Packaged Full **production** / Steam.                            | Production origin. No `.env.local` override in the artifact.                       |
 
 Notes:
 

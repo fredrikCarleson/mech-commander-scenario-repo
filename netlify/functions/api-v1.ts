@@ -3,6 +3,7 @@ import { createNetlifyCampaignBlobStore } from './lib/netlify-campaign-blob-stor
 
 import {
   AuthError,
+  authenticateGoogleCreator,
   isAdminSubject,
   issueCreatorSession,
   requireAdmin,
@@ -54,26 +55,7 @@ async function routeRequest(request: Request): Promise<Response> {
     if (resource === 'auth') {
       if (action === 'session' && method === 'POST') {
         assertMutationEnabled();
-        const body = await readJsonBody(request);
-        const identityToken =
-          body && typeof body === 'object' && 'identityToken' in body
-            ? (body as { identityToken?: unknown }).identityToken
-            : undefined;
-        const expectedNonce =
-          body && typeof body === 'object' && 'nonce' in body
-            ? (body as { nonce?: unknown }).nonce
-            : undefined;
-        if (typeof identityToken !== 'string' || !identityToken) {
-          return errorResponse(400, 'Google identity token is required.');
-        }
-        if (
-          typeof expectedNonce !== 'string' ||
-          expectedNonce.length < 16 ||
-          expectedNonce.length > 256
-        ) {
-          return errorResponse(400, 'OAuth nonce is required.');
-        }
-        const identity = await verifyGoogleIdentityToken(identityToken, expectedNonce);
+        const identity = await authenticateGoogleCreator(await readJsonBody(request));
         const session = await issueCreatorSession(identity);
         return jsonResponse(200, {
           ...session,

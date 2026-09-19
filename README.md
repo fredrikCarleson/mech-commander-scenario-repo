@@ -22,7 +22,7 @@ Open `http://localhost:8888`; port 5173 is the Vite UI without the Netlify API.
 
 ## Authentication
 
-Public browsing, downloads, thumbnails, and ratings are anonymous. Upload, update, status, and withdrawal operations require a short-lived creator session issued from a verified Google identity token.
+Public browsing, downloads, thumbnails, and ratings are anonymous. Upload, update, status, and withdrawal operations require a short-lived creator session. The wiki `/admin` Google button sends an identity token. The Steam/desktop game sends a loopback authorization code; this API exchanges it with Google.
 
 Authorization uses the immutable Google `sub` claim:
 
@@ -32,20 +32,21 @@ Authorization uses the immutable Google `sub` claim:
 
 Configure:
 
-| Variable                    | Purpose                                                              |
-| --------------------------- | -------------------------------------------------------------------- |
-| `GOOGLE_WEB_CLIENT_IDS`     | Accepted Web OAuth audiences                                         |
-| `GOOGLE_DESKTOP_CLIENT_IDS` | Accepted installed-app OAuth audiences                               |
-| `GOOGLE_CLIENT_ID(S)`       | Development-only migration fallback                                  |
-| `VITE_GOOGLE_CLIENT_ID`     | Public Web client ID for the wiki admin sign-in button               |
-| `ADMIN_GOOGLE_SUBS`         | Comma-separated immutable admin subject IDs                          |
-| `SESSION_SIGNING_SECRET`    | At least 32 random bytes for one-hour creator sessions               |
-| `SESSION_SIGNING_SECRET_ID` | Non-secret environment identity (`development/candidate/production`) |
-| `COMMUNITY_ENVIRONMENT`     | Explicit `development`, `staging`, or `production`                   |
-| `COMMUNITY_API_ORIGIN`      | Exact API origin from the environment matrix                         |
-| `SCENARIO_BLOB_STORE`       | Exact isolated Blob namespace from the environment matrix            |
-| `COMMUNITY_MUTATION_MODE`   | `authenticated`, or `disabled` for the forward-compatible rollback   |
-| `COMMUNITY_CORS_ORIGINS`    | Comma-separated trusted wiki and packaged desktop origins            |
+| Variable                       | Purpose                                                              |
+| ------------------------------ | -------------------------------------------------------------------- |
+| `GOOGLE_WEB_CLIENT_IDS`        | Accepted Web OAuth audiences                                         |
+| `GOOGLE_DESKTOP_CLIENT_IDS`    | Accepted installed-app OAuth audiences                               |
+| `GOOGLE_DESKTOP_CLIENT_SECRET` | Wiki-only secret for desktop code exchange. Never ship in the game   |
+| `GOOGLE_CLIENT_ID(S)`          | Development-only migration fallback                                  |
+| `VITE_GOOGLE_CLIENT_ID`        | Public Web client ID for the wiki admin sign-in button               |
+| `ADMIN_GOOGLE_SUBS`            | Comma-separated immutable admin subject IDs                          |
+| `SESSION_SIGNING_SECRET`       | At least 32 random bytes for one-hour creator sessions               |
+| `SESSION_SIGNING_SECRET_ID`    | Non-secret environment identity (`development/candidate/production`) |
+| `COMMUNITY_ENVIRONMENT`        | Explicit `development`, `staging`, or `production`                   |
+| `COMMUNITY_API_ORIGIN`         | Exact API origin from the environment matrix                         |
+| `SCENARIO_BLOB_STORE`          | Exact isolated Blob namespace from the environment matrix            |
+| `COMMUNITY_MUTATION_MODE`      | `authenticated`, or `disabled` for the forward-compatible rollback   |
+| `COMMUNITY_CORS_ORIGINS`       | Comma-separated trusted wiki and packaged desktop origins            |
 
 Google Web authorized JavaScript origins should include `http://localhost:8888` and `https://meridian-strike-wiki.netlify.app`.
 
@@ -53,24 +54,24 @@ Google Web authorized JavaScript origins should include `http://localhost:8888` 
 
 Scenario routes use `/scenarios`; campaign routes use the equivalent `/campaigns` paths.
 
-| Method   | Path                        | Access                | Purpose                                                                |
-| -------- | --------------------------- | --------------------- | ---------------------------------------------------------------------- |
-| `POST`   | `/auth/session`             | Google identity token | Issue creator session                                                  |
-| `GET`    | `/auth/me`                  | Creator               | Verify creator session                                                 |
-| `GET`    | `/:type`                    | Public                | Paginated approved catalogue                                           |
-| `POST`   | `/:type`                    | Creator               | Submit new content for review                                          |
-| `GET`    | `/:type/:id`                | Public                | Approved metadata                                                      |
-| `PUT`    | `/:type/:id`                | Owner                 | Submit immutable revision                                              |
-| `DELETE` | `/:type/:id`                | Owner                 | Withdraw/archive listing                                               |
-| `GET`    | `/:type/:id/status`         | Owner                 | Submission and revision state                                          |
-| `GET`    | `/:type/:id/thumbnail`      | Public                | Approved WebP preview                                                  |
-| `GET`    | `/:type/:id/download`       | Public                | Approved ZIP                                                           |
-| `POST`   | `/:type/:id/ratings`        | Public                | Rate approved content                                                  |
-| `GET`    | `/admin/:type`              | Admin                 | Pending review queue                                                   |
-| `POST`   | `/admin/:type/:id/approve`  | Admin                 | Promote pending revision                                               |
-| `POST`   | `/admin/:type/:id/reject`   | Admin                 | Archive pending revision                                               |
-| `POST`   | `/admin/:type/:id/rollback` | Admin                 | Reactivate a verified immutable revision                               |
-| `DELETE` | `/admin/:type/:id`          | Admin                 | Tombstone public access; retain immutable revisions for audit/recovery |
+| Method   | Path                        | Access                                              | Purpose                                                                |
+| -------- | --------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------- |
+| `POST`   | `/auth/session`             | Google identity token or desktop authorization code | Issue creator session                                                  |
+| `GET`    | `/auth/me`                  | Creator                                             | Verify creator session                                                 |
+| `GET`    | `/:type`                    | Public                                              | Paginated approved catalogue                                           |
+| `POST`   | `/:type`                    | Creator                                             | Submit new content for review                                          |
+| `GET`    | `/:type/:id`                | Public                                              | Approved metadata                                                      |
+| `PUT`    | `/:type/:id`                | Owner                                               | Submit immutable revision                                              |
+| `DELETE` | `/:type/:id`                | Owner                                               | Withdraw/archive listing                                               |
+| `GET`    | `/:type/:id/status`         | Owner                                               | Submission and revision state                                          |
+| `GET`    | `/:type/:id/thumbnail`      | Public                                              | Approved WebP preview                                                  |
+| `GET`    | `/:type/:id/download`       | Public                                              | Approved ZIP                                                           |
+| `POST`   | `/:type/:id/ratings`        | Public                                              | Rate approved content                                                  |
+| `GET`    | `/admin/:type`              | Admin                                               | Pending review queue                                                   |
+| `POST`   | `/admin/:type/:id/approve`  | Admin                                               | Promote pending revision                                               |
+| `POST`   | `/admin/:type/:id/reject`   | Admin                                               | Archive pending revision                                               |
+| `POST`   | `/admin/:type/:id/rollback` | Admin                                               | Reactivate a verified immutable revision                               |
+| `DELETE` | `/admin/:type/:id`          | Admin                                               | Tombstone public access; retain immutable revisions for audit/recovery |
 
 Here `:type` is `scenarios` or `campaigns`.
 
@@ -108,7 +109,6 @@ After an authorized backup and dry-run review, apply additive writes with an exp
 node scripts/community-blob-apply.mjs --store mech-scenarios --environment production --input <path-outside-repository> --confirm production
 ```
 
-
 ## Package validation
 
 Scenario ZIPs contain four root files: `manifest.json`, `scenario.json`, `map.json`, and `thumbnail.webp`.
@@ -131,4 +131,3 @@ Both validators enforce compressed and decompressed limits, safe paths, allowed 
 Live site: `https://meridian-strike-wiki.netlify.app`
 
 Owner/operator runbook (upload flow, dev vs staging vs production, testing): [docs/OWNER_COMMUNITY_GUIDE.md](docs/OWNER_COMMUNITY_GUIDE.md).
-

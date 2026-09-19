@@ -2,6 +2,9 @@ import { generateKeyPair, SignJWT } from 'jose';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   AuthError,
+  authenticateGoogleCreator,
+  exchangeDesktopGoogleAuthorizationCode,
+  isLoopbackOAuthRedirect,
   issueCreatorSession,
   requireAdmin,
   requireCreator,
@@ -146,6 +149,74 @@ describe('authentication boundaries', () => {
         'expected-nonce',
       ),
     ).rejects.toMatchObject({ statusCode: 401 });
+  });
+
+  it('exchanges a desktop loopback authorization code and rejects wiki redirects', async () => {
+    process.env = {
+      ...process.env,
+      NODE_ENV: 'test',
+      COMMUNITY_ENVIRONMENT: 'development',
+      GOOGLE_WEB_CLIENT_IDS: 'web-client.apps.googleusercontent.com',
+      GOOGLE_DESKTOP_CLIENT_IDS: 'desktop-client.apps.googleusercontent.com',
+      GOOGLE_DESKTOP_CLIENT_SECRET: 'desktop-secret-for-tests-only',
+    };
+    expect(isLoopbackOAuthRedirect('http://127.0.0.1:50393/oauth/callback')).toBe(true);
+    expect(isLoopbackOAuthRedirect('https://meridian-strike-wiki.netlify.app/admin')).toBe(false);
+
+    const fetchImpl = vi.fn(
+      async () =>
+        new Response(JSON.stringify({ id_token: 'google-id-token' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    );
+    const verifyIdentityToken = vi.fn(async () => ({
+      sub: 'immutable-google-sub',
+      email: 'creator@example.com',
+    }));
+    await expect(
+      exchangeDesktopGoogleAuthorizationCode(
+        {
+          authorizationCode: 'google-auth-code',
+          redirectUri: 'http://127.0.0.1:50393/oauth/callback',
+          codeVerifier: 'a'.repeat(43),
+          nonce: 'expected-nonce-value',
+          clientId: 'desktop-client.apps.googleusercontent.com',
+        },
+        { fetchImpl, verifyIdentityToken },
+      ),
+    ).resolves.toEqual({ sub: 'immutable-google-sub', email: 'creator@example.com' });
+    expect(fetchImpl).toHaveBeenCalledWith(
+      'https://oauth2.googleapis.com/token',
+      expect.objectContaining({ method: 'POST' }),
+    );
+    const tokenBody = String(fetchImpl.mock.calls[0]?.[1]?.body);
+    expect(tokenBody).toContain('client_secret=desktop-secret-for-tests-only');
+    expect(tokenBody).toContain('code_verifier=' + 'a'.repeat(43));
+
+    await expect(
+      authenticateGoogleCreator({
+        authorizationCode: 'google-auth-code',
+        redirectUri: 'https://meridian-strike-wiki.netlify.app/admin',
+        codeVerifier: 'a'.repeat(43),
+        nonce: 'expected-nonce-value',
+      }),
+    ).rejects.toMatchObject({ statusCode: 400 });
+
+    const missingSecret = vi.fn();
+    process.env.GOOGLE_DESKTOP_CLIENT_SECRET = '';
+    await expect(
+      exchangeDesktopGoogleAuthorizationCode(
+        {
+          authorizationCode: 'google-auth-code',
+          redirectUri: 'http://127.0.0.1:50393/oauth/callback',
+          codeVerifier: 'a'.repeat(43),
+          nonce: 'expected-nonce-value',
+        },
+        { fetchImpl: missingSecret },
+      ),
+    ).rejects.toMatchObject({ statusCode: 503 });
+    expect(missingSecret).not.toHaveBeenCalled();
   });
 
   it('binds creator sessions to the environment and secret identity', async () => {

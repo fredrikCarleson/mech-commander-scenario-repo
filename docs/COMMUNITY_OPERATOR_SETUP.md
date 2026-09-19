@@ -4,7 +4,6 @@ This is the work I cannot do from the repositories: Google Cloud, the Netlify da
 
 Day-to-day upload, admin review, and **development / staging / production** testing: [OWNER_COMMUNITY_GUIDE.md](./OWNER_COMMUNITY_GUIDE.md).
 
-
 Do **not** paste secrets, session tokens, Netlify tokens, or Google client secrets into chat, tickets, or git.
 
 Do **not** run production Blob migration yet. Do **not** remove `ADMIN_EMAILS` yet. Do **not** add `ADMIN_API_KEY`. Do **not** change Cloudflare.
@@ -16,7 +15,7 @@ Site: **meridian-strike-wiki** (`https://meridian-strike-wiki.netlify.app`)
 ## 0. Rules
 
 - Public Desktop/Web **client IDs** are allowed in Netlify, game `.env.local`, and chat.
-- Google may also show a Desktop **client secret**. Ignore it. Never store it in Netlify, Vite, Electron, or `.env`.
+- Google Desktop **client secret** is required for the wiki to finish Steam/desktop sign-in. Store it only in Netlify (and local wiki `.env` for `netlify dev`). Never put it in the game, Vite, git, or chat.
 - `SESSION_SIGNING_SECRET` and `NETLIFY_AUTH_TOKEN` stay on your machine / Netlify UI only.
 - `ADMIN_GOOGLE_SUBS` is a sensitive identifier. You may paste the `sub` value to me if you want it checked; do not paste the Google ID token or session JWT.
 - After you add or change Netlify variables, trigger a new production deploy so Functions pick them up.
@@ -52,9 +51,9 @@ This already drives `VITE_GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_ID` on Netlify.
 
 1. **Create credentials** → **OAuth client ID** → application type **Desktop app**.
 2. Name it something like `Meridian Strike Desktop`.
-3. Copy the **Client ID** only (ends in `.apps.googleusercontent.com`).
-4. Google may display a client secret for Desktop apps. **Do not use it.** The shipped game uses PKCE and a loopback callback (`http://127.0.0.1` on a random port).
-5. You do not need to register a fixed redirect URI for that random port.
+3. Copy the **Client ID** (ends in `.apps.googleusercontent.com`).
+4. Copy the Desktop **client secret** into a private note. Google still requires it at the token endpoint even with PKCE. The wiki Function uses it; the Steam game never ships it.
+5. You do not need to register a fixed redirect URI. The game listens on `http://127.0.0.1:<random-port>/oauth/callback`. That local page is expected and is not `/admin`.
 
 Keep both IDs in a local note, not in git:
 
@@ -75,11 +74,11 @@ Netlify `netlify.toml` already declares the non-secret identity values, but prod
 
 ### 2.1 Keep these (already present)
 
-| Variable | Scope | Action |
-| --- | --- | --- |
-| `VITE_GOOGLE_CLIENT_ID` | Production, Deploy Previews, Branch deploys | Keep. Must be the **Web** client ID from step 1.2. |
-| `GOOGLE_CLIENT_ID` | Same | Keep during migration. Same Web client ID. |
-| `ADMIN_EMAILS` | Production | Keep until the later rollback window. Do not delete now. |
+| Variable                | Scope                                       | Action                                                   |
+| ----------------------- | ------------------------------------------- | -------------------------------------------------------- |
+| `VITE_GOOGLE_CLIENT_ID` | Production, Deploy Previews, Branch deploys | Keep. Must be the **Web** client ID from step 1.2.       |
+| `GOOGLE_CLIENT_ID`      | Same                                        | Keep during migration. Same Web client ID.               |
+| `ADMIN_EMAILS`          | Production                                  | Keep until the later rollback window. Do not delete now. |
 
 Confirm **`ADMIN_API_KEY` is absent**. If it exists, leave it unused and tell me. Do not add it.
 
@@ -87,14 +86,14 @@ Confirm **`ADMIN_API_KEY` is absent**. If it exists, leave it unused and tell me
 
 Scope: **Production** only.
 
-| Variable | Exact value |
-| --- | --- |
-| `COMMUNITY_ENVIRONMENT` | `production` |
-| `COMMUNITY_API_ORIGIN` | `https://meridian-strike-wiki.netlify.app/api/v1` |
-| `SCENARIO_BLOB_STORE` | `mech-scenarios` |
-| `SESSION_SIGNING_SECRET_ID` | `production-v1` |
-| `COMMUNITY_MUTATION_MODE` | `authenticated` |
-| `COMMUNITY_CORS_ORIGINS` | `https://meridian-strike-wiki.netlify.app,http://127.0.0.1:42647` |
+| Variable                    | Exact value                                                       |
+| --------------------------- | ----------------------------------------------------------------- |
+| `COMMUNITY_ENVIRONMENT`     | `production`                                                      |
+| `COMMUNITY_API_ORIGIN`      | `https://meridian-strike-wiki.netlify.app/api/v1`                 |
+| `SCENARIO_BLOB_STORE`       | `mech-scenarios`                                                  |
+| `SESSION_SIGNING_SECRET_ID` | `production-v1`                                                   |
+| `COMMUNITY_MUTATION_MODE`   | `authenticated`                                                   |
+| `COMMUNITY_CORS_ORIGINS`    | `https://meridian-strike-wiki.netlify.app,http://127.0.0.1:42647` |
 
 Use those strings exactly. Do not point production at `mech-scenarios-candidate-v1`.
 
@@ -102,14 +101,14 @@ Use those strings exactly. Do not point production at `mech-scenarios-candidate-
 
 Scope: **Deploy Previews** and **Branch deploys** (not Production).
 
-| Variable | Exact value |
-| --- | --- |
-| `COMMUNITY_ENVIRONMENT` | `staging` |
-| `COMMUNITY_API_ORIGIN` | `https://candidate--meridian-strike-wiki.netlify.app/api/v1` |
-| `SCENARIO_BLOB_STORE` | `mech-scenarios-candidate-v1` |
-| `SESSION_SIGNING_SECRET_ID` | `candidate-v1` |
-| `COMMUNITY_MUTATION_MODE` | `authenticated` |
-| `COMMUNITY_CORS_ORIGINS` | `http://127.0.0.1:42647,http://127.0.0.1:42648` |
+| Variable                    | Exact value                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| `COMMUNITY_ENVIRONMENT`     | `staging`                                                    |
+| `COMMUNITY_API_ORIGIN`      | `https://candidate--meridian-strike-wiki.netlify.app/api/v1` |
+| `SCENARIO_BLOB_STORE`       | `mech-scenarios-candidate-v1`                                |
+| `SESSION_SIGNING_SECRET_ID` | `candidate-v1`                                               |
+| `COMMUNITY_MUTATION_MODE`   | `authenticated`                                              |
+| `COMMUNITY_CORS_ORIGINS`    | `http://127.0.0.1:42647,http://127.0.0.1:42648`              |
 
 `COMMUNITY_API_ORIGIN` is an identity check, not the browser URL of a random deploy preview. Leave it as the matrix value even if a preview is served from `deploy-preview-N--meridian-strike-wiki.netlify.app`.
 
@@ -117,15 +116,25 @@ Scope: **Deploy Previews** and **Branch deploys** (not Production).
 
 Set on **Production**, **Deploy Previews**, and **Branch deploys**. Same values are acceptable for this release if you only created one Web client and one Desktop client.
 
-| Variable | Value |
-| --- | --- |
-| `GOOGLE_WEB_CLIENT_IDS` | Web client ID from step 1.2 |
-| `GOOGLE_DESKTOP_CLIENT_IDS` | Desktop client ID from step 1.3 |
-| `GOOGLE_CLIENT_IDS` | `WEB_CLIENT_ID,DESKTOP_CLIENT_ID` (both, comma-separated, no spaces needed) |
+| Variable                    | Value                                                                       |
+| --------------------------- | --------------------------------------------------------------------------- |
+| `GOOGLE_WEB_CLIENT_IDS`     | Web client ID from step 1.2                                                 |
+| `GOOGLE_DESKTOP_CLIENT_IDS` | Desktop client ID from step 1.3                                             |
+| `GOOGLE_CLIENT_IDS`         | `WEB_CLIENT_ID,DESKTOP_CLIENT_ID` (both, comma-separated, no spaces needed) |
 
 Staging and production **require** both `GOOGLE_WEB_CLIENT_IDS` and `GOOGLE_DESKTOP_CLIENT_IDS`. Sign-in returns 503 if either list is empty.
 
-### 2.5 Session secret (secret)
+### 2.5 Desktop client secret (secret)
+
+Scope: **Production**, **Deploy Previews**, and **Branch deploys**.
+
+| Variable                       | Value                               |
+| ------------------------------ | ----------------------------------- |
+| `GOOGLE_DESKTOP_CLIENT_SECRET` | Desktop client secret from step 1.3 |
+
+Do not paste this into chat or the game repo. Steam packages must not contain it.
+
+### 2.6 Session secret (secret)
 
 Generate two **different** secrets, each at least 32 characters.
 
@@ -137,13 +146,13 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
 
 Run it twice. Do not commit the output. Do not paste it into chat.
 
-| Variable | Production | Deploy Previews + Branch deploys |
-| --- | --- | --- |
-| `SESSION_SIGNING_SECRET` | first generated value | second generated value |
+| Variable                 | Production            | Deploy Previews + Branch deploys |
+| ------------------------ | --------------------- | -------------------------------- |
+| `SESSION_SIGNING_SECRET` | first generated value | second generated value           |
 
 Rotating this later signs every creator/admin out.
 
-### 2.6 Admin subjects (after you can sign in)
+### 2.7 Admin subjects (after you can sign in)
 
 Leave `ADMIN_GOOGLE_SUBS` empty until step 5. Admin routes stay forbidden until it is set, which is expected.
 
@@ -173,6 +182,7 @@ For `npm run dev` only. Start from `.env.example` and fill:
 ```env
 GOOGLE_WEB_CLIENT_IDS=<web client id>
 GOOGLE_DESKTOP_CLIENT_IDS=<desktop client id>
+GOOGLE_DESKTOP_CLIENT_SECRET=<desktop client secret>
 GOOGLE_CLIENT_ID=<web client id>
 GOOGLE_CLIENT_IDS=<web client id>,<desktop client id>
 VITE_GOOGLE_CLIENT_ID=<web client id>
@@ -234,7 +244,6 @@ If `/admin` still says Google is not configured, `VITE_GOOGLE_CLIENT_ID` was not
 - `npm run migration:dry-run` against a real production snapshot.
 - Applying migration to production Blobs.
 - Removing `ADMIN_EMAILS`.
-- Revoking a historical Desktop client secret (only after secretless packaged sign-in works).
 - Steam packaging / private branch.
 - Changing Cloudflare Workers, D1, or R2.
 
@@ -259,12 +268,13 @@ Send me only this:
 3. Confirm consent screen scopes include `openid` and `email`, and whether the app is Testing or Published.
 4. Confirm Netlify production identity variables match section 2.2.
 5. Confirm `GOOGLE_WEB_CLIENT_IDS` and `GOOGLE_DESKTOP_CLIENT_IDS` are set on production and previews.
-6. Confirm two different `SESSION_SIGNING_SECRET` values exist (do not paste them).
-7. What `GET /api/v1/scenarios` returns now (status + whether you see published items).
-8. What `GET /api/v1/campaigns` returns now.
-9. Whether `/admin` Google sign-in works, and whether `ADMIN_GOOGLE_SUBS` is set.
-10. Confirm `C:\VSCode\mech-command\.env.local` contains `COMMUNITY_GOOGLE_OAUTH_CLIENT_ID` and no client secret.
-11. The last known-good Netlify deploy ID, if you recorded it.
-12. Confirm `ADMIN_API_KEY` is absent (or tell me if it was already there).
+6. Confirm `GOOGLE_DESKTOP_CLIENT_SECRET` is set on Netlify (do not paste it).
+7. Confirm two different `SESSION_SIGNING_SECRET` values exist (do not paste them).
+8. What `GET /api/v1/scenarios` returns now (status + whether you see published items).
+9. What `GET /api/v1/campaigns` returns now.
+10. Whether `/admin` Google sign-in works, and whether `ADMIN_GOOGLE_SUBS` is set.
+11. Confirm `C:\VSCode\mech-command\.env.local` contains `COMMUNITY_GOOGLE_OAUTH_CLIENT_ID` and no client secret.
+12. The last known-good Netlify deploy ID, if you recorded it.
+13. Confirm `ADMIN_API_KEY` is absent (or tell me if it was already there).
 
 I will then continue from the plan: verify the live API, commit the game branch, and walk you through the read-only Blob export.
