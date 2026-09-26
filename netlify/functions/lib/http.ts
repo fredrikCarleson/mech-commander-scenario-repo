@@ -11,6 +11,9 @@ export function applyCors(response: Response, request: Request): Response {
     'Access-Control-Allow-Headers',
     'Content-Type, Accept, Authorization, Idempotency-Key',
   );
+  // Desktop builds fetch downloads cross-origin. Without this, Chromium hides
+  // the release checksum and the game rejects a valid package.
+  headers.set('Access-Control-Expose-Headers', 'X-Checksum-Sha256, X-Community-Release-Id');
   headers.set('Access-Control-Max-Age', '86400');
   headers.append('Vary', 'Origin');
   return new Response(response.body, {

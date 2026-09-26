@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import handler from '../netlify/functions/api-v1.ts';
 import {
+  applyCors,
   corsPreflightResponse,
   parseApiPath,
   readBoundedBody,
@@ -51,6 +52,29 @@ describe('API HTTP boundary', () => {
     expect(denied.headers.get('Content-Type')).toMatch(/^application\/json/);
     expect(denied.headers.get('Access-Control-Allow-Origin')).toBeNull();
     await expect(denied.json()).resolves.toEqual({ error: 'Origin is not allowed.' });
+  });
+
+  it('exposes download checksum headers to the desktop game origin', () => {
+    process.env.NODE_ENV = 'test';
+    process.env.COMMUNITY_ENVIRONMENT = 'development';
+    const response = applyCors(
+      new Response(new Uint8Array([1, 2, 3]), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/zip',
+          'X-Checksum-Sha256': 'a'.repeat(64),
+          'X-Community-Release-Id': '4251533a-ce01-4565-8775-b1af40f18f92:r1',
+        },
+      }),
+      new Request('http://localhost/api/v1/scenarios/id/download', {
+        headers: { Origin: 'http://127.0.0.1:42647' },
+      }),
+    );
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('http://127.0.0.1:42647');
+    expect(response.headers.get('Access-Control-Expose-Headers')).toBe(
+      'X-Checksum-Sha256, X-Community-Release-Id',
+    );
+    expect(response.headers.get('X-Checksum-Sha256')).toBe('a'.repeat(64));
   });
 
   it('rejects oversized bodies before parsing them', async () => {
