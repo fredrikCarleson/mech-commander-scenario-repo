@@ -1,4 +1,4 @@
-# Pilots & Skills Guide
+﻿# Pilots & Skills Guide
 
 Pilots form the backbone of your mercenary company. Each pilot brings unique attributes, leveling progression, and combat traits to the lance.
 
@@ -10,66 +10,67 @@ Pilots form the backbone of your mercenary company. Each pilot brings unique att
 
 - **Role:** Marksman Specialist
 - **Starting Attributes:** Gunnery 8 | Reflex 5 | Resolve 6 | Command 5 | Technical 4 | Instinct 5
-- **Unique Trait:** `Calm Under Fire` (Maintains accuracy when heat or incoming fire builds)
+- **Unique Trait:** `Calm Under Fire` (Reduces heat-driven accuracy penalties)
 - **Background:** Veteran marksman with twelve seasons of frontier experience.
 
 ### 2. Elias Ren
 
 - **Role:** Aggressive Skirmisher
 - **Starting Attributes:** Reflex 8 | Instinct 6 | Gunnery 5 | Resolve 5 | Command 3 | Technical 3
-- **Unique Trait:** `Reckless` (Higher mobility and initiative at the cost of defense)
+- **Unique Trait:** `Reckless` (+10 hit at optimal range; slightly easier to hit)
 - **Background:** Young aggressive pilot with lightning reflexes.
 
 ### 3. Tala Orin
 
 - **Role:** Technical Specialist & Tech-Runner
 - **Starting Attributes:** Technical 8 | Gunnery 5 | Resolve 5 | Instinct 5 | Command 4 | Reflex 4
-- **Unique Trait:** `Mechanically Gifted` (Improved cooling efficiency and reduced heat build-up)
+- **Unique Trait:** `Mechanically Gifted` (Improves cooling by +2 per turn)
 - **Background:** Tech genius who keeps her chassis running cold under pressure.
 
 ### 4. Jonas Vale
 
 - **Role:** Lance Commander
 - **Starting Attributes:** Command 8 | Gunnery 6 | Resolve 6 | Reflex 5 | Instinct 5 | Technical 4
-- **Unique Trait:** `Natural Leader` (Grants hit/dodge bonuses to nearby lance mates)
+- **Unique Trait:** `Natural Leader` (Command aura is stronger for nearby allies)
 - **Background:** Steady voice on the tactical comms channel.
 
 ### 5. Sera Kest
 
 - **Role:** Scout & Recon Specialist
 - **Starting Attributes:** Instinct 8 | Reflex 6 | Gunnery 5 | Technical 4 | Command 4 | Resolve 4
-- **Unique Trait:** `Cautious` (Enhanced line-of-sight detection and evasive maneuvers)
+- **Unique Trait:** `Cautious` (+10 defense when the machine did not move)
 - **Background:** Reads battlefield topography and enemy intent effortlessly.
 
 ### 6. Darius Kane
 
 - **Role:** Frontline Tank / Anchor
 - **Starting Attributes:** Resolve 8 | Command 5 | Instinct 5 | Gunnery 5 | Reflex 4 | Technical 4
-- **Unique Trait:** `Stubborn` (Resists ejection under critical structure breakdown)
+- **Unique Trait:** `Stubborn` (Ignores 25% of damage while heavily injured)
 - **Background:** Frontline slugger who refuses to yield ground.
 
 ---
 
 ## Attributes & Progression
 
-- **Gunnery:** Increases hit probability across all direct and indirect weapon systems.
-  - _Calculation:_ Each point above/below 5 modifies base accuracy by **±4%**.
-- **Reflex:** Enhances movement initiative and base dodge chance.
-  - _Calculation:_ Each point above/below 5 modifies the accuracy penalty against you when shooting after the attacker moved by **±1.5%**.
-- **Instinct:** Increases critical hit awareness and fog-of-war detection.
-  - _Calculation:_ Each point above/below 5 grants a flat **±1%** defense (evasion) bonus against incoming attacks.
-- **Technical:** Boosts heat dissipation efficiency and repair recovery.
-  - _Calculation:_ Every **2 points** above/below 5 modifies the mech's Heat Dissipation (cooling) per turn by **±1**.
-- **Command:** Provides aura bonuses to tactical positioning and morale.
-  - _Calculation:_ Projects an aura of **4 hexes**. Allied mechs within the aura gain **+1%** accuracy per point of the commander's skill above 5.
-- **Resolve:** Reduces panic under heat shutdown and structure damage. _(Currently a narrative and campaign-level attribute with no direct modifier in tactical combat math)._
+- **Gunnery:** Raises hit chance with all weapons (above rating 5).
+- **Reflex:** Resolves earlier when orders are otherwise unconstrained and reduces moved-target penalties.
+- **Technical:** Improves heat cooling each turn (above rating 5). Does not speed hangar repairs.
+- **Command:** Nearby allies gain a small hit-chance aura.
+- **Resolve:** Currently provides no direct combat modifier or injury protection.
+- **Instinct:** Makes this pilot harder to hit (defensive awareness).
+
+Level-up spends **+1** in one attribute (maximum 10). If every attribute is already at 10, the promotion cannot be spent.
 
 ---
 
-## Injury & Fatigue Management
+## Injury & Recovery
 
-When a pilot's torso or command capsule takes structural damage, they may sustain injuries:
+Injuries come from destroyed machines or serious command/core damage. Story difficulty is more forgiving; **Iron Contract** can mark a destroyed machine's pilot **killed in action**.
 
-- **Light Injury:** Requires 2 – 4 days in the HQ Medical Bay to recover.
-- **Severe Injury:** Requires 7 – 14 days of downtime.
-- **KIA (Killed In Action):** If a pilot's command capsule is completely destroyed or they take fatal damage, they are permanently killed in action. There is no recruitment board to replace them, so protect your pilots at all costs.
+Recovery is measured in campaign days: one injury mark clears per day the calendar advances (Repair Bay time skip, operations). Typical durations:
+
+- **Command shock** — 5 days
+- **Core concussion** — 10 days
+- **Ejection trauma** (machine destroyed) — 15 days
+
+There is no separate fatigue track. The starting six pilots are the company roster; the Mercenary Board posts **side contracts**, not replacement hires.

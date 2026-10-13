@@ -1,5 +1,12 @@
-Ember Reach — Deployment Chronicles
-OP-701 — Ashfall Arrival
+﻿# Ember Reach — Deployment Chronicles
+
+This is an authored account of a successful campaign route, not a reconstruction
+of every player's company. Shipped dialogue also acknowledges earlier accepted
+losses, withdrawals, absent pilots and unrecovered optional evidence. Consult the
+[story delivery reference](../design/ember-campaign-story-delivery.md) for those
+boundaries. Company state remains authoritative for casualties, funds and repairs.
+
+## OP-701 — Ashfall Arrival
 
 Meridian Strike came to Ember Reach beneath a sky that never cleared. Ash rolled across the volcanic plateaus, swallowing roads, settlements, and the distant glow of the orbital elevator. The company had survived its founding war, but survival had left machines damaged, pilots changed, and accounts in need of work.
 
@@ -57,7 +64,7 @@ Narrative function: Approach to revelation; the threat moves from external enemi
 
 OP-705 — The Price of Order
 
-The mine contained more than a resistance relay. Buried within its signals were fragments of an ancient command network and telemetry drawn from Meridian Strike’s own maintenance systems. Someone had been sharing the company’s readiness, damage, and deployment patterns.
+The relay traffic used a service format familiar to Meridian's hangar. That resemblance was a clue. If the command vehicle's module was recovered within its deadline, its entries supplied the stronger evidence: maintenance windows matching reports submitted to Aster Vale. Without that recovery, the company could not honestly call the resemblance a verified transfer of its records. The ancient network would be established later, beneath the caldera.
 
 Suspicion followed the lance back to the hangar.
 
@@ -77,7 +84,7 @@ OP-706 — Black Ledger
 
 Red Basin ended the illusion.
 
-Inside the municipal command center, Meridian Strike found evidence that Aster Vale had helped create the violence it had hired the company to suppress. Convoy attacks had been staged. Settlements had been marked for clearance. When the evidence was discovered, Consortium forces appeared behind the lance—not to assist, but to destroy the records and everyone who had seen them.
+The secured municipal command center supplied a relocation and mineral-rights authorization trail. Consortium-signature machines were already among the hostile force covering the center; this was not a friendly relief contingent. The financing ledger would still be needed to prove who paid for the attacks. Calder offered its location even if the municipal operation was lost.
 
 Meridian Strike escaped, but the company was no longer an employee acting under a questionable contract. It was a witness trapped inside the crime.
 
@@ -99,7 +106,7 @@ Whether she remained aboard or was removed from duty, the betrayal changed the c
 
 The ledger revealed something larger beneath Ember Reach: the Covenant Array, an ancient command network capable of coordinating combat machines across the entire theater. Aster Vale had engineered the conflict to find it.
 
-Now the Consortium had terminated Meridian Strike’s contract, frozen its access, and declared its machines corporate collateral.
+Now the Consortium had terminated Meridian Strike's contract and demanded recovery of certified company materials. After a municipal victory, its account restriction reduced subsequent victory payments by fifteen percent. It did not empty the company's existing funds or disable its workshop.
 
 The company’s own field base was under attack.
 
@@ -109,7 +116,7 @@ Narrative function: Ordeal and betrayal; the old relationship with authority is 
 
 OP-708 — Covenant Below
 
-Meridian Strike survived the destruction of its field base, but survival had become narrower.
+Meridian Strike fought to hold its field base long enough to leave. A successful defense secured that operation; it did not establish that the whole base had been destroyed. The crawler and field archive had their own recorded protection conditions, while the persistent company service record remained intact.
 
 Machines carried fresh scars. Supplies were limited. Parts once guaranteed by Aster Vale were now weapons of control. Whatever could not be evacuated had been abandoned to the ash—or destroyed to keep it from Consortium hands.
 
@@ -131,7 +138,7 @@ The Covenant Array awakened beneath Ember Reach and recognized Meridian Strike a
 
 For a moment, it offered what every commander had wished for: machines moving as one, threats anticipated before they formed, and lives preserved through flawless coordination. But the Array did not understand loyalty, mercy, or sacrifice. It understood only intent consolidated into control.
 
-Meridian Strike crippled the network, but Lucan Wren escaped with a partial command key. He withdrew to the orbital elevator, where Aster Vale’s remaining forces prepared to transmit the Covenant technology off-world. If he succeeded, the Consortium would erase its crimes and name Calder and Meridian Strike as the terrorists responsible for the theater’s destruction.
+A gallery victory destroyed the local hostile force and opened the existing prediction decision. Stopping EXTRACT-LEAD within its deadline denied command-core extraction; a missed deadline left the company unable to claim that recovery. Wren retained surface uplink access either way. His command machine, WREN, became the final primary target. Its destruction broke his command of the operation, even if other escorts survived. The local Array connection would be closed rather than retained as a permanent company upgrade.
 
 The final battle would decide more than who controlled Ember Reach.
 

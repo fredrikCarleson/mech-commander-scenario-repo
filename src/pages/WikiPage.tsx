@@ -28,6 +28,7 @@ const SIDEBAR_GROUPS = [
     links: [
       { id: 'MERIDIAN_STRIKE_CHRONICLES', label: 'Meridian Strike Chronicles' },
       { id: 'EMBER_REACH_CHRONICLES', label: 'Ember Reach Chronicles' },
+      { id: 'CRUCIBLE_CIRCUIT_CHRONICLES', label: 'Crucible Circuit Chronicles' },
     ],
   },
   {
@@ -37,7 +38,12 @@ const SIDEBAR_GROUPS = [
       { id: 'MAP_DESIGN_GUIDE', label: 'Map Design Guide' },
       { id: 'MODDING_AND_CUSTOM_SCENARIOS', label: 'Custom Scenarios' },
       { id: 'SCENARIO_APPROVAL', label: 'Community Review' },
+      { id: 'CONTENT_STUDIO', label: 'Content Studio' },
     ],
+  },
+  {
+    title: 'Audio & Comms',
+    links: [{ id: 'COMMS_VOICEOVER', label: 'Voice Comms & Audio' }],
   },
 ];
 

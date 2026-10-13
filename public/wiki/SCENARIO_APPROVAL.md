@@ -1,8 +1,10 @@
-# Community Review
+﻿# Community Review
 
 Every custom **scenario** and **campaign** submitted to the Meridian Strike community repository is checked twice before players can see it: automated validation, then a human review.
 
 Pending items are not in the public catalogue, detail pages, latest download, thumbnails, or revision download URLs.
+
+Public wiki: `https://meridian-strike-wiki.netlify.app/wiki/SCENARIO_APPROVAL`
 
 ---
 
@@ -23,40 +25,31 @@ If Phase 1 passes, the item is **pending**. It is still private.
 
 ## Phase 2: Human review
 
-An administrator opens the wiki admin queue and plays or inspects the pending revision.
+An administrator opens `https://meridian-strike-wiki.netlify.app/admin` and inspects the pending revision.
 
-> [!WARNING]
-> Repeated guideline violations can result in a ban from community publishing.
+Repeated guideline violations can result in a ban from community publishing.
 
 ### Content
 
-Zero tolerance in titles, descriptions, briefings, and radio chatter for:
-
-- Hate speech, slurs, or harassment of real-world people or groups
-- NSFW, extreme gore, or sexually explicit themes
-- Real-world political or religious propaganda
+Zero tolerance in titles, descriptions, briefings, and radio chatter for hate speech, NSFW or sexually explicit themes, or real-world political/religious propaganda.
 
 ### Licensing
 
-You must own or have rights to the thumbnail and other images. Do not rip commercial art from other games.
+You must own or have rights to the thumbnail and other images.
 
 ### Playability
 
-Admins may reject:
-
-- Unplayable deploy (for example all deep water)
-- Softlocks (required extraction behind impassable walls)
-- Spam, blank tests, or clones of official campaigns with no meaningful change
+Admins may reject unplayable deploys, softlocks, spam, blank tests, or clones of official campaigns with no meaningful change.
 
 ---
 
 ## Verdicts
 
-| Result | What players see |
-| --- | --- |
-| **Approved** | That exact revision becomes public. Catalogue, download, thumbnail, and ratings go live. |
-| **Revision pending** | The new revision stays private. The last approved revision stays public. |
-| **Rejected** | The owner status shows the moderator's reason. Submit a corrected revision. The last approved revision stays public. |
-| **Withdrawn** | The listing leaves the catalogue. Local installs keep working. Approved immutable revisions remain downloadable by revision number. |
+| Result               | What players see                                                                        |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| **Approved**         | That exact revision becomes public.                                                     |
+| **Revision pending** | The new revision stays private. The last approved revision stays public.                |
+| **Rejected**         | The owner status shows the moderator's reason. The last approved revision stays public. |
+| **Withdrawn**        | The listing leaves the catalogue. Local installs keep working.                          |
 
 Approval always names a revision. A later author upload cannot silently replace the bytes an admin already reviewed.

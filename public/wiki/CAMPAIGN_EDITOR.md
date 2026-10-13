@@ -1,60 +1,61 @@
-# Campaign Workshop
+﻿# Campaign Editor
 
-The Campaign Workshop composes your local custom scenarios into a linear theater you can play, export, or publish to the community catalogue.
+The Campaign Workshop composes local Custom Scenarios into a playable linear theater.
 
-Official Meridian Strike / Ember Reach campaigns are a separate bundled workflow. Do not copy official campaign IDs into community packs.
+Official campaign content is a separate workflow. See `docs/developer/CAMPAIGN_PACK_LAYOUT.md` and `docs/wiki/CONTENT_STUDIO.md`.
 
-The Steam **demo** does not include Campaign Workshop.
+## Recommended workflow
 
----
+1. Build and playtest each mission in **Scenario Library**.
+2. Open **Campaign Workshop** and create a campaign.
+3. In Guided mode, define its identity, author credit, intended difficulty, and intended experience.
+4. Add missions in play order. Set target difficulty, expected duration, rewards, and fail-forward behavior.
+5. Author dialogue, intro, and aftermath. Choose PNG, JPEG, or WebP images in the editor; they are packaged automatically. Community/custom videos are not supported.
+6. Fix validation errors and review the campaign-wide balance curve. Balance warnings are advisory and never change combat rules.
+7. Save and playtest. Unsaved work is durably recovered after navigation or restart.
+8. Export a self-contained ZIP, or sign in with Google and publish it for community review.
 
-## Play community campaigns
+Advanced mode exposes stable IDs and detailed presentation controls. A saved campaign ID is immutable because saves, revisions, and community ownership refer to it.
 
-Approved campaigns appear on this site under [Campaigns](/campaigns) and inside the Full Edition game. Installing a campaign also installs its embedded missions. Updating an installed campaign is always an **explicit** player action; a failed update keeps the last playable local revision.
+## Ownership and revisions
 
-Imported community campaigns are read-only. Use **Fork to edit** before changing one as your own work. Forking creates new campaign and scenario IDs so you do not overwrite someone else's content.
+- Publishing requires Google sign-in in the desktop game.
+- Only the Google account that first published a campaign can submit later revisions or withdraw it.
+- A new revision waits for admin approval while the last approved revision remains downloadable and playable.
+- Installed revisions update only after explicit player action. A failed update retains the last playable local revision.
+- Local authoring, import, export, fork, and playtest remain available while signed out and offline.
+- Imported community campaigns are read-only. Use **Fork to edit** to create new campaign and scenario IDs with explicit provenance.
+- Admin review at `https://meridian-strike-wiki.netlify.app/admin` can approve or reject scenario and campaign revisions. Admin access is authorized by immutable Google subject ID, not an editable email address.
 
----
+Owner upload and environment notes: [`docs/OWNER_COMMUNITY_GUIDE.md`](../OWNER_COMMUNITY_GUIDE.md). Public wiki: `https://meridian-strike-wiki.netlify.app/wiki/CAMPAIGN_EDITOR`.
 
-## Authoring workflow
-
-1. Build and playtest each mission in **Custom Scenarios**.
-2. Open **Campaign Workshop** and create a campaign. The stable ID must start with `custom-` or `user-` and cannot change after save.
-3. Add missions in play order.
-4. Author dialogue, intro, and aftermath. Use PNG, JPEG, or WebP images. **Community campaigns cannot include video.**
-5. Fix validation errors. Balance warnings are advisory.
-6. Save and playtest locally. This works signed out and offline.
-7. Export a ZIP to share privately, or sign in with Google and **publish** for community review.
-
-Do not publish an imported campaign as your own. Fork it first.
-
----
-
-## Community package
-
-The game adds catalogue files on top of the workshop ZIP:
+## ZIP format
 
 ```text
-manifest.json
-thumbnail.webp
-Campaigns/<stable-id>/
+Campaigns/<id>/
   campaign.json
+  README.md
+  PACK.md
   dialogues/<missionId>.json
-  media/   (images only)
+  media/manifest.json
+  media/<managed PNG, JPEG, or WebP images>
+  media/ASSETS.md
   missions/<scenarioId>/scenario.json
   missions/<scenarioId>/scenariomap.png|jpg|webp
 ```
 
-The same size and image limits as scenarios apply (4,000,000 compressed bytes, 20 MiB expanded, 1 MiB per image). Mission IDs and order are locked after the first approved revision; a later update that reorders or replaces missions is rejected and must be published as a new campaign fork.
+Legacy ZIPs with top-level `Scenarios/` still import. Imported campaigns remain read-only until deliberately forked.
 
----
+Community/custom ZIPs have no video roles or video fields. Official bundled campaigns retain their separate video-capable format.
 
-## Publish from the game
+Community packages add root `manifest.json` and `thumbnail.webp` for server validation and catalogue presentation.
 
-1. Full Edition **desktop** app, Google sign-in from the creator panel.
-2. Publish from Campaign Workshop. The first upload is revision 1 and stays pending until an admin approves it.
-3. Later **Update** uploads create revision 2, 3, … The last **approved** revision stays public while the new one is reviewed.
-4. **Withdraw** removes the public listing. Existing local installs keep working. Immutable approved revisions remain addressable for reinstall.
-5. Approval and rejection happen at [Community Review](./SCENARIO_APPROVAL).
+## Code map
 
-The website has no public upload form. Admin review is at `https://meridian-strike-wiki.netlify.app/admin`.
+| Module                                   | Role                                                                                  |
+| ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `src/customCampaigns/`                   | Versioning, migration, validation, balance guidance, drafts, media, storage, and ZIPs |
+| `src/ui/screens/CustomCampaigns.tsx`     | Local and community campaign library                                                  |
+| `src/ui/screens/CampaignEditor.tsx`      | Guided/advanced editor                                                                |
+| `src/api/communityCampaignRepository.ts` | Community catalogue, publishing, and withdrawal                                       |
+| `src/api/communityCampaignPackage.ts`    | Community package construction and import                                             |

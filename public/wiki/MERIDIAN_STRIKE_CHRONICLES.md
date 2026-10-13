@@ -1,4 +1,9 @@
-Meridian Strike — Deployment Chronicles
+﻿Meridian Strike — Deployment Chronicles
+
+This account describes the campaign setting and intended successful arc. A live
+company may retry, withdraw or accept a failed nonfinal contract. Its settled
+results and service records remain authoritative for losses and achievements.
+
 OP-101 — Border Signal
 
 Meridian Strike began with four battle-scarred machines, six pilots, and a company ledger that left little room for failure. The hangar lights stayed on only because Mara Voss accepted contracts other commanders considered too small, too remote, or too uncertain.
@@ -33,9 +38,9 @@ Narrative function: Crossing the threshold; the company discovers that the war i
 
 OP-303 — Hold the Line
 
-The relay download confirmed Mara’s suspicion. VEX commanded more than scattered border raiders. His forces were operating through a coordinated theater network, tracking military traffic, supply schedules, and the movements of independent companies throughout the region.
+The active, defended relay deepened Mara’s suspicion. VEX commanded more than scattered border raiders. The station linked the border interference to an observation network. A completed download could reveal its traffic, but control of the station alone did not prove what every file contained.
 
-Meridian Strike had taken information VEX could not allow them to keep.
+VEX directed the company's attention toward its repair traffic. Mara treated this as a threat rather than proof that he knew the base's location. The incoming assault made the next danger concrete, even for a company that had failed to secure the relay.
 
 His retaliation came against the company’s forward staging base, where fuel reserves, repair equipment, ammunition, and wounded personnel had been gathered behind a narrow desert pass. If the base fell, Meridian Strike would lose more than a contract. It would lose the infrastructure keeping its damaged machines operational and its pilots alive.
 
@@ -71,21 +76,21 @@ OP-505 — Deep Extract
 
 The strike against VEX-PRIME did not end the campaign.
 
-The command position had been part of a deeper deception, built to expose Meridian Strike’s tactics, measure its operational limits, and draw its reconnaissance elements beyond reliable support. Before the company could recover, VEX’s hunter lances moved against an isolated scouting detachment.
+VEX-PRIME was a working field command node, not verified proof of the human commander's location. Destroying it disrupted a real position without eliminating every hostile force. Hunter machines still threatened the routes behind the line.
 
-One Meridian pilot remained trapped inside a ruined supply depot deep behind hostile lines.
+Deep Extract sent the company through an extraction corridor near an old supply depot. The hunters were positioned to deny the approach to its evacuation point. There was no confirmed captive whose rescue would restore a named pilot to the roster.
 
-Standard mercenary doctrine offered a cold calculation. A rescue could cost multiple machines, further damage the company’s finances, and leave the remaining force vulnerable before the final confrontation. A stranded pilot represented one life. The company represented many.
+The evacuation window required at least one living company machine at the extraction hex in round seven. Defeating all hostile machines could also complete the operation. Darius wanted to cover every possible return; Sera and Jonas warned that covering an exit was useful only while it remained usable.
 
-Mara rejected the calculation.
+Mara kept the objective and the company's duty to its people in the same conversation.
 
 Meridian Strike had survived because its pilots believed they would not be discarded when the ledger turned against them. That belief was worth more than any machine, but only if the company proved it under fire.
 
-Heavy chassis would be too slow for the extraction window. The rescue force would need speed, discipline, and enough firepower to break through converging hunters.
+Assault chassis were not authorized for this operation. The deployed force needed speed, discipline and enough firepower to keep the route usable.
 
 VEX expected Meridian Strike to protect its assets.
 
-Instead, Mara was going back for one of her people.
+Instead, the company worked to turn attachment into information and mutual support. The result was the actual fate of its deployed people and machines, not an automatic promise that every member came home.
 
 Narrative function: Supreme ordeal; the company chooses loyalty over mercenary expediency.
 
@@ -93,7 +98,7 @@ OP-606 — VEX: Last Stand
 
 Meridian Strike entered the final operation carrying the history of every battle that had brought it there.
 
-The company had found VEX in the border static, challenged his relay network, survived his siege, struck at his false command post, and refused to abandon a pilot when retreat would have been easier. Each encounter had cost armor, credits, blood, and certainty. Each had also answered the question that had followed the company from its first contract: what held Meridian Strike together when payment was no longer enough?
+The company had encountered VEX in the border static, investigated his relay network, faced his assault, pursued his field command node and attempted extraction through his hunters. Individual results could include accepted losses. Each operation added to the company's actual history; none guaranteed a clean return. The final objective was to destroy the hostile lance controlling the basin.
 
 VEX had withdrawn into a fortified desert basin prepared as a final kill zone. Electronic warfare blanketed the approaches. Heavy machines guarded the chokepoints. His personal lance waited where every route could be observed and every mistake punished.
 

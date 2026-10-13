@@ -1,76 +1,41 @@
-# Custom Scenarios
+﻿# Modding & custom scenarios
 
-Meridian Strike **Full Edition** includes in-game tools to design, playtest, and publish scenarios. The Steam demo does not include Custom Scenarios, Campaign Workshop, or the Mercenary Board.
+Meridian Strike Full Edition includes player-facing authoring, import, playtest, and community
+publishing tools inside the game. The repository's Content Studio workspace is an internal workflow
+for official content and is not required or supported for community publishing.
 
-You do **not** upload from this website. Publishing happens in the desktop game after Google sign-in.
+## Play community content
 
----
+1. Open **Custom Scenarios** or **Campaign Workshop** from the title screen.
+2. Browse the community catalogue and choose **Install**, or import a local ZIP.
+3. Launch the installed scenario or campaign from its normal in-game screen.
 
-## Play community scenarios
+Community campaign updates are explicit: the installed revision remains playable until the player
+chooses to update. Removing an installed campaign also removes only its provenance-matched embedded
+scenarios. The Demo Edition does not expose custom/community content.
 
-1. Open **Custom Scenarios** from the title screen, or browse the **Mercenary Board** for approved side contracts.
-2. Install from the community catalogue, or import a local ZIP.
-3. Play from Custom Scenarios or accept the contract from the Mercenary Board.
+## Create and playtest
 
-Ratings are optional and anonymous. A Netlify outage only blocks community network features; local and official play still work.
+- Use **Scenario Editor** to create or edit a local scenario, then save and playtest it.
+- Use **Campaign Workshop** to combine eligible scenarios, write dialogue, and add intro or aftermath
+  slides.
+- Local authoring, saving, ZIP import/export, and playtesting work while signed out and offline.
+- Imported campaigns are read-only; fork one before editing it as your own local work.
 
----
+Community packages accept PNG, JPEG, and WebP images within the documented limits. Custom campaign
+video fields and video files are intentionally unsupported; bundled official campaigns keep their
+existing video support.
 
-## Create a scenario
+## Publish
 
-```mermaid
-flowchart LR
-    A[1. Map Design] -->|Terrain and zones| B[2. Scenario Setup]
-    B -->|Enemies and objectives| C[3. Narrative]
-    C -->|Briefing and chatter| D[4. Playtest]
-    D -->|Desktop sign-in| E((Community review))
-```
+1. Validate and save the content in the in-game editor.
+2. Sign in from the community creator panel. Sign-in is required for publishing, ownership checks,
+   updates, and withdrawal—not for local authoring.
+3. Choose **Publish**. New uploads and updates enter moderation as immutable numbered revisions.
 
-### 1. Map design
+An approved revision stays available while a newer update is reviewed. An author can withdraw the
+public listing without erasing retained immutable release records. Administrative deletion creates a
+tombstone and prevents public retrieval; it is distinct from author withdrawal.
 
-Open the **Map Editor** from Content Studio / Custom Scenarios. Paint terrain, then paint **deploy** and optional **extraction** zones. Units and zones must sit on real map hexes or the server will reject the package.
-
-See the [Map Design Guide](./MAP_DESIGN_GUIDE) for layout advice.
-
-### 2. Scenario setup
-
-Configure the objective (`destroyAll`, `holdHex`, `surviveRounds`, `assassinate`, `extract`), turn limit, drop-weight cap, and enemy waves with AI profiles.
-
-### 3. Narrative
-
-Write the pre-drop briefing and optional in-combat radio chatter (round start, unit destroyed, objective reached).
-
-### 4. Playtest locally
-
-Save and play from Custom Scenarios while signed out. Local authoring does not need Google or the internet.
-
----
-
-## Package rules
-
-The game builds the ZIP for you. Do not hand-zip folders unless you know the layout. A scenario package is a **flat** ZIP:
-
-- `manifest.json` — title, author, description, tags, versions
-- `scenario.json` — rules, enemies, objectives
-- `map.json` — hex terrain
-- `thumbnail.webp` — catalogue image
-
-Limits the server also enforces:
-
-- Compressed ZIP at most 4,000,000 bytes; expanded at most 20 MiB
-- Each image at most 1 MiB; PNG, JPEG, or WebP only
-- No videos, no nested folders, no reserved official campaign IDs
-
----
-
-## Publish from the game
-
-1. Use the **Full Edition desktop app** (not the browser hot-reload session, not the demo).
-2. Sign in with Google from the community creator panel. The system browser opens; the game never stores a Google client secret.
-3. On your scenario card, click **Upload** (or **Update** if it is already linked).
-4. The game validates the package, then the server validates it again. On success it enters the **pending** queue. It is **not** public yet.
-5. An admin reviews it on the wiki. See [Community Review](./SCENARIO_APPROVAL).
-
-Only the Google account that first published an item can update or withdraw it. Legacy maps that predate ownership cannot be claimed by guessing an email; they stay playable and ownerless until an admin assigns them or you publish a new fork.
-
-![Upload Scenario](/wiki/images/upload-scenario.jpg)
+Player-facing wiki: `https://meridian-strike-wiki.netlify.app/wiki/MODDING_AND_CUSTOM_SCENARIOS`  
+Owner/admin env guide: [`docs/OWNER_COMMUNITY_GUIDE.md`](../OWNER_COMMUNITY_GUIDE.md)

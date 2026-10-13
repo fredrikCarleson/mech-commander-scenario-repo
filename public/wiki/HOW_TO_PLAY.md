@@ -1,6 +1,8 @@
-# Meridian Strike — How to Play
+﻿# Meridian Strike — How to Play
 
 Welcome to **Meridian Strike**, a single-player tactical mech RPG. You command a small mercenary company: choose pilots and machines, fight turn-based battles on a hex grid, and bring your crew home with experience, salvage, and (hopefully) intact chassis.
+
+The **Demo** includes the complete founding campaign and its Headquarters systems. The **Full** edition adds Ember Reach, the Mercenary Board, Custom Scenarios, and Campaign Workshop.
 
 ---
 
@@ -11,19 +13,23 @@ Welcome to **Meridian Strike**, a single-player tactical mech RPG. You command a
 3. Earn **pilot XP**, manage **repairs / injuries / days**, and grow your company.
 4. Keep your machines in fighting shape — **damage carries over** between missions.
 
-A new campaign starts with **6 pilots**, a **gated light/medium hangar**, and a **six-mission** contract chain (later ops unlock as you progress).
+A new company starts with **6 pilots**, a **gated light/medium hangar** (Wisp, Lancer, Ravenfall, Warden), and a **six-mission** founding contract chain. Later ops and heavier chassis unlock as you progress. Full companies that clear the founding war can deploy the same company into **Ember Reach** (nine further contracts).
 
 ---
 
 ## Starting the game
 
-On the title screen:
+On the title **Company** tab:
 
-- **New Campaign** — starts fresh. Confirming erases the previous save.
-- **Continue Game** — loads your last campaign from local storage.
-- **Difficulty** — Story · Veteran · Iron Contract (affects rewards, repair, and injury pressure).
+- **Continue Campaign** — resume your living company from the Continue autosave (Headquarters, an unfinished battle, or a pending after-action). Disabled if that save cannot be opened in this edition.
+- **New Company** — starts a fresh founding campaign. Confirming clears the Continue autosave (career theater unlocks and named archives are kept). You can snapshot the old company first if a Continue save exists.
+- **Load Company** — copies a named archive into Continue.
+- **Theaters** — inspect career unlocks, deploy or replay a theater with the current company, or found a new company for a listed war. This is not a second Continue button.
+- **Difficulty** — Story · Veteran · Iron Contract (affects rewards, repair cost, and injury pressure).
 
-The game auto-saves as you play (except on the title screen).
+The **Create** tab offers **Combat Tutorial** in every edition. **Custom Scenarios** and **Campaign Workshop** appear in Full only.
+
+The game auto-saves the Continue company as you play (not on the title screen, and not while browsing theaters from the title). **Load Company** named archives are kept separately; desktop builds also mirror Continue and named saves into the install’s user-data folder.
 
 ---
 
@@ -33,15 +39,17 @@ The game auto-saves as you play (except on the title screen).
 Headquarters → Mission Briefing → Deployment → Battle → After-Action Report → Headquarters
 ```
 
-Optional: **Mercenary board** side contracts, **Custom Scenarios** / editor (sandbox — does not damage campaign hangars).
+Optional in Full: **Mercenary Board** side contracts, **Custom Scenarios** / Campaign Workshop. Custom fights are sandbox — they do not damage campaign hangars.
 
 ### Headquarters
 
 - Company funds, reputation, **day clock**, streak
 - **Missions** — campaign contract board
-- **Mercenary board** — optional paid side ops
-- **Repair bay** — schedule / rush repairs; bay time advances calendar days
-- **Machines** / **Pilots** — chassis condition, injuries, XP, traits
+- **Mercenary board** — optional paid community side ops (**Full only**)
+- **Repair bay** — schedule / rush repairs; bay time advances calendar days; unlock **weapon refit** after the first completed main contract
+- **Machines** / **Pilots** — hull condition, loadout/refit, injuries, XP, traits
+
+The founding war and Ember Reach share a **campaign calendar**. Story / Veteran / Iron Contract set different deadlines. Spending days in the Repair Bay or on operations consumes that clock.
 
 ### Deployment
 
@@ -71,6 +79,7 @@ Then a new round begins.
 - Select a machine on the map or squad bar.
 - **Move is the default order mode.** Click any highlighted destination without first pressing Move.
 - Planned moves show a **destination ghost**; planned shots show badges / telegraphs.
+- Hover an enemy in **Move or Fire** mode for the same **Enemy intel** card (best-weapon hit chance, armor/structure, heat, weapons).
 - Remove a queued order with **✕** in the right panel.
 - The right command panel keeps orders and weapons visible. Hover the selected **pilot name** (or
   focus it with the keyboard) for attributes, their current combat bonuses, and the pilot's trait.
@@ -78,12 +87,14 @@ Then a new round begins.
 - Ending the round with unused friendly actions opens an in-game confirmation listing the affected
   machines. If confirmed, those machines hold and still cool at end of activation.
 
-| Order          | Effect                                                                    |
-| -------------- | ------------------------------------------------------------------------- |
-| **Move**       | Walk to a highlighted hex (terrain cost + occupancy rules)                |
-| **Fire salvo** | Press **Fire salvo**, then click a target or building to queue the attack |
-| **Brace**      | Reduce incoming damage until next activation                              |
-| **Cool**       | Vent extra heat (1 AP)                                                    |
+| Order          | Effect                                                                                                                           |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Move**       | Walk to a highlighted hex (terrain cost + occupancy rules)                                                                       |
+| **Fire salvo** | Press **Fire salvo**, then click a target or building to queue the attack                                                        |
+| **Brace**      | Reduce incoming damage until next activation                                                                                     |
+| **Cool**       | Vent extra heat (1 AP)                                                                                                           |
+| **Ram**        | Adjacent 1 AP, or move-and-ram for 2 AP; confirm with **Space**                                                                  |
+| **Flee**       | Withdraw machines that have **already** reached an escape hex (button; no hotkey). Queued moves do not count until they resolve. |
 
 Hit % while planning uses **planned positions** (including allies’ planned destinations where relevant).
 
@@ -119,7 +130,7 @@ cost through overkill timing.
 - Each chassis has a **movement budget**; terrain costs more than plains.
 - Rock / deep water / wall / building are **jump-only** for jump-capable scouts; heavier frames cannot cross them.
 - Forest = cover; water helps cooling.
-- Destroyed legs and high heat reduce movement.
+- One destroyed leg and high heat reduce movement. Losing both legs permits one hex of crawling per activation, with no movement evasion, Sprint, jump or ram.
 
 ---
 
@@ -135,13 +146,13 @@ cost through overkill timing.
 
 ## Pilots
 
-Attributes: Reflex, Gunnery, Technical, Command, Resolve (injuries / campaign pressure), Instinct. Each pilot has a **trait**. Higher Reflex resolves earlier when no vacate dependency constrains the order and wins contested destinations. Match Gunnery to shooters, Technical to hot platforms, Command to support. During battle, hover or focus the pilot name at the top of the command panel to see the live numeric effect of each attribute.
+Attributes: Reflex, Gunnery, Technical, Command, Resolve, Instinct. Resolve currently provides no direct combat modifier or injury protection. Each pilot has a **trait**. Higher Reflex resolves earlier when no vacate dependency constrains the order and wins contested destinations. Match Gunnery to shooters, Technical to hot platforms, Command to support. During battle, hover or focus the pilot name at the top of the command panel to see the live numeric effect of each attribute.
 
 XP from participation, kills, and objectives. Level-up: +1 to one attribute (max 10).
 
 ---
 
-## Campaign missions (current)
+## Campaign missions (founding war)
 
 | Op     | Mission         | Mass (rec.) | Objective (summary)              |
 | ------ | --------------- | ----------: | -------------------------------- |
@@ -154,14 +165,20 @@ XP from participation, kills, and objectives. Level-up: +1 to one attribute (max
 
 Exact enemy lists, unlock gates, and optional bonuses are on the contract board / briefing.
 
+After a genuine finale victory, Full companies can open **Theaters** and deploy into Ember Reach. Demo shows that next theater as **Full Edition** and does not let you start it.
+
+Non-finale campaign losses can **fail forward**: accept the defeat, skip that op’s victory rewards, and continue the contract chain.
+
 ---
 
 ## Between missions
 
 - **Damage persists** until repaired in the Repair bay (schedule vs rush).
+- **Refit** (after buying the hangar facility) swaps weapons on a hull within that chassis’s size and capacity limits. Labor costs credits and days.
 - **Salvage** after victories can yield parts / chassis progress.
-- **Injuries** can bench pilots for days.
+- **Injuries** can bench pilots for days. Destroyed machines on **Iron Contract** can kill the assigned pilot.
 - Destroyed command/core → **OUT OF ACTION** until repaired or written off.
+- **Withdrawal** recovers hulls that reached an escape hex and writes off the rest (the last remaining hull is protected). Extracted living pilots skip the usual injury pass.
 
 ---
 
@@ -178,21 +195,23 @@ Exact enemy lists, unlock gates, and optional bonuses are on the contract board 
 
 ## Controls summary
 
-| Screen       | Main actions                                  |
-| ------------ | --------------------------------------------- |
-| Title        | New Campaign / Continue / difficulty          |
-| Headquarters | Missions, mercenary, repair, machines, pilots |
-| Briefing     | Back / authorize deployment                   |
-| Deployment   | Pick machines + pilots → Start battle         |
-| Battle       | Plan Move / Fire / Brace / Cool → ▶ End round |
-| After-action | Salvage / level-ups → return to HQ            |
+| Screen       | Main actions                                                           |
+| ------------ | ---------------------------------------------------------------------- |
+| Title        | Continue Campaign / New Company / Load Company / Theaters / difficulty |
+| Headquarters | Missions, mercenary (Full), repair, machines, pilots                   |
+| Briefing     | Back / authorize deployment                                            |
+| Deployment   | Pick machines + pilots → Start battle                                  |
+| Battle       | Plan Move / Fire / Brace / Cool / Ram / Flee → ▶ End round             |
+| After-action | Salvage / level-ups → return to HQ                                     |
+
+Keyboard shortcuts: see [Controls and interface](CONTROLS_AND_INTERFACE.md).
 
 ---
 
 ## Still open (product)
 
-- [ ] Deeper machine customization / loadout builder
-- [ ] Steam / desktop storefront packaging polish <!-- (see docs/steam-readiness.md) -->
-- [ ] Optional voiceover files for new order-failure pilot lines (cards work without audio)
+- [ ] Broader machine customization beyond per-mount weapon refit (chassis hardpoints stay fixed)
+- [ ] Steamworks overlay / store CTA, code signing, and store-client checks (packaging itself exists; see `steam/README.md`)
+- [ ] Optional voiceover files for some Battle Director lines (cards work without audio)
 
 Good hunting, Commander.
