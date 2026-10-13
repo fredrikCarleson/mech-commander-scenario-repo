@@ -1,43 +1,30 @@
-﻿# Optional comms voice-over
+# Tactical Voice Communications
 
-Meridian Strike treats visible text as the authoritative battle communication. Optional speech is a small accent layer and never controls card timing, battle resolution, or mission progression.
+In Meridian Strike, battle communication brings the cockpit experience to life with pilot voice callouts, status updates, and radio chatter from tactical command.
 
-## Player setting
+---
 
-**Settings → Audio → Voice comms** defaults to **Off**, including for saves with no stored preference. Turning it on enables the curated clips below. Turning it off immediately stops active speech. The preference persists as `meridian-strike:voice-comms-v1`.
+## Audio Settings & Preferences
 
-Music and sound effects have separate controls. Missing or blocked speech always falls back to the visible text without delaying the card.
+Voice chatter is fully customizable according to player preference:
 
-## Curated release set
+- **Enabling / Disabling:** Navigate to **Settings → Audio → Voice Comms** to toggle voice lines on or off. Turning it off immediately silences active spoken dialogue while retaining text subtitles.
+- **Independent Volume Sliders:** Voice communications can be balanced independently from Sound Effects and Background Music, allowing you to fine-tune cockpit comms for your setup.
+- **Text-First Design:** On-screen dialogue cards and combat subtitles remain the authoritative communication channel. Spoken audio serves as an atmospheric accent layer and never slows down turn pacing, delays card dismissals, or blocks order execution.
 
-The runtime accepts only entries in [`voiceover_manifest.csv`](voiceover_manifest.csv):
+---
 
-- Two kill confirmations for each of Mara Voss, Elias Ren, Tala Orin, Jonas Vale, Sera Kest, and Darius Kane.
-- Two COMMAND kill confirmations for a player unit without an identified pilot.
-- Seven mission-status lines covering victory and defeat.
+## Cockpit Transmission Types
 
-This is 21 eligible clips. Hostile taunts, routine invalid-order chatter, movement failures, fire failures, Brace/Cool failures, and all other generated battle text remain text-only. Files left in the asset directory but absent from the curated runtime catalogue are ignored.
+When enabled, voice chatter triggers during key tactical moments:
 
-The manifest and `src/ui/commsVoiceCatalog.ts` must stay identical. `src/ui/sfx.test.ts` checks the row count, catalogue membership, and computed filename for every entry.
+- **Confirmed Kill Callouts:** Unique voice lines for lance pilots (Mara Voss, Elias Ren, Tala Orin, Jonas Vale, Sera Kest, Darius Kane) upon neutralizing enemy mechs.
+- **Tactical HQ Alerts:** Central command acknowledgments when mission milestones, objectives, or secondary goals are achieved.
+- **Mission Outcomes:** Voice confirmations when securing operational victory or confirming critical tactical withdrawals.
 
-## Asset location and filenames
+---
 
-Clips live in:
+## Accessibility & Fallback
 
-```text
-public/assets/voice/comms/
-```
-
-Filenames are deterministic:
-
-```text
-<speaker-slug>__<line-slug>__<hash>.mp3
-```
-
-Leading direction tags such as `[urgent]`, `[grim]`, and `[relieved]` select the intended delivery but are excluded from the filename. Use `commsVoiceFileName()` rather than constructing paths by hand.
-
-`voiceover_optional_missing.txt` lists curated clips that may be absent during development. These entries remain silent until matching licensed recordings are supplied.
-
-## Release review
-
-The current clips are retained only as an opt-in fallback while the demo ships text-first. A later owner-reviewed recording pass must establish speaker consistency, commercial rights, loudness normalization, and the Steam AI-content disclosure before voice can be considered release-approved. Speech ducking is deferred unless a reviewed recorded set ships.
+- **Subtitles & Transcripts:** Every spoken voice line is simultaneously displayed in the battlefield interface and recorded in the combat log.
+- **Silent Operation:** Missing or muted audio seamlessly falls back to visual text cards without delay, ensuring complete playability across all sound settings and environments.

@@ -1,61 +1,50 @@
-﻿# Campaign Editor
+# Campaign Workshop Guide
 
-The Campaign Workshop composes local Custom Scenarios into a playable linear theater.
+The **Campaign Workshop** is an in-game tool in Meridian Strike that allows creators to link individual tactical scenarios into an interconnected, story-driven campaign theater.
 
-Official campaign content is a separate workflow. See `docs/developer/CAMPAIGN_PACK_LAYOUT.md` and `docs/wiki/CONTENT_STUDIO.md`.
+Whether crafting a multi-stage border skirmish or an epic planetary defense, the workshop guides you through setting narrative arcs, mission progression, balance curves, and custom briefings.
 
-## Recommended workflow
+---
 
-1. Build and playtest each mission in **Scenario Library**.
-2. Open **Campaign Workshop** and create a campaign.
-3. In Guided mode, define its identity, author credit, intended difficulty, and intended experience.
-4. Add missions in play order. Set target difficulty, expected duration, rewards, and fail-forward behavior.
-5. Author dialogue, intro, and aftermath. Choose PNG, JPEG, or WebP images in the editor; they are packaged automatically. Community/custom videos are not supported.
-6. Fix validation errors and review the campaign-wide balance curve. Balance warnings are advisory and never change combat rules.
-7. Save and playtest. Unsaved work is durably recovered after navigation or restart.
-8. Export a self-contained ZIP, or sign in with Google and publish it for community review.
+## Creator Workflow
 
-Advanced mode exposes stable IDs and detailed presentation controls. A saved campaign ID is immutable because saves, revisions, and community ownership refer to it.
+Creating a custom campaign follows a straightforward, step-by-step authoring process inside the game:
 
-## Ownership and revisions
+1. **Build Your Missions:** Create and playtest each individual tactical battle in the **Scenario Editor** first to ensure balanced mechanics and engaging map layout.
+2. **Open Campaign Workshop:** Select **Campaign Workshop** from the main menu and create a new campaign project. Choose between **Guided Mode** (for a structured step-by-step setup) or **Advanced Mode** (for full granular control over presentation and metadata).
+3. **Define Campaign Identity:** Set the campaign's title, synopsis, author name, difficulty rating, and intended experience tags.
+4. **Arrange Mission Sequence:** Add your saved scenarios in their intended play order. For each stage, define target difficulty, credit rewards, repair turnaround expectations, and whether the mission permits **fail-forward** progression upon defeat.
+5. **Add Story & Dialogue:** Author narrative briefings, in-combat radio transmissions, mid-battle events, and introductory/aftermath narrative slides.
+6. **Attach Visual Assets:** Choose custom artwork (PNG, JPEG, or WebP) for chapter cards, briefing slides, and catalogue thumbnails. Images are packaged and optimized automatically by the game.
+7. **Validation & Balance Review:** Review the campaign balance graph in the editor. The workshop analyzes your lance drop limits, enemy opposition strength, and repair intervals to help you spot unintended difficulty spikes.
+8. **Test & Share:** Playtest your campaign locally. When ready, export a self-contained package to share with friends, or sign in to publish it directly to the community catalogue.
 
-- Publishing requires Google sign-in in the desktop game.
-- Only the Google account that first published a campaign can submit later revisions or withdraw it.
-- A new revision waits for admin approval while the last approved revision remains downloadable and playable.
-- Installed revisions update only after explicit player action. A failed update retains the last playable local revision.
-- Local authoring, import, export, fork, and playtest remain available while signed out and offline.
-- Imported community campaigns are read-only. Use **Fork to edit** to create new campaign and scenario IDs with explicit provenance.
-- Admin review at `https://meridian-strike-wiki.netlify.app/admin` can approve or reject scenario and campaign revisions. Admin access is authorized by immutable Google subject ID, not an editable email address.
+---
 
-Owner upload and environment notes: [`docs/OWNER_COMMUNITY_GUIDE.md`](../OWNER_COMMUNITY_GUIDE.md). Public wiki: `https://meridian-strike-wiki.netlify.app/wiki/CAMPAIGN_EDITOR`.
+## Campaign Package Architecture
 
-## ZIP format
+When you export or publish a campaign from the workshop, the game automatically packages your work into a self-contained campaign archive. You do not need to assemble files manually:
 
-```text
-Campaigns/<id>/
-  campaign.json
-  README.md
-  PACK.md
-  dialogues/<missionId>.json
-  media/manifest.json
-  media/<managed PNG, JPEG, or WebP images>
-  media/ASSETS.md
-  missions/<scenarioId>/scenario.json
-  missions/<scenarioId>/scenariomap.png|jpg|webp
-```
+- **Campaign Identity & Rules:** Contains the overall title, description, difficulty tier, author credit, and campaign rules.
+- **Mission Flow & Briefings:** Stores the sequential mission tree, objective triggers, credit payouts, and custom radio dialogues.
+- **Tactical Battle Maps:** Embeds each scenario's hex terrain, deployment coordinates, enemy force compositions, and victory objectives.
+- **Narrative Art & Media:** Stores your custom chapter slides, intro visuals, aftermath illustrations, and the workshop thumbnail.
+- **Integrity Validation:** Every packaged scenario is validated against the community safety rules before upload.
 
-Legacy ZIPs with top-level `Scenarios/` still import. Imported campaigns remain read-only until deliberately forked.
+> [!NOTE]
+> Community packages support high-resolution PNG, JPEG, and WebP imagery (up to 1 MiB per image, with a total package limit of 20 MiB expanded). Video files are reserved for official bundled campaigns and are not accepted in community packages.
 
-Community/custom ZIPs have no video roles or video fields. Official bundled campaigns retain their separate video-capable format.
+---
 
-Community packages add root `manifest.json` and `thumbnail.webp` for server validation and catalogue presentation.
+## Publishing to the Community
 
-## Code map
+Players with the Full Edition desktop app can publish their creations for other commanders to enjoy:
 
-| Module                                   | Role                                                                                  |
-| ---------------------------------------- | ------------------------------------------------------------------------------------- |
-| `src/customCampaigns/`                   | Versioning, migration, validation, balance guidance, drafts, media, storage, and ZIPs |
-| `src/ui/screens/CustomCampaigns.tsx`     | Local and community campaign library                                                  |
-| `src/ui/screens/CampaignEditor.tsx`      | Guided/advanced editor                                                                |
-| `src/api/communityCampaignRepository.ts` | Community catalogue, publishing, and withdrawal                                       |
-| `src/api/communityCampaignPackage.ts`    | Community package construction and import                                             |
+1. **Local Playtesting:** Ensure all missions can be completed and that dialogue triggers function as expected.
+2. **Community Sign-In:** Sign in with Google from the in-game creator panel. Local authoring, importing, and offline playtesting never require an internet connection, but publishing requires creator authentication to establish ownership.
+3. **Submit for Review:** Click **Publish** in the Campaign Workshop. Your campaign enters the community moderation queue as revision 1.
+4. **Moderation Review:** An administrator reviews the package on the community review portal to ensure safety, fair playability, and appropriate content. Once approved, the campaign goes live in the public catalogue.
+5. **Updates & Forking:**
+   - Only the original creator's account can submit updates to an existing campaign listing.
+   - While a new revision is under review, the previous approved version remains fully playable and downloadable for all players.
+   - When importing someone else's community campaign, use **Fork to Edit** to create your own independent project with fresh IDs so you never overwrite another author's work.

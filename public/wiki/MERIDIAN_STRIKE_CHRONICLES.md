@@ -1,10 +1,12 @@
-﻿Meridian Strike — Deployment Chronicles
+# Meridian Strike — Deployment Chronicles
 
-This account describes the campaign setting and intended successful arc. A live
-company may retry, withdraw or accept a failed nonfinal contract. Its settled
-results and service records remain authoritative for losses and achievements.
+> [!WARNING]
+> **SPOILER ALERT: Major Campaign Narrative Spoilers**  
+> This chronicle contains complete narrative events, mission operations, plot developments, and the final climax of **Meridian Strike (Theater I)**. If you have not yet completed the founding campaign in the game, read on with caution!
 
-OP-101 — Border Signal
+---
+
+## OP-101 — Border Signal
 
 Meridian Strike began with four battle-scarred machines, six pilots, and a company ledger that left little room for failure. The hangar lights stayed on only because Mara Voss accepted contracts other commanders considered too small, too remote, or too uncertain.
 
@@ -16,9 +18,9 @@ For Meridian Strike, the mission offered badly needed credits and a chance to pr
 
 Before the first shot had been fired, Meridian Strike had entered someone else’s campaign.
 
-Narrative function: Call to adventure; the company takes its first contract and enters VEX’s shadow.
+---
 
-OP-202 — Silent Relay
+## OP-202 — Silent Relay
 
 The fighting at Border Signal revealed that the jamming was not an isolated raid. Hidden inside the ruined equipment, Tala Orin recovered fragments of encrypted telemetry leading away from the planet and toward a dormant relay station on a scarred moon.
 
@@ -34,9 +36,9 @@ Mara understood the warning. Meridian Strike was no longer investigating the ene
 
 The network had begun investigating them.
 
-Narrative function: Crossing the threshold; the company discovers that the war is organized and personal.
+---
 
-OP-303 — Hold the Line
+## OP-303 — Hold the Line
 
 The active, defended relay deepened Mara’s suspicion. VEX commanded more than scattered border raiders. The station linked the border interference to an observation network. A completed download could reveal its traffic, but control of the station alone did not prove what every file contained.
 
@@ -50,9 +52,9 @@ Mara ordered the company into the pass.
 
 This was no longer a reconnaissance contract or an intelligence recovery. Meridian Strike would have to hold against a commander who had studied its limits—and intended to break them.
 
-Narrative function: Road of trials; VEX tests whether the young company can endure sustained pressure.
+---
 
-OP-404 — Cut the Head
+## OP-404 — Cut the Head
 
 Meridian Strike survived VEX’s assault, but the defense consumed armor, ammunition, and time the company could not easily replace. The enemy had demonstrated that as long as VEX controlled the theater network, every base, convoy, and repair schedule remained vulnerable.
 
@@ -68,11 +70,9 @@ For the first time, the company was not responding to VEX’s actions.
 
 It was hunting him.
 
-Whether the target was truly the head of the enemy—or merely another layer of the trap—remained unknown.
+---
 
-Narrative function: Approach to the inmost cave; Meridian attempts to seize the initiative and confront VEX directly.
-
-OP-505 — Deep Extract
+## OP-505 — Deep Extract
 
 The strike against VEX-PRIME did not end the campaign.
 
@@ -88,17 +88,15 @@ Meridian Strike had survived because its pilots believed they would not be disca
 
 Assault chassis were not authorized for this operation. The deployed force needed speed, discipline and enough firepower to keep the route usable.
 
-VEX expected Meridian Strike to protect its assets.
+VEX expected Meridian Strike to protect its assets. Instead, the company worked to turn attachment into information and mutual support. The result was the actual fate of its deployed people and machines, not an automatic promise that every member came home.
 
-Instead, the company worked to turn attachment into information and mutual support. The result was the actual fate of its deployed people and machines, not an automatic promise that every member came home.
+---
 
-Narrative function: Supreme ordeal; the company chooses loyalty over mercenary expediency.
-
-OP-606 — VEX: Last Stand
+## OP-606 — VEX: Last Stand
 
 Meridian Strike entered the final operation carrying the history of every battle that had brought it there.
 
-The company had encountered VEX in the border static, investigated his relay network, faced his assault, pursued his field command node and attempted extraction through his hunters. Individual results could include accepted losses. Each operation added to the company's actual history; none guaranteed a clean return. The final objective was to destroy the hostile lance controlling the basin.
+The company had encountered VEX in the border static, investigated his relay network, faced his assault, pursued his field command node, and attempted extraction through his hunters. Individual results could include accepted losses. Each operation added to the company's actual history; none guaranteed a clean return. The final objective was to destroy the hostile lance controlling the basin.
 
 VEX had withdrawn into a fortified desert basin prepared as a final kill zone. Electronic warfare blanketed the approaches. Heavy machines guarded the chokepoints. His personal lance waited where every route could be observed and every mistake punished.
 
@@ -107,5 +105,3 @@ There would be no larger force arriving to finish the war. No employer would ass
 VEX believed a mercenary company was only a ledger of expendable assets.
 
 Mara intended to prove that a company could become something more—and that its name could survive the commander who tried to erase it.
-
-Narrative function: Apotheosis and ultimate boon; Meridian confronts its shadow and earns its identity.

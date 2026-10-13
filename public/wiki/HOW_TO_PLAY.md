@@ -1,4 +1,4 @@
-﻿# Meridian Strike — How to Play
+# Meridian Strike — How to Play
 
 Welcome to **Meridian Strike**, a single-player tactical mech RPG. You command a small mercenary company: choose pilots and machines, fight turn-based battles on a hex grid, and bring your crew home with experience, salvage, and (hopefully) intact chassis.
 
@@ -207,11 +207,5 @@ Non-finale campaign losses can **fail forward**: accept the defeat, skip that op
 Keyboard shortcuts: see [Controls and interface](CONTROLS_AND_INTERFACE.md).
 
 ---
-
-## Still open (product)
-
-- [ ] Broader machine customization beyond per-mount weapon refit (chassis hardpoints stay fixed)
-- [ ] Steamworks overlay / store CTA, code signing, and store-client checks (packaging itself exists; see `steam/README.md`)
-- [ ] Optional voiceover files for some Battle Director lines (cards work without audio)
 
 Good hunting, Commander.

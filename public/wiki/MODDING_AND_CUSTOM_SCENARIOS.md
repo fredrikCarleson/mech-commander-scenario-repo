@@ -1,41 +1,34 @@
-﻿# Modding & custom scenarios
+# Modding & Custom Scenarios
 
-Meridian Strike Full Edition includes player-facing authoring, import, playtest, and community
-publishing tools inside the game. The repository's Content Studio workspace is an internal workflow
-for official content and is not required or supported for community publishing.
+Meridian Strike Full Edition includes built-in tools to design, playtest, import, and publish custom scenarios and campaigns directly from within the game.
 
-## Play community content
+---
 
-1. Open **Custom Scenarios** or **Campaign Workshop** from the title screen.
-2. Browse the community catalogue and choose **Install**, or import a local ZIP.
-3. Launch the installed scenario or campaign from its normal in-game screen.
+## Playing Community Content
 
-Community campaign updates are explicit: the installed revision remains playable until the player
-chooses to update. Removing an installed campaign also removes only its provenance-matched embedded
-scenarios. The Demo Edition does not expose custom/community content.
+1. Open **Custom Scenarios** or **Campaign Workshop** from the main menu.
+2. Browse the community catalogue to download approved missions, or import a scenario package directly from your local storage.
+3. Launch the installed scenario or campaign from the in-game mission selector.
 
-## Create and playtest
+Community content updates are always explicit: installed missions remain playable at their current revision until you choose to update them. The Steam Demo Edition does not expose custom or community content.
 
-- Use **Scenario Editor** to create or edit a local scenario, then save and playtest it.
-- Use **Campaign Workshop** to combine eligible scenarios, write dialogue, and add intro or aftermath
-  slides.
-- Local authoring, saving, ZIP import/export, and playtesting work while signed out and offline.
-- Imported campaigns are read-only; fork one before editing it as your own local work.
+---
 
-Community packages accept PNG, JPEG, and WebP images within the documented limits. Custom campaign
-video fields and video files are intentionally unsupported; bundled official campaigns keep their
-existing video support.
+## Creating & Playtesting Scenarios
 
-## Publish
+The in-game **Scenario Editor** allows players to design standalone tactical missions:
 
-1. Validate and save the content in the in-game editor.
-2. Sign in from the community creator panel. Sign-in is required for publishing, ownership checks,
-   updates, and withdrawal—not for local authoring.
-3. Choose **Publish**. New uploads and updates enter moderation as immutable numbered revisions.
+- **Hex Map Design:** Paint terrain, deployment zones, extraction boundaries, and objective locations. See the [Map Design Guide](./MAP_DESIGN_GUIDE) for layout best practices.
+- **Rules & Objectives:** Set mission victory conditions (`destroyAll`, `holdHex`, `surviveRounds`, `assassinate`, or `extract`), turn deadlines, lance mass limits, and enemy force compositions with distinct AI behaviors.
+- **Narrative & Briefings:** Write custom pre-drop mission briefings and in-combat radio transmissions triggered by round starts, destroyed units, or captured objectives.
+- **Offline & Private Testing:** Scenario creation, saving, export, and local playtesting work completely offline without requiring an account or internet connection.
+- **Remixing Content:** Community scenarios and campaigns are read-only when imported; use **Fork to Edit** to create your own independent project before modifying someone else's work.
 
-An approved revision stays available while a newer update is reviewed. An author can withdraw the
-public listing without erasing retained immutable release records. Administrative deletion creates a
-tombstone and prevents public retrieval; it is distinct from author withdrawal.
+---
 
-Player-facing wiki: `https://meridian-strike-wiki.netlify.app/wiki/MODDING_AND_CUSTOM_SCENARIOS`  
-Owner/admin env guide: [`docs/OWNER_COMMUNITY_GUIDE.md`](../OWNER_COMMUNITY_GUIDE.md)
+## Publishing to the Community
+
+1. **Verify Your Mission:** Save and playtest your scenario locally in the editor to ensure it is beatable and free of errors.
+2. **Creator Sign-In:** Sign in with Google from the community creator panel in the desktop game. Creator authentication is required only for publishing, ownership checks, and updates—not for local offline play.
+3. **Publish for Review:** Submit your scenario to the community queue. Once submitted, the scenario enters the moderation queue as an immutable numbered revision.
+4. **Moderation & Approval:** An administrator reviews the mission for safety, playability, and community standards before approving it for the public catalogue.

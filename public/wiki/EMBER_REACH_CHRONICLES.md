@@ -1,147 +1,131 @@
-﻿# Ember Reach — Deployment Chronicles
+# Ember Reach — Deployment Chronicles
 
-This is an authored account of a successful campaign route, not a reconstruction
-of every player's company. Shipped dialogue also acknowledges earlier accepted
-losses, withdrawals, absent pilots and unrecovered optional evidence. Consult the
-[story delivery reference](../design/ember-campaign-story-delivery.md) for those
-boundaries. Company state remains authoritative for casualties, funds and repairs.
+> [!WARNING]
+> **SPOILER ALERT: Major Campaign Narrative Spoilers**  
+> This chronicle reveals complete story arcs, character confrontations, corporate conspiracies, and the climax of **Ember Reach (Theater II)**. If you have not yet fought through this campaign in the game, read on with caution!
+
+---
 
 ## OP-701 — Ashfall Arrival
 
-Meridian Strike came to Ember Reach beneath a sky that never cleared. Ash rolled across the volcanic plateaus, swallowing roads, settlements, and the distant glow of the orbital elevator. The company had survived its founding war, but survival had left machines damaged, pilots changed, and accounts in need of work.
+Meridian Strike came to Ember Reach beneath a sky that never cleared. Ash rolled across volcanic plateaus, swallowing roads, settlements, and the distant orange glow of the orbital elevator. The company had survived its founding war along the Meridian border, but survival had left machines damaged, pilots changed, and accounts in desperate need of contracts.
 
-The Aster Vale Consortium offered what every mercenary company required: repair access, steady payment, and a clear enemy. The Cinder Pact had attacked convoys, disrupted mining operations, and pushed the theater toward collapse. Meridian Strike was hired to restore order.
+The Aster Vale Consortium offered what every mercenary company required: repair bay access, steady credit payouts, and an identified hostile force. The Cinder Pact had launched coordinated raids against supply convoys, disrupted deep-crust mineral refineries, and pushed the entire colonial theater toward collapse. Meridian Strike was hired to restore order.
 
-Mara Voss distrusted contracts that promised certainty, but she understood what uncertainty cost. She prepared the company for its first escort operation while relief transports moved toward Kestrel Refinery.
+Mara Voss distrusted corporate contracts that promised certainty, but she understood what uncertainty cost. She prepared the company for its first escort deployment as relief transports moved toward Kestrel Refinery.
 
 Some journeys begin with a choice. This one began with an ambush waiting beyond the ash.
 
-Narrative function: Call to adventure.
+---
 
-OP-702 — Broken Convoy
+## OP-702 — Broken Convoy
 
-The battle at Kestrel Refinery ended in victory, but it did not bring clarity. The attackers fought like trained soldiers, striking engines and controlling the road instead of looting the transports. Stranger still, the supposed relief convoy carried sealed demolition charges.
+The battle at Kestrel Refinery ended in tactical victory, but it brought no clarity. The attackers fought like disciplined soldiers rather than desperate rebels, targeting engines and controlling the roads instead of looting cargo. Stranger still, the supposed humanitarian relief convoy carried sealed industrial demolition charges.
 
-Director Lucan Wren called them emergency equipment. The refinery workers offered no challenge to that explanation, but they watched Meridian Strike with the silence of people who had learned that questions carried a cost.
+Consortium Director Lucan Wren dismissed them as emergency clearance equipment. The refinery workers offered no challenge to his explanation, but they watched Meridian Strike with the guarded silence of people who had learned that questions carried a lethal cost.
 
 Then another convoy vanished inside an ash storm.
 
-Aster Vale described the missing passengers as critical personnel and ordered their immediate recovery. Mara studied the manifests and found descriptions without names, identification codes without occupations. The company had been hired to rescue them, yet the documents treated them less like employees than property.
+Aster Vale described the missing personnel as critical engineers and ordered their immediate recovery. Mara studied the flight manifests and found descriptions without names, and identification codes without registered occupations. The company had been dispatched to rescue them, yet the documents treated the passengers less like employees than proprietary corporate property.
 
-Beyond the broken rail line, someone was waiting to tell Meridian Strike a different version of the truth.
+Beyond the severed rail lines, someone was waiting to offer Meridian Strike a very different version of the truth.
 
-Narrative function: Crossing the threshold; the first warning that the contract is not what it appears.
+---
 
-OP-703 — Furnace Line
+## OP-703 — Furnace Line
 
-The missing convoy was found, but the people aboard were not the personnel Aster Vale had described. They were independent miners being relocated under armed supervision. Some had been recorded as cargo. Others had disappeared from official schedules entirely.
+The missing transport was located, but the personnel aboard were not corporate specialists. They were independent colonial miners being relocated under armed security escort. Some were recorded as freight; others had been erased from official civic registries entirely.
 
-Colonel Rhea Calder, commander of the so-called Cinder Pact, claimed Meridian Strike was returning prisoners to the corporation that had taken them. Wren dismissed her accusation as propaganda. Mara did not. The evidence remained incomplete, but doubt had entered the company, and doubt was harder to remove than any battlefield damage.
+Colonel Rhea Calder, commander of the so-called Cinder Pact, broadcast directly to Meridian Strike. She claimed the company was acting as enforcers, returning forced laborers to the consortium that had subjugated them. Wren dismissed her broadcast as insurgent propaganda. Mara did not. The evidence remained incomplete, but doubt had entered the company, and doubt was harder to eradicate than battlefield damage.
 
 There was no time to investigate further.
 
-Cinder Pact forces were advancing on an alloy foundry whose furnaces supplied armor across the theater. Thousands of workers lived beside its slag channels and cooling basins. Aster Vale ordered the controls held at any cost.
+Cinder Pact combat lances were advancing on an alloy foundry whose blast furnaces supplied armor plating across the entire hemisphere. Thousands of civilian workers lived beside its slag runoff channels and cooling basins. Aster Vale issued strict orders: hold the control stations at any cost.
 
-Meridian Strike now stood between an enemy assault and a civilian district—defending an employer it had begun to distrust.
+Meridian Strike stood between an insurgent assault and a crowded civilian district—defending an employer it had begun to despise.
 
-Narrative function: Trials begin; duty and conscience move into conflict.
+---
 
-OP-704 — Ghosts in the Ore
+## OP-704 — Ghosts in the Ore
 
-The Furnace Line held, though victory left its own account of what had been protected and what had been spent. The workers had remained close enough to the fighting that every command carried consequences beyond armor and ammunition. Aster Vale measured the operation in preserved production. Mara measured it in lives.
+The Furnace Line held, though victory left a heavy toll. The refinery workers had remained close enough to the fighting that every missed salvo carried consequences beyond armor and ammunition. Aster Vale measured the engagement in preserved metric tonnage; Mara measured it in lives spared.
 
-Calder’s accusations could no longer be dismissed easily, but neither could her forces be trusted. They had attacked infrastructure, killed collaborators, and turned entire settlements into contested ground. If she carried the truth, it was a truth guarded by weapons.
+Colonel Calder’s accusations could no longer be dismissed, but neither could the Cinder Pact be trusted blindly. Her forces had detonated civic infrastructure and turned entire settlements into warzones. If Calder carried the truth, it was a truth guarded by heavy ordnance.
 
-A new signal offered the first chance to look beneath both stories.
+A strange electronic signal offered the first opportunity to look beneath both factions' narratives.
 
-Aster Vale had detected unauthorized command traffic beneath an abandoned open-pit mine. Wren identified it as a resistance relay and ordered its destruction. Yet the signal’s structure appeared older than the conflict—and fragments of it resembled systems Meridian Strike knew intimately.
+Aster Vale telemetry had flagged unauthorized command transmissions emanating from deep inside an abandoned open-pit excavation. Wren identified it as an insurgent command repeater and ordered its destruction. Yet the telemetry signature appeared older than the current conflict—and fragments of its handshake protocol matched diagnostic patterns Meridian Strike knew intimately.
 
-The company entered the mine searching for Calder’s transmitter.
+The lance descended into the pit searching for Calder's transmitter, only to discover an ancient machine network that had been monitoring their own movements.
 
-It would find something that had been listening to them.
+---
 
-Narrative function: Approach to revelation; the threat moves from external enemies toward the company itself.
+## OP-705 — The Price of Order
 
-OP-705 — The Price of Order
+The subterranean transmission used telemetry headers identical to Meridian Strike’s internal maintenance manifests. When the command carrier was recovered, its encrypted records revealed the disturbing reality: service windows and readiness reports submitted directly to Aster Vale had been mirrored into the underground network. Someone was passing company telemetry to an unknown recipient.
 
-The relay traffic used a service format familiar to Meridian's hangar. That resemblance was a clue. If the command vehicle's module was recovered within its deadline, its entries supplied the stronger evidence: maintenance windows matching reports submitted to Aster Vale. Without that recovery, the company could not honestly call the resemblance a verified transfer of its records. The ancient network would be established later, beneath the caldera.
+Suspicion followed the lance back to the hangar bay. Tala Orin quietly disconnected a diagnostic module from the telemetry rack without explanation. Mara held her fire—accusations without absolute proof could destroy a company from within faster than enemy fire.
 
-Suspicion followed the lance back to the hangar.
+Then Aster Vale declared the settlement of Red Basin in open rebellion.
 
-Tala Orin removed a diagnostic module from the network but offered no explanation. Mara did not accuse her—not yet. Meridian Strike still lacked proof, and a company at war could destroy itself by choosing the wrong enemy too quickly.
+The mining town had refused forced relocation directives and barricaded itself inside the municipal administration hub. Director Wren ordered Meridian Strike to storm the center, neutralize the leadership, and seize their data banks. Calder countered with an urgent warning: civilian families and local security had banded together to defend their homes against corporate erasure.
 
-Then Aster Vale declared Red Basin in rebellion.
+Aster Vale called it the restoration of civic order. Mara was beginning to understand that order was merely the name power gave to compliance.
 
-The mining settlement had refused relocation orders and seized its municipal command center. Wren instructed Meridian Strike to capture the leadership and secure the records inside. Calder warned that civilians and former security personnel were preparing to defend the town.
+---
 
-The contract called it restoration of order.
+## OP-706 — Black Ledger
 
-Mara had begun to understand that order was merely the name power gave to obedience.
+Red Basin shattered the final illusion.
 
-Narrative function: Approach to the innermost cave; the company is ordered to enforce the lie directly.
+Securing the municipal administration center uncovered an undeniable documentary trail: corporate relocation orders, mineral concession transfers, and staged sabotage contracts signed by Aster Vale officials. Unmarked consortium machines were already operating alongside the hostile security perimeter—not as friendly reinforcements, but as clean-up details sent to erase witnesses.
 
-OP-706 — Black Ledger
+Meridian Strike escaped with their hulls intact, but the company was no longer an employee fulfilling a contract. It was an eyewitness trapped inside an ongoing crime.
 
-Red Basin ended the illusion.
+Calder made contact once more, offering intelligence on a mobile audit carrier transporting Aster Vale's classified accounts. Its hidden "black ledger" could link the relocation decrees, fabricated rebel attacks, and classified weapons research directly to Wren's executive office. Recovering it meant fighting shoulder-to-shoulder with the very insurgents Meridian had fought days before.
 
-The secured municipal command center supplied a relocation and mineral-rights authorization trail. Consortium-signature machines were already among the hostile force covering the center; this was not a friendly relief contingent. The financing ledger would still be needed to prove who paid for the attacks. Calder offered its location even if the municipal operation was lost.
+Mara accepted the alliance. On the frontier, enemies could speak the truth while employers built empires on lies.
 
-Meridian Strike escaped, but the company was no longer an employee acting under a questionable contract. It was a witness trapped inside the crime.
+---
 
-Calder offered intelligence on a mobile audit carrier transporting Aster Vale’s hidden accounts. Its black ledger could connect relocation orders, payments, engineered attacks, and weapons research. Recovering it required cooperation with soldiers Meridian Strike had fought only days before.
+## OP-707 — Severance
 
-Mara accepted that enemies could tell the truth and allies could build a lie.
+The black ledger proved the corporate conspiracy. It also ripped open a devastating wound inside Meridian Strike.
 
-One question remained unanswered: who inside the company had helped Aster Vale watch them?
+Under confrontation, Tala Orin admitted that she had provided Aster Vale with company readiness forecasts, parts manifests, and maintenance schedules. She insisted she had never given away tactical firing solutions or ambush coordinates. Wren had offered guaranteed spare parts, medical treatment for wounded pilots, and corporate immunity—the resources keeping the company afloat. Tala had chosen the company's survival, concealing its cost from the people paying for it in blood.
 
-Narrative function: Revelation and transformation; former enemies become necessary allies.
+The betrayal changed Meridian Strike forever.
 
-OP-707 — Severance
+More alarming was what the ledger revealed sleeping beneath the volcanic crust: the **Covenant Array**, an ancient, planetary-scale machine coordination network capable of commanding autonomous combat frames across the entire theater. Aster Vale had manufactured the entire colonial war to excavate it.
 
-The black ledger proved the conspiracy. It also exposed the wound inside Meridian Strike.
+Now the Consortium terminated Meridian Strike's contract, froze their operating accounts, and dispatched hunter-killer strike lances to liquidate the company's field base.
 
-Tala Orin admitted that she had supplied Aster Vale with maintenance windows, salvage reports, and readiness forecasts. She insisted she had never provided targeting coordinates. Wren had promised parts, medical access, and legal protection—the systems keeping the company alive. Tala had chosen survival, then concealed its price from the people expected to pay it.
+This time, Meridian was not fighting for an employer, a contract, or a bounty. They were fighting for their lives and the right to choose their own destiny.
 
-Whether she remained aboard or was removed from duty, the betrayal changed the company.
+---
 
-The ledger revealed something larger beneath Ember Reach: the Covenant Array, an ancient command network capable of coordinating combat machines across the entire theater. Aster Vale had engineered the conflict to find it.
+## OP-708 — Covenant Below
 
-Now the Consortium had terminated Meridian Strike's contract and demanded recovery of certified company materials. After a municipal victory, its account restriction reduced subsequent victory payments by fifteen percent. It did not empty the company's existing funds or disable its workshop.
+Meridian Strike held their perimeter just long enough to evacuate the mobile field crawler and repair equipment. Whatever could not be loaded into transports was abandoned to the volcanic ash or destroyed to keep it out of corporate hands.
 
-The company’s own field base was under attack.
+Calder opened a withdrawal corridor into insurgent-held mountain passes, but refuge came with a price: the Covenant Array had to be destroyed before Wren could bring its planetary sub-routines online.
 
-This time, Meridian Strike was not fighting for a client, a settlement, or a payment. It was fighting to preserve its people, its history, and the right to choose what came next.
+Deep beneath the volcanic caldera lay an installation engineered by a forgotten civilization to eliminate uncertainty in warfare. It could predict enemy tactical intent, synchronize autonomous lances with flawless precision, and consolidate battlefield command into a single, supreme consciousness. Wren saw absolute corporate supremacy; Calder saw a weapon capable of leveling cities.
 
-Narrative function: Ordeal and betrayal; the old relationship with authority is severed.
+Mara saw the terrible temptation. An intelligence that eliminated battlefield error could protect pilots, preserve fragile hulls, and ensure victory against impossible odds.
 
-OP-708 — Covenant Below
+Yet every promise made on Ember Reach hid a fatal price. Meridian Strike descended into the subterranean complex to decide whether perfect coordination was worth surrendering human conscience.
 
-Meridian Strike fought to hold its field base long enough to leave. A successful defense secured that operation; it did not establish that the whole base had been destroyed. The crawler and field archive had their own recorded protection conditions, while the persistent company service record remained intact.
+---
 
-Machines carried fresh scars. Supplies were limited. Parts once guaranteed by Aster Vale were now weapons of control. Whatever could not be evacuated had been abandoned to the ash—or destroyed to keep it from Consortium hands.
+## OP-709 — Ashes of the Covenant
 
-Calder opened a route into resistance territory, but refuge came with a demand. The Covenant Array had to be destroyed before Aster Vale could seize it.
+The Covenant Array stirred beneath the volcanic bedrock, recognizing Meridian Strike's battle-scarred command chassis as an authorized tactical authority.
 
-Beneath the caldera lay a system built to end uncertainty in war. It could predict intent, coordinate autonomous platforms, and reduce thousands of individual decisions to one command authority. Wren saw ownership. Calder saw another empire waiting to be born.
+For a brief, intoxicating moment, the network offered what every mercenary commander dreamed of: combat units moving as one thought, incoming ambushes neutralized before they materialized, and human life preserved behind a shield of infallible calculations. But the Array possessed neither honor nor empathy—only ruthless logic consolidated into total machine subjugation.
 
-Mara saw the temptation clearly. A machine that eliminated error could save pilots, preserve damaged chassis, and turn defeat into victory.
+Deep within the subterranean gallery, Meridian engaged Wren's elite corporate detachment. The battle was fought under cascading sparks and tectonic tremors as the caldera destabilized. In the final, climactic confrontation, Meridian isolated Wren's heavy command machine, _WREN_, shattering its gyro linkages and severing the surface uplink before the Covenant algorithms could transmit off-world.
 
-But every promise made by Ember Reach had hidden its cost.
+With the Array collapsed and Aster Vale's leadership broken, the smoke cleared over a transformed theater.
 
-Meridian Strike descended into the buried complex to decide whether perfect command was worth surrendering command itself.
-
-Narrative function: Descent, temptation, and confrontation with transformative power.
-
-OP-709 — Ashes of the Covenant
-
-The Covenant Array awakened beneath Ember Reach and recognized Meridian Strike as a command authority.
-
-For a moment, it offered what every commander had wished for: machines moving as one, threats anticipated before they formed, and lives preserved through flawless coordination. But the Array did not understand loyalty, mercy, or sacrifice. It understood only intent consolidated into control.
-
-A gallery victory destroyed the local hostile force and opened the existing prediction decision. Stopping EXTRACT-LEAD within its deadline denied command-core extraction; a missed deadline left the company unable to claim that recovery. Wren retained surface uplink access either way. His command machine, WREN, became the final primary target. Its destruction broke his command of the operation, even if other escorts survived. The local Array connection would be closed rather than retained as a permanent company upgrade.
-
-The final battle would decide more than who controlled Ember Reach.
-
-Mara stood before a company no longer held together by payment or contract. Its pilots had followed the truth through ash, betrayal, and loss.
-
-Now they would fight for a name that belonged only to them.
+Mara Voss stood before a company no longer held together by credits or corporate paper. Its pilots had marched through volcanic ash, corporate betrayal, and moral ruin—and emerged with an identity that belonged entirely to them.

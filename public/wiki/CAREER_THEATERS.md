@@ -1,57 +1,62 @@
 # Career & Theaters
 
-Company career (profile) unlocks theaters. The Continue save is one living company.
+In Meridian Strike, your career profile unlocks new operational theaters across the star system. Your active company persists across theaters, carrying its pilots, machines, and battle history forward.
 
-## Player model
+---
 
-| Verb                  | Effect                                                                     |
-| --------------------- | -------------------------------------------------------------------------- |
-| **Continue**          | Resume the active company in its current theater                           |
-| **Theaters**          | Pick / inspect theaters; start or ship out                                 |
-| **Deploy to theater** | Soft transition — keep pilots/hangar/funds; reset theater clock & missions |
-| **Replay theater**    | Same company, reset that theater's mission graph                           |
-| **New Company**       | Hard reset Continue company; **career unlocks kept**                       |
+## Player Progression Model
 
-## Persistence
+The main menu gives commanders several options for directing their mercenary company:
 
-| Store       | Key                            | Survives New Company? |
-| ----------- | ------------------------------ | --------------------- |
-| Career      | `meridian-strike:career-v1`    | Yes                   |
-| Continue    | `meridian-strike:save-v1`      | No (cleared)          |
-| Named saves | `meridian-strike:save-named:*` | Yes                   |
+| Action                | Effect                                                                                                                              |
+| :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
+| **Continue**          | Resumes your active company in its current theater and operation.                                                                   |
+| **Theaters**          | Inspects unlocked theaters across the star system; start a new deployment or review operational status.                             |
+| **Deploy to Theater** | Soft transition — keep your seasoned pilots, machines, and company funds while resetting the local theater clock and contract tree. |
+| **Replay Theater**    | Replay the contracts in a cleared theater using your current company roster.                                                        |
+| **New Company**       | Resets your active company and finances to start fresh, while **keeping all previously earned career theater unlocks**.             |
 
-Aftermath-seen lives on the career theater record (`aftermathSeen`). Legacy `${campaignId}:campaign-aftermath-seen-v1` keys migrate on load.
+---
 
-## Unlock graph
+## Career Persistence & Save System
 
-1. **Meridian Strike** — always available (founding war, 6 contracts)
-2. **Ember Reach** — unlocks when Meridian Strike is cleared (Theater II, 9 contracts)
-3. **The Crucible Circuit** — unlocks when Ember Reach is cleared (Theater III, 8 championship bouts)
+Meridian Strike separates company-level saves from career-wide achievements:
 
-Demo includes only the founding war. After a genuine Meridian clear, Ember Reach is visible as **Full Edition** but not playable until Full is installed. Career clear records survive a **New Company** wipe.
+- **Career Profile:** Tracks which theaters you have unlocked and cleared. Unlocks and medals are permanent and survive starting a "New Company."
+- **Company Save:** Tracks the living company — including current funds, damaged hulls, active repairs, pilot injuries, and current contract progress.
+- **Named Archives:** Players can create named save states at key strategic junctures to preserve milestones or explore alternate deployment choices.
 
-Title **Theaters** hydrates the Continue save for browsing and does **not** settle an ended battle; **Continue Campaign** is what recovers owed after-action or in-progress combat.
+---
+
+## Theater Unlock Chain
+
+1. **Meridian Strike (Theater I):** The founding border war (6 contracts). Always available at the start of your career.
+2. **Ember Reach (Theater II):** Unlocks upon victorious completion of Meridian Strike (9 contracts). A fierce corporate conflict fought under volcanic ash.
+3. **The Crucible Circuit (Theater III):** Unlocks upon victorious completion of Ember Reach (8 championship bouts). The elite machine-combat dueling ladder in the Grand Crucible arena.
+
+> [!NOTE]
+> The Demo Edition includes the founding Meridian Strike campaign. Full Edition unlocks the complete career progression including Ember Reach and The Crucible Circuit.
 
 ---
 
 ## Theater III: The Crucible Circuit
 
-The Crucible Circuit (`crucible_circuit`) is a high-stakes, 90-day championship ladder held in the Grand Crucible arena.
+The Crucible Circuit is a high-stakes, 90-day championship ladder held in the legendary Grand Crucible arena.
 
-### Tournament Structure & Format
+### Tournament Format & Stakes
 
-- **1v1 Duels:** Each bout is a single machine duel between the deployed company unit and a registered arena champion.
-- **Tonnage Ceilings:** Permitted deployment tonnage rises across the 8 bouts (25 tons up to 80 tons). Deploying below the ceiling is allowed, but grants no balancing compensation.
-- **Wager Stakes:** _"Deployed hulls are the wager."_
-  - **Victory:** Awards credits and transfers the defeated champion's machine directly into your persistent hangar in its post-battle damaged condition.
-  - **Defeat:** The deployed machine is forfeited permanently to the arena. The pilot is never surrendered; normal injury and recovery rules apply.
-  - **Rechallenge:** Defeat does not immediately end the run if the company still owns an operational, eligible machine within the mass limit.
+- **1v1 Duels:** Every engagement is a single-combat duel between your selected machine and a registered arena champion.
+- **Rising Tonnage Ceilings:** Permitted deployment tonnage rises across the 8 bouts (from 25 tons up to 80 tons). Deploying a lighter frame is permitted, but offers no balancing handicap.
+- **The Wager:** _"Deployed hulls are the wager."_
+  - **Victory:** Awards the championship purse and transfers the defeated champion's mech directly into your persistent company hangar in its damaged post-battle state.
+  - **Defeat:** The deployed machine is forfeited permanently to the arena. Pilots are never surrendered; normal medical recovery rules apply.
+  - **Rechallenge:** Defeat does not eliminate your company as long as you possess another operational, eligible hull within the weight limit.
   - **No Flee / Fail-Forward:** Escape hexes are absent and fail-forward is disabled.
-- **Voluntary Withdrawal:** After any victory, the player may choose to withdraw from the tournament, successfully ending the theater and preserving all winnings and reputation.
+- **Voluntary Withdrawal:** After every victory, commanders have the option to withdraw from the tournament, locking in all prize machines, earnings, and reputation.
 
 ### The 8 Championship Bouts
 
-| Op         | Bout Name            | Mass Limit | Opponent Callsign | Chassis                      | Victory Purse |
+| Op         | Bout Name            | Mass Limit | Opponent Callsign | Opponent Chassis             | Victory Purse |
 | :--------- | :------------------- | :--------: | :---------------- | :--------------------------- | :-----------: |
 | **OP-801** | Opening Bell         |    25 t    | SPARK             | LANCER-25                    |   18,000 c    |
 | **OP-802** | The Fox's Ground     |    35 t    | FOX               | RAVENFALL-35                 |   22,000 c    |
@@ -61,14 +66,3 @@ The Crucible Circuit (`crucible_circuit`) is a high-stakes, 90-day championship 
 | **OP-806** | Iron Saint           |    75 t    | SAINT             | TITAN-75                     |   45,000 c    |
 | **OP-807** | The Fallen Crown     |    80 t    | FALLEN            | COLOSSUS-80                  |   52,000 c    |
 | **OP-808** | King of the Crucible |    80 t    | CROWN             | COLOSSUS-80 (_Crown of Ash_) |   70,000 c    |
-
----
-
-## Code map
-
-- `src/campaign/career.ts` — load/save, clear records, unlock checks
-- `src/campaign/theaters.ts` — catalog
-- `src/campaign/theaterTransition.ts` — soft deploy / replay
-- `src/campaigns/crucible_circuit/` — Theater III missions, logic, and progression
-- `src/ui/screens/TheaterSelect.tsx` — selection UI
-- Final victory → `recordTheaterClear` in `afterAction.ts`

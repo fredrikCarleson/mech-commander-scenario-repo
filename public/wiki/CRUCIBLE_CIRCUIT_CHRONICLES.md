@@ -1,128 +1,153 @@
 # The Crucible Circuit — Deployment Chronicles
 
-For ninety days every year, active frontier conflicts lose viewers, military sensor networks redirect relays, weapons manufacturers reserve hospitality suites, and mercenary companies throughout known space turn their attention to a single proving ground: **The Grand Crucible**.
-
-Its champions are professional duelists, decorated combat veterans, corporate demonstration pilots, and hardened survivors bound by one immutable arena law:
-
-> **One pilot. One machine. Winner claims the defeated machine.**
-
-Following their campaigns in Meridian Strike and Ember Reach, the Meridian Company receives an official circuit invitation. This is not an employer hiring guns to protect a mining settlement, nor a defensive stand against Commander Vex. It is a calculated gamble of everything the company has built.
+> [!WARNING]
+> **SPOILER ALERT: Major Campaign Narrative Spoilers**  
+> This chronicle reveals complete story arcs, character confrontations, arena secrets, and tournament outcomes for **Theater III: The Crucible Circuit**. If you have not yet fought through the circuit in the game, read on with caution!
 
 ---
 
-## Tournament Rules & Architecture
+## The Proving Grounds
 
-- **1v1 Championship Duels:** All engagements are single-machine duels on the Grand Crucible proving grounds.
-- **The Wager:** _Deployed hulls are the wager._ If Meridian loses a bout, the deployed machine is permanently forfeited to the arena. Pilots are never surrendered; normal injury and recovery rules apply.
-- **The Prize:** Victory transfers the defeated opponent's machine directly into Meridian's persistent hangar in its post-battle damaged condition.
-- **Rising Tonnage Ceilings:** The tournament ladder enforces strict mass limits starting at 25 tons and escalating to 80 tons. Players may deploy below the ceiling, but receive no handicap compensation.
-- **Persistent Company Ledger:** 90 campaign days to complete the circuit. Repair Bay times and pilot injury recovery advance the same calendar.
-- **No Flee / Fail-Forward:** Escape hexes are absent and defeat cannot be skipped. However, if another operational machine in the company roster meets the mass criteria, the player may challenge the opponent again.
-- **Voluntary Withdrawal:** After every victory, the commander may choose to withdraw from the tournament, locking in company earnings, captured machines, and prestige.
+For ninety days every standard year, active border skirmishes pause, military communication nets redirect secondary feeds, industrial arms cartels book luxury hospitality suites, and mercenary crews across the quadrant turn their eyes toward a single proving ground: **The Grand Crucible**.
 
----
+It is a permanent combat amphitheater carved from hard-packed desert, rocky ridges, and scorched ferrocrete beneath towering industrial floodlights. Suspended camera drones track every missile trajectory; fifty thousand spectators roar from blast-shielded grandstands; and millions more watch through planetary broadcasts.
 
-## OP-801 — Opening Bell
+Its champions are decorated veterans, retired frontline duelists, corporate demonstration aces, and hardened survivors bound by one brutal arena law:
 
-- **Opponent:** Niko Serrin (_"The Spark"_)
-- **Chassis:** LANCER-25 (Mass Limit: 25 t)
-- **Purse:** 18,000 c
+> _One pilot. One machine. Winner claims the defeated machine._
 
-The lower brackets belong to the young, the hungry, and the desperate. Niko Serrin enters the arena with lightning reflexes and an aggressively tuned Lancer, eager to build a reputation off the veterans from Ember Reach. The fight tests raw skirmishing agility and heat discipline in close quarters.
+Following the grueling campaigns across Meridian Strike and the ash-choked betrayal of Ember Reach, the Meridian Company receives a formal circuit invitation. This is not an employer hiring guns to protect a mining settlement, nor a desperate defense against Commander Vex. It is a voluntary gamble of everything the company has bled to build.
 
-_Narrative function:_ Entrance into the arena; proving the company can adapt from open-field lance doctrine to single-combat dueling.
+In the ready room, the company is divided. Elias sees glory, cheering crowds, and an opportunity to ensure the company's name is never forgotten. Mara sees a meat grinder engineered to entertain spectators while mercenary commanders squander machines they will need to survive their next real contract. Tala and Jonas look at the ledger: every melted armor plate and shattered actuator will have to be repaired on company credits.
+
+In the end, Mara authorizes the deployment. Meridian will enter the arena.
 
 ---
 
-## OP-802 — The Fox's Ground
+## Act I: The Proving Gate
 
-- **Opponent:** Aya Corven (_"Fox"_)
-- **Chassis:** RAVENFALL-35 (Mass Limit: 35 t)
-- **Purse:** 22,000 c
+### Opening Bell — The Challenger
 
-Aya Corven treats the arena like private hunting grounds. Piloting an agile Ravenfall, she exploits line-of-sight breaks along the ridge lines and cooling pools to set up flanking shots against slower opponents. Victory requires discipline, patience, and baiting her into exposing her weaker rear armor.
+The lower brackets of the circuit belong to the hungry, the young, and the desperate.
 
-_Narrative function:_ Understanding terrain affordances and counter-flanking under the gaze of thousands of spectators.
+Niko Serrin, known to the betting crowd as _"The Spark"_, pilots a finely tuned, razor-sharp LANCER-25. Serrin views Meridian's arrival not as a threat, but as his ticket to the main card. Defeating the hardened veterans of Ember Reach in the opening round would instantly make his name.
 
----
+When the blast doors grind open, the arena floodlights blind the cockpit sensors for a heartbeat before tactical displays lock on. Serrin wastes no time with feeling out the distance—he charges through the central open ground, firing repeating lasers in aggressive, high-heat bursts.
 
-## OP-803 — The Professional
+Meridian's pilot holds back, using the outer forest pockets to absorb incoming fire and forcing Serrin to overextend. When the challenger's heat gauge redlines, a disciplined counter-salvo shatters his leg actuators. Serrin ejects into the arena dirt.
 
-- **Opponent:** Bram Calder (_"The Wall"_)
-- **Chassis:** WARDEN-40 (Mass Limit: 40 t)
-- **Purse:** 26,000 c
-
-Bram Calder brings twenty seasons of mercenary combat into the ring. He wastes no heat on theatrics, holds optimal firing lanes with surgical patience, and punishes every reckless charge. Calder's Warden is built to outlast, forcing Meridian into a grueling battle of attrition.
-
-_Narrative function:_ Professional confrontation; contrasting mercenary survival doctrine with arena entertainment.
+His battered Lancer is winched into Meridian's paddock. The first prize is claimed, but the tournament has only just begun.
 
 ---
 
-## OP-804 — House Favorite
+### The Fox's Ground — The Huntress
 
-- **Opponent:** Juno Varek (_"Darling of the Crucible"_)
-- **Chassis:** IRONCLAD-55 (Mass Limit: 55 t)
-- **Purse:** 32,000 c
+Word spreads quickly that Meridian fights with cold military discipline rather than showmanship. In response, the circuit pits them against Aya Corven, callsign _"Fox"_, in an agile RAVENFALL-35.
 
-The middle tier introduces the circuit's true celebrities. Juno Varek commands the arena crowd with flamboyant aggression and an up-armored Ironclad designed to trade punishing blows at point-blank range. Defeating Varek turns the arena audience hostile, painting Meridian as the ruthless outsiders.
+Corven does not charge. She knows every shallow stream, boulder cluster, and line-of-sight obstruction in the arena. Her Ravenfall glides along the ridge lines, teasing long-range missile locks and vanishing behind terrain before return fire can track her. She wants Meridian to break formation and chase her into exposed fire lanes.
 
-_Narrative function:_ The threshold of fame; testing whether Meridian can withstand the physical and psychological pressure of the main card.
+The bout becomes a tense game of tactical patience. Refusing to take the bait, Meridian anchors in partial cover near a central cooling pool, timing a coordinated flanking maneuver as Corven pivots around a rock outcrop. A concentrated volley rips into her exposed rear flank. Corven concedes the bout before her core structure gives out, surrendering her prized machine.
 
 ---
 
-## OP-805 — Longshot
+### The Professional — The Old Soldier
 
-- **Opponent:** Severin Holt (_"Longshot"_)
-- **Chassis:** TEMPEST-60 (Mass Limit: 60 t)
-- **Purse:** 38,000 c
+In the third bout, Meridian faces Bram Calder, known simply as _"The Wall"_. Piloting a heavily armored WARDEN-40, Calder is the first opponent whose combat record mirrors Meridian's own past: fifteen seasons of real frontier warfare, broken contracts, and scar-tissue experience.
 
-Severin Holt rarely lets opponents close within visual range. From elevated positions behind armored blast aprons, his Tempest rains indirect missile fire and heavy cannon salvos across the entire stadium. Rushing him blindly means running through a deadly kill zone under continuous bombardment.
+There is no taunting across the open comms. Calder establishes a rock-solid position behind a fortified berm and forces Meridian to fight for every single hex. He fires only when his hit solutions are optimal, manages heat with mathematical precision, and gives ground only when tactically advantageous.
 
-_Narrative function:_ Navigating long-range fire lanes and closing distance against heavy siege loadouts.
+The duel turns into a grueling exchange of armor degradation. Meridian wins not through flash or luck, but by exploiting Calder's short-range weapon blind spots and pushing him into an endurance contest. When Calder's Warden finally loses its primary weapon arm, he salutes over the radio channel and yields with the quiet professionalism of an old soldier who knows when a position is lost.
 
 ---
 
-## OP-806 — Iron Saint
+## Act II: The Price of Fame
 
-- **Opponent:** Ilyan Drave (_"Iron Saint"_)
-- **Chassis:** TITAN-75 (Mass Limit: 75 t)
-- **Purse:** 45,000 c
+### House Favorite — The Darling's Fall
 
-Revered almost like a religious icon within the tournament, Ilyan Drave pilots an imposing Titan assault frame. Drave fights with calm, relentless momentum, absorbing fire with reinforced frontal armor plates while methodically dismantling his target piece by piece.
+The mid-bracket introduces the arena's true celebrities. Juno Varek, the celebrated _"Darling of the Crucible"_, enters the arena to deafening applause and pyrotechnics aboard a thunderous, customized IRONCLAD-55.
 
-_Narrative function:_ The heavy assault crucible; surviving an exchange with one of the most durable hulls on the circuit.
+Varek fights for the crowd. She taunts over the stadium speakers, trades devastating point-blank cannon fire, and plays directly to the camera drones. The entire venue is hostile to Meridian, treating the mercenary outsiders as villains sent to ruin their favorite's championship run.
 
----
+The brawl is violent and punishing. Varek's heavy autocannons tear through armor, shaking cockpit bulkheads and pushing structural alarms to the brink. But her crowd-pleasing bravado leaves her vulnerable. When she steps into an open depression to deliver what she intends to be a finishing blow, Meridian braces, absorbs the impact, and unleashes an alpha strike directly into her exposed torso armor.
 
-## OP-807 — The Fallen Crown
-
-- **Opponent:** Maeve Ardan (_"The Fallen Crown"_)
-- **Chassis:** COLOSSUS-80 (Mass Limit: 80 t)
-- **Purse:** 52,000 c
-
-A former reigning champion who lost her title in a legendary final, Maeve Ardan fights with bitter ferocity. Her Colossus siege platform is armed to obliterate armor instantly. She views every challenger as an obstacle between her and the rematch she believes she is owed.
-
-_Narrative function:_ Penultimate test; facing a fighter who has won everything and lost everything.
+Varek's command capsule ejects high into the floodlit night. As the smoking hull of her Ironclad collapses into the dust, fifty thousand spectators fall dead silent—followed by an explosive roar of boos. Meridian is no longer an underdog novelty; they are the contenders everyone wants to see broken.
 
 ---
 
-## OP-808 — King of the Crucible
+### Longshot — The Sniper's Gauntlet
 
-- **Opponent:** Cassian Rook (_"The Crown"_)
-- **Chassis:** COLOSSUS-80 (_"Crown of Ash"_) (Mass Limit: 80 t)
-- **Purse:** 70,000 c
+The hostility of the crowd only intensifies with the arrival of Severin Holt, callsign _"Longshot"_. Piloting a TEMPEST-60 bristling with heavy coil cannons and long-range missile pods, Holt has analyzed every recorded movement of Meridian's past matches.
 
-The reigning grand champion. Cassian Rook's _Crown of Ash_ is a masterpiece of custom heavy engineering, manned by a pilot whose combat awareness, precision, and cool composure have gone unchallenged for three consecutive seasons. There are no gimmicks, no secondary objectives, and no retreat. Only the final duel to determine the undisputed master of the Crucible.
+Holt positions himself on the furthest elevated shelf of the stadium, behind reinforced blast bulkheads, and blankets the arena with continuous, punishing long-range fire. The open floor becomes a deadly kill zone where lingering in the clear means swift dismemberment.
 
-_Narrative function:_ The ultimate peak of the mercenary profession; risking the company's finest machine for immortality on the Grand Circuit.
+Meridian's deployed pilot is forced to execute a nerve-wracking leapfrog advance: dashing between crater depressions, using smoke and terrain obstructions, and absorbing shrapnel while steadily closing the gap. When Meridian finally crests the ridge and corners Holt at point-blank range, his long-range guns cannot track fast enough. The Tempest's heavy arm is sheared away, ending his reign.
 
 ---
 
-## Epilogue States
+### Iron Saint — The Monolith
 
-Depending on the commander's decisions and outcomes across the 90-day season, the company settles into one of several historical records:
+The semi-finals bring forth Ilyan Drave, the revered _"Iron Saint"_, piloting an imposing TITAN-75 assault frame. Drave is treated almost as a monastic icon on the circuit; he does not fight for applause, money, or glory. He fights because the Crucible is the only place left where machines of war are pushed to their absolute mechanical limits.
 
-- **`crucible_champion`:** Defeated Cassian Rook and claimed the championship crown and purse.
-- **`crucible_undefeated_champion`:** Won all eight consecutive bouts without forfeiting a single company machine.
-- **`crucible_withdrew_early`:** Made a calculated withdrawal between rounds, banking captured prize machines and purse earnings.
-- **`crucible_eliminated`:** Lost an operational machine without possessing another eligible hull or running out of tournament calendar days.
+Drave's Titan moves like an oncoming glacier. It shrugs off concentrated missile salvos against reinforced frontal plating, grinding forward with implacable momentum. Every shot from his heavy battery threatens to obliterate an entire chassis section.
+
+The fight is Meridian's most punishing trial yet. Victory requires dancing along the razor's edge of heat shutdown, constantly flanking Drave's slow traverse speed, and methodically stripping his armor layer by layer until a critical blow pierces his core structure. Drave steps out of the ruined machine with his head held high, leaving behind a heavily battered prize that will demand weeks of round-the-clock repair work.
+
+---
+
+## Act III: The Champion's Gate
+
+### The Fallen Crown — The Desperate Queen
+
+The penultimate match is against Maeve Ardan in an 80-ton COLOSSUS. Once the undisputed champion of the circuit, Ardan was deposed three seasons ago by Cassian Rook in a match that shattered her company and cost her the crown.
+
+Ardan does not care about Meridian. She does not care about the crowd or the sponsors. She sees only one thing: Rook waiting at the summit, and Meridian standing between her and her revenge.
+
+She fights with terrifying, unbridled fury. Her Colossus pushes weapons past safe heat tolerances, firing salvos in rapid, punishing succession. She accepts severe damage if it allows her to inflict ruin in return. To survive, Meridian must endure a hurricane of super-heavy artillery, outmaneuver her reckless charges, and exploit the gaping structural vulnerabilities created by her overheating chassis.
+
+When Ardan's Colossus topples onto the ferrocrete, she does not speak over the radio. There is only the static hiss of a broken dream, and the realization that the final gate has swung wide.
+
+---
+
+### King of the Crucible — Crown of Ash
+
+At the pinnacle of the mountain waits Cassian Rook, piloting the fabled 80-ton Colossus known as the _Crown of Ash_.
+
+Rook is not a ceremonial figurehead, nor a corporate puppet. He is the absolute master of heavy machine dueling. His combat reflexes are surgical; his tactical awareness borders on precognition; and his customized machine possesses the firepower to level a fortress.
+
+Under the blinding, stadium-wide halogen glare of the final bout, every lesson the Meridian Company has learned across three grueling theaters is tested. There are no secondary escape routes, no terrain tricks Rook does not already know, and no margin for error.
+
+The two heavy war machines clash in an epic, thunderous duel that rattles the stadium foundations. Armor plates are ripped away in jagged sheets; heat alarms scream continuously inside the cockpit; and internal systems begin to fail under repeated impacts. In the climactic exchange, Meridian feints a withdrawal toward a cooling basin, draws Rook into pivoting his torso, and fires a devastating, pinpoint salvo straight into his core armor.
+
+The _Crown of Ash_ stumbles, its gyros screeching in protest, before crashing face-down onto the arena floor.
+
+For three seconds, fifty thousand spectators stand in stunned disbelief. Then the stadium erupts into an earth-shaking standing ovation. Meridian has conquered the Grand Crucible.
+
+---
+
+## Company Epilogues
+
+The journey through the Grand Crucible leaves an indelible mark on the company's legacy. Depending on the commander's choices, leadership, and willingness to risk their hulls, the history books remember Meridian in very different ways:
+
+### The Flawless Legend
+
+_Achieved by conquering all eight championship bouts without forfeiting a single company machine._
+
+> Meridian achieved what veteran tournament analysts declared statistically impossible: sweeping the circuit from Opening Bell to the King of the Crucible without a single loss. The company's name is engraved in polished titanium across the Grand Arch of the arena. Wealthy, revered, and possessing a hangar filled with captured championship machines, Meridian stands at the very apex of the mercenary profession.
+
+### The Champion's Burden
+
+_Achieved by defeating Cassian Rook after suffering machine forfeits along the ladder._
+
+> Mara Voss and her lance lift the Crucible Championship Trophy beneath blinding stadium lights, with the smoking chassis of the _Crown of Ash_ secured in their bay. Yet the victory was paid for in blood and iron. Battered machines were surrendered along the way, reminding the veteran pilots that glory in the arena carries the exact same price as survival in the border wars.
+
+### The Calculated Exit
+
+_Achieved by choosing voluntary withdrawal between bouts to secure winnings._
+
+> Knowing when to walk away is the mark of a true commander. Having proven their mettle against renowned champions, claimed valuable captured chassis, and banked hundreds of thousands of credits, Meridian withdrew before the escalating meat grinder could claim their veteran frames. They left the spectators wanting more and returned to the frontier richer, stronger, and entirely on their own terms.
+
+### Broken in the Dust
+
+_Occurs when the company loses an operational hull without possessing another eligible machine or running out of tournament days._
+
+> The Crucible takes everything you are willing to wager. Limping back to the transports with a shattered hull forfeited to the arena and empty bays, the company tastes the bitter reality of the circuit. The pilots survived, but the machine they bled to keep running belongs to someone else now. The frontier awaits, as unforgiving as ever.

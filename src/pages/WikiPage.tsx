@@ -38,7 +38,6 @@ const SIDEBAR_GROUPS = [
       { id: 'MAP_DESIGN_GUIDE', label: 'Map Design Guide' },
       { id: 'MODDING_AND_CUSTOM_SCENARIOS', label: 'Custom Scenarios' },
       { id: 'SCENARIO_APPROVAL', label: 'Community Review' },
-      { id: 'CONTENT_STUDIO', label: 'Content Studio' },
     ],
   },
   {
