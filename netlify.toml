@@ -168,6 +168,16 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/telemetry"
+  to = "/.netlify/functions/telemetry"
+  status = 200
+
+[[redirects]]
+  from = "/telemetry-summary"
+  to = "/.netlify/functions/telemetry-summary"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -181,6 +191,12 @@
   included_files = ["shared/**"]
 
 [functions."api-v1"]
+  node_bundler = "esbuild"
+
+[functions."telemetry"]
+  node_bundler = "esbuild"
+
+[functions."telemetry-summary"]
   node_bundler = "esbuild"
 
 [[headers]]

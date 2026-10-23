@@ -10,6 +10,7 @@
     "postbuild": "node scripts/generate-sitemap.js",
     "typecheck": "tsc -b",
     "test": "vitest run",
+    "test:telemetry": "node scripts/test-telemetry.mjs",
     "inventory:export": "node scripts/community-blob-export.mjs",
     "migration:dry-run": "node scripts/community-migration.mjs --dry-run",
     "format": "prettier --write .",

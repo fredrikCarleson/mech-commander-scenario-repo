@@ -119,14 +119,60 @@ Both validators enforce compressed and decompressed limits, safe paths, allowed 
 
 ## Commands
 
-| Command                | Purpose                                    |
-| ---------------------- | ------------------------------------------ |
-| `npm run dev`          | Netlify Dev with Functions and local Blobs |
-| `npm run typecheck`    | TypeScript project build                   |
-| `npm test`             | Unit and service tests                     |
-| `npm run lint`         | Oxlint                                     |
-| `npm run format:check` | Prettier verification                      |
-| `npm run build`        | Production build                           |
+| Command                  | Purpose                                                |
+| ------------------------ | ------------------------------------------------------ |
+| `npm run dev`            | Netlify Dev with Functions and local Blobs             |
+| `npm run typecheck`      | TypeScript project build                               |
+| `npm test`               | Unit and service tests                                 |
+| `npm run test:telemetry` | Test local telemetry endpoints and print curl examples |
+| `npm run lint`           | Oxlint                                                 |
+| `npm run format:check`   | Prettier verification                                  |
+| `npm run build`          | Production build                                       |
+
+## Gameplay Telemetry
+
+Anonymous gameplay telemetry endpoints receive player drop-off and retention metrics from the _Meridian Strike_ desktop game client (documented in `fredrikCarleson/mech-command`).
+
+### Endpoints
+
+- `POST /.netlify/functions/telemetry` (also rewritten from `/telemetry`): Receives anonymous single or batched events. Returns `204 No Content`. CORS-enabled for Electron (`Origin: null`, `file://`, localhost). Stores events in Netlify Blobs (`telemetry` store).
+- `GET /.netlify/functions/telemetry-summary?days=7` (also rewritten from `/telemetry-summary`): Read-only summary protected by `TELEMETRY_ADMIN_KEY`.
+
+### Deploying & Setting `TELEMETRY_ADMIN_KEY`
+
+1. In the Netlify dashboard for `meridian-strike-wiki`, navigate to **Site configuration** > **Environment variables**.
+2. Add:
+   - **Key**: `TELEMETRY_ADMIN_KEY`
+   - **Value**: A secure secret key (e.g. generated with `openssl rand -hex 24`)
+   - **Scopes**: Functions / All deploys
+3. For local testing, add `TELEMETRY_ADMIN_KEY` to your local `.env`.
+
+### Querying the Summary
+
+Send the admin key via `X-Admin-Key` or `Authorization: Bearer <key>`:
+
+```bash
+curl -H "X-Admin-Key: <TELEMETRY_ADMIN_KEY>" \
+  "https://meridian-strike-wiki.netlify.app/.netlify/functions/telemetry-summary?days=7"
+```
+
+The response includes:
+
+- Event counts for all 11 allowed event types (`title_shown`, `campaign_intro`, `tutorial_step`, `tutorial_complete`, `tutorial_skip`, `deploy`, `combat_round`, `mission_win`, `mission_loss`, `hq_visit`, `quit`)
+- Unique install count
+- Drop-off funnel (`title_shown` -> `tutorial_step` -> `deploy` -> `mission_win` -> `hq_visit`) with unique installs, drop-offs, and conversion rates
+- Median combat rounds played before `mission_loss`
+
+### Local Testing
+
+Start Netlify dev and run the verification script or test suite:
+
+```bash
+npm run dev
+npm run test:telemetry
+# Or run vitest:
+npm test
+```
 
 Live site: `https://meridian-strike-wiki.netlify.app`
 
