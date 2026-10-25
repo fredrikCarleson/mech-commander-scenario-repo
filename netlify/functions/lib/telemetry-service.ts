@@ -1,4 +1,11 @@
 import { getStore } from '@netlify/blobs';
+import {
+  parseRetentionFields,
+  retentionSummary,
+  matchesRetentionFilters,
+  type RetentionFields,
+  type RetentionFilters,
+} from './telemetry-retention.ts';
 
 export const MAX_BODY_BYTES = 16 * 1024; // 16 KB body limit
 export const MAX_EVENTS_PER_INSTALL_PER_DAY = 500;
@@ -16,11 +23,20 @@ export const ALLOWED_EVENT_NAMES = [
   'mission_loss',
   'hq_visit',
   'quit',
+  'session_start',
+  'tutorial_start',
+  'tutorial_resume',
+  'tutorial_restart',
+  'tutorial_lesson',
+  'company_founded',
+  'battle_entered',
+  'after_action_acknowledged',
+  'repair_scheduled',
 ] as const;
 
 export type TelemetryEventName = (typeof ALLOWED_EVENT_NAMES)[number];
 
-export interface StoredTelemetryEvent {
+export interface StoredTelemetryEvent extends RetentionFields {
   installId: string;
   name: TelemetryEventName;
   timestamp: string;
@@ -43,6 +59,7 @@ export interface FunnelStepSummary {
 }
 
 export interface TelemetrySummaryResponse {
+  retention: ReturnType<typeof retentionSummary>;
   period: {
     days: number;
     startDate: string;
@@ -99,6 +116,7 @@ export function getTelemetryCorsHeaders(
     'Access-Control-Allow-Headers':
       'Content-Type, Accept, Authorization, X-Admin-Key, x-admin-key, X-Telemetry-Admin-Key',
     'Access-Control-Max-Age': '86400',
+    'Access-Control-Expose-Headers': 'Retry-After',
     Vary: 'Origin',
   };
 }
@@ -222,6 +240,9 @@ export function parseRawEventItem(item: unknown, fallbackInstallId?: string): St
 
   // Build clean stored object with ONLY whitelisted fields (strip unknown fields, IPs, personal info)
   const stored: StoredTelemetryEvent = {
+    ...parseRetentionFields(mergedProps, (message) => {
+      throw new TelemetryValidationError(message);
+    }),
     installId,
     name,
     timestamp: normalizedTimestamp,
@@ -371,7 +392,15 @@ export async function processAndStoreEvents(
 
   // Group events by installId
   const byInstall = new Map<string, StoredTelemetryEvent[]>();
+  const seenIds = new Set<string>();
   for (const ev of events) {
+    if (ev.eventId) {
+      const key = `events/${ev.timestamp.slice(0, 10)}/${ev.installId}-${ev.eventId}.json`;
+      if (seenIds.has(key)) continue;
+      seenIds.add(key);
+      const existing = await store.get(key, { type: 'json' });
+      if (existing) continue; // Retries must not consume the daily budget again.
+    }
     const list = byInstall.get(ev.installId) || [];
     list.push(ev);
     byInstall.set(ev.installId, list);
@@ -402,9 +431,15 @@ export async function processAndStoreEvents(
     ignoredTotal += toIgnore;
 
     if (toAccept.length > 0) {
-      const randomId = crypto.randomUUID();
-      const eventKey = `events/${todayStr}/${randomId}.json`;
-      await store.setJSON(eventKey, toAccept);
+      const legacy = toAccept.filter((event) => !event.eventId);
+      if (legacy.length)
+        await store.setJSON(`events/${todayStr}/${crypto.randomUUID()}.json`, legacy);
+      for (const event of toAccept.filter((item) => item.eventId)) {
+        await store.setJSON(
+          `events/${event.timestamp.slice(0, 10)}/${event.installId}-${event.eventId}.json`,
+          [event],
+        );
+      }
 
       // Update rate limit counter
       await store.set(countKey, String(currentDailyCount + toAccept.length));
@@ -462,6 +497,7 @@ export async function fetchAllKeysForPrefix(
 export async function generateTelemetrySummary(
   days = 7,
   store: BlobStoreLike = getDefaultTelemetryStore(),
+  filters: RetentionFilters = {},
 ): Promise<TelemetrySummaryResponse> {
   const boundedDays = Math.max(1, Math.min(90, Math.floor(days)));
   const now = new Date();
@@ -511,7 +547,19 @@ export async function generateTelemetrySummary(
   }
 
   // Calculate counts per event
+  const retentionEvents = allEvents.slice();
+  const selectedEvents = allEvents.filter((event) => matchesRetentionFilters(event, filters));
+  allEvents.splice(0, allEvents.length, ...selectedEvents);
   const countsPerEvent: Record<TelemetryEventName, number> = {
+    session_start: 0,
+    tutorial_start: 0,
+    tutorial_resume: 0,
+    tutorial_restart: 0,
+    tutorial_lesson: 0,
+    company_founded: 0,
+    battle_entered: 0,
+    after_action_acknowledged: 0,
+    repair_scheduled: 0,
     title_shown: 0,
     campaign_intro: 0,
     tutorial_step: 0,
@@ -599,6 +647,7 @@ export async function generateTelemetrySummary(
   const maxRounds = lossRounds.length > 0 ? Math.max(...lossRounds) : null;
 
   return {
+    retention: retentionSummary(retentionEvents, filters, now),
     period: {
       days: boundedDays,
       startDate,
