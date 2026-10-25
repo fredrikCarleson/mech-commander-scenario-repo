@@ -1,5 +1,5 @@
 import {
-  BlobStoreLike,
+  type BlobStoreLike,
   corsPreflightResponse,
   getDefaultTelemetryStore,
   jsonResponse,
@@ -32,7 +32,17 @@ export async function handleTelemetryRequest(
     const events = parseTelemetryPayload(rawBody);
 
     const store = customStore || getDefaultTelemetryStore();
-    await processAndStoreEvents(events, store);
+    const result = await processAndStoreEvents(events, store);
+    if (result.ignored && events.some((event) => event.schemaVersion === 2)) {
+      const response = jsonResponse(
+        429,
+        { error: 'Daily event limit reached. Retry later.', ...result },
+        request,
+        'POST, OPTIONS',
+      );
+      response.headers.set('Retry-After', '3600');
+      return response;
+    }
 
     // Respond 204 on success
     return noContentResponse(request);

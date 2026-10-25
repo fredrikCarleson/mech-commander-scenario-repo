@@ -1,5 +1,5 @@
 import {
-  BlobStoreLike,
+  type BlobStoreLike,
   corsPreflightResponse,
   generateTelemetrySummary,
   getDefaultTelemetryStore,
@@ -52,7 +52,21 @@ export async function handleTelemetrySummaryRequest(
     const days = daysParam ? parseInt(daysParam, 10) || 7 : 7;
 
     const store = customStore || getDefaultTelemetryStore();
-    const summary = await generateTelemetrySummary(days, store);
+    const edition = url.searchParams.get('edition');
+    const channel = url.searchParams.get('channel');
+    const build = url.searchParams.get('build');
+    if (
+      (edition && edition !== 'full' && edition !== 'demo') ||
+      (channel && !['steam', 'standalone', 'development'].includes(channel)) ||
+      (build && build.length > 64)
+    ) {
+      return jsonResponse(400, { error: 'Invalid edition, channel or build filter.' }, request);
+    }
+    const summary = await generateTelemetrySummary(days, store, {
+      edition: (edition as 'full' | 'demo' | undefined) || undefined,
+      channel: (channel as 'steam' | 'standalone' | 'development' | undefined) || undefined,
+      build: build || undefined,
+    });
 
     return jsonResponse(200, summary, request, 'GET, OPTIONS');
   } catch (err: unknown) {
