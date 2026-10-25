@@ -1,5 +1,5 @@
 import {
-  BlobStoreLike,
+  type BlobStoreLike,
   corsPreflightResponse,
   getDefaultTelemetryStore,
   jsonResponse,
