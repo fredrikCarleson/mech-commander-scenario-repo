@@ -28,6 +28,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Link to="/campaigns">Campaigns</Link>
             <Link to="/support">Support</Link>
             <Link to="/admin">Admin</Link>
+            {isAdmin && <Link to="/admin/metrics">Metrics</Link>}
             {isAdmin && <Link to="/api">API</Link>}
           </nav>
         </div>

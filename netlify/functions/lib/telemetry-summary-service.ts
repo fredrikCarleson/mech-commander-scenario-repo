@@ -9,7 +9,7 @@ import {
 } from './telemetry-service.ts';
 import {
   retentionSummary,
-  matchesRetentionFilters,
+  matchesEventFilters,
   type RetentionFilters,
 } from './telemetry-retention.ts';
 
@@ -112,7 +112,7 @@ export async function generateTelemetrySummary(
 
   // Calculate counts per event
   const retentionEvents = allEvents.slice();
-  const selectedEvents = allEvents.filter((event) => matchesRetentionFilters(event, filters));
+  const selectedEvents = allEvents.filter((event) => matchesEventFilters(event, filters));
   allEvents.splice(0, allEvents.length, ...selectedEvents);
   const countsPerEvent: Record<TelemetryEventName, number> = {
     session_start: 0,
@@ -146,7 +146,8 @@ export async function generateTelemetrySummary(
     }
   }
 
-  // Funnel steps: title_shown -> tutorial_step -> deploy -> mission_win -> hq_visit
+  // Cohort-based funnel steps: title_shown -> tutorial_step -> deploy -> mission_win -> hq_visit
+  // Only installs that completed the previous step are eligible for each successive step.
   const funnelStepNames = [
     'title_shown',
     'tutorial_step',
@@ -154,42 +155,55 @@ export async function generateTelemetrySummary(
     'mission_win',
     'hq_visit',
   ] as const;
-  const funnelInstalls = funnelStepNames.map((step) => {
-    const matching = allEvents.filter((e) => e.name === step);
-    const uniqueForStep = new Set(matching.map((e) => e.installId)).size;
-    return {
-      step,
-      uniqueInstalls: uniqueForStep,
-      eventCount: matching.length,
-    };
-  });
 
-  const firstStepCount = funnelInstalls[0]?.uniqueInstalls || 0;
-  const funnel: FunnelStepSummary[] = funnelInstalls.map((s, idx) => {
-    const prevInstalls = idx === 0 ? s.uniqueInstalls : funnelInstalls[idx - 1].uniqueInstalls;
-    const dropoff = Math.max(0, prevInstalls - s.uniqueInstalls);
-    const conversionFromPrev =
-      prevInstalls > 0 ? Number((s.uniqueInstalls / prevInstalls).toFixed(3)) : 0;
+  let currentCohort = new Set<string>();
+  const funnel: FunnelStepSummary[] = [];
+  let firstStepCount = 0;
+
+  for (let idx = 0; idx < funnelStepNames.length; idx++) {
+    const step = funnelStepNames[idx];
+    let nextCohort: Set<string>;
+
+    if (idx === 0) {
+      const stepEvents = allEvents.filter((e) => e.name === step);
+      nextCohort = new Set(stepEvents.map((e) => e.installId));
+      firstStepCount = nextCohort.size;
+    } else {
+      const stepEvents = allEvents.filter((e) => e.name === step && currentCohort.has(e.installId));
+      nextCohort = new Set(stepEvents.map((e) => e.installId));
+    }
+
+    const prevCount = idx === 0 ? nextCohort.size : currentCohort.size;
+    const dropoff = Math.max(0, prevCount - nextCohort.size);
+    const conversionFromPrev = prevCount > 0 ? Number((nextCohort.size / prevCount).toFixed(3)) : 0;
     const conversionFromStart =
-      firstStepCount > 0 ? Number((s.uniqueInstalls / firstStepCount).toFixed(3)) : 0;
+      firstStepCount > 0 ? Number((nextCohort.size / firstStepCount).toFixed(3)) : 0;
 
-    return {
-      step: s.step,
-      uniqueInstalls: s.uniqueInstalls,
-      eventCount: s.eventCount,
+    const matchingEvents = allEvents.filter((e) => e.name === step && nextCohort.has(e.installId));
+
+    funnel.push({
+      step,
+      uniqueInstalls: nextCohort.size,
+      eventCount: matchingEvents.length,
       dropoffInstalls: dropoff,
       conversionFromPrevious: conversionFromPrev,
       conversionFromStart: conversionFromStart,
-    };
-  });
+    });
 
-  // Calculate median combat rounds before mission_loss
+    currentCohort = nextCohort;
+  }
+
+  // Calculate combat rounds before mission_loss
   const lossRounds: number[] = [];
+  let missingCount = 0;
   const lossEvents = allEvents.filter((e) => e.name === 'mission_loss');
 
   for (const loss of lossEvents) {
+    let roundVal: number | null = null;
     if (typeof loss.rounds === 'number' && Number.isFinite(loss.rounds)) {
-      lossRounds.push(loss.rounds);
+      roundVal = loss.rounds;
+    } else if (typeof (loss as any).round === 'number' && Number.isFinite((loss as any).round)) {
+      roundVal = (loss as any).round;
     } else {
       // Look for max round in combat_round events for this installId/missionId
       const relatedCombatRounds = allEvents.filter(
@@ -197,18 +211,81 @@ export async function generateTelemetrySummary(
           e.name === 'combat_round' &&
           e.installId === loss.installId &&
           (!loss.missionId || e.missionId === loss.missionId) &&
-          typeof e.round === 'number',
+          typeof e.round === 'number' &&
+          Number.isFinite(e.round),
       );
       if (relatedCombatRounds.length > 0) {
-        const maxR = Math.max(...relatedCombatRounds.map((r) => r.round as number));
-        lossRounds.push(maxR);
+        roundVal = Math.max(...relatedCombatRounds.map((r) => r.round as number));
       }
+    }
+
+    if (roundVal !== null && Number.isFinite(roundVal)) {
+      lossRounds.push(roundVal);
+    } else {
+      missingCount++;
     }
   }
 
   const medianRounds = calculateMedian(lossRounds);
+  const meanRounds =
+    lossRounds.length > 0
+      ? Number((lossRounds.reduce((acc, r) => acc + r, 0) / lossRounds.length).toFixed(2))
+      : null;
   const minRounds = lossRounds.length > 0 ? Math.min(...lossRounds) : null;
   const maxRounds = lossRounds.length > 0 ? Math.max(...lossRounds) : null;
+
+  // Breakdown by edition (full vs demo) and build
+  const editionGroups = new Map<
+    string,
+    { installs: Set<string>; events: StoredTelemetryEvent[] }
+  >();
+  const buildGroups = new Map<string, { installs: Set<string>; events: StoredTelemetryEvent[] }>();
+
+  for (const ev of allEvents) {
+    const editionKey = ev.edition || 'unknown';
+    let ed = editionGroups.get(editionKey);
+    if (!ed) {
+      ed = { installs: new Set(), events: [] };
+      editionGroups.set(editionKey, ed);
+    }
+    ed.installs.add(ev.installId);
+    ed.events.push(ev);
+
+    const buildKey = ev.build || 'unknown';
+    let bd = buildGroups.get(buildKey);
+    if (!bd) {
+      bd = { installs: new Set(), events: [] };
+      buildGroups.set(buildKey, bd);
+    }
+    bd.installs.add(ev.installId);
+    bd.events.push(ev);
+  }
+
+  function summarizeGroup(group: { installs: Set<string>; events: StoredTelemetryEvent[] }) {
+    const groupCounts: Partial<Record<TelemetryEventName, number>> = {};
+    for (const ev of group.events) {
+      groupCounts[ev.name] = (groupCounts[ev.name] || 0) + 1;
+    }
+    return {
+      uniqueInstalls: group.installs.size,
+      totalEvents: group.events.length,
+      missionWins: groupCounts.mission_win || 0,
+      missionLosses: groupCounts.mission_loss || 0,
+      countsPerEvent: groupCounts,
+    };
+  }
+
+  const byEdition: Record<string, ReturnType<typeof summarizeGroup>> = {};
+  for (const [key, group] of editionGroups.entries()) {
+    byEdition[key] = summarizeGroup(group);
+  }
+
+  const byBuild: Record<string, ReturnType<typeof summarizeGroup>> = {};
+  for (const [key, group] of buildGroups.entries()) {
+    byBuild[key] = summarizeGroup(group);
+  }
+
+  const breakdown = { byEdition, byBuild };
 
   return {
     retention: retentionSummary(retentionEvents, filters, now),
@@ -223,10 +300,14 @@ export async function generateTelemetrySummary(
     funnel,
     combatRoundsBeforeMissionLoss: {
       median: medianRounds,
-      sampleCount: lossRounds.length,
+      mean: meanRounds,
       min: minRounds,
       max: maxRounds,
-      rounds: lossRounds,
+      sampleCount: lossRounds.length,
+      missingCount,
+      rounds: lossRounds.slice(0, 50),
     },
+    breakdown,
+    breakdowns: breakdown,
   };
 }

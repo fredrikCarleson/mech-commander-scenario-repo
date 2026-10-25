@@ -6,6 +6,7 @@ import { DetailPage } from './pages/DetailPage.tsx';
 import { UploadPage } from './pages/UploadPage.tsx';
 import { ApiInfoPage } from './pages/ApiInfoPage.tsx';
 import { AdminPage } from './pages/AdminPage.tsx';
+import { AdminMetricsPage } from './pages/AdminMetricsPage.tsx';
 import { WikiPage } from './pages/WikiPage.tsx';
 import { CampaignCataloguePage } from './pages/CampaignCataloguePage.tsx';
 import { CampaignDetailPage } from './pages/CampaignDetailPage.tsx';
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/scenarios/:id" element={<DetailPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/metrics" element={<AdminMetricsPage />} />
         <Route path="/api" element={<ApiInfoPage />} />
         <Route path="/wiki" element={<Navigate to="/wiki/HOW_TO_PLAY" replace />} />
         <Route path="/wiki/:pageId" element={<WikiPage />} />

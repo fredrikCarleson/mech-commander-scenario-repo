@@ -56,6 +56,29 @@ export interface FunnelStepSummary {
   conversionFromStart: number;
 }
 
+export interface CombatRoundsLossSummary {
+  median: number | null;
+  mean: number | null;
+  min: number | null;
+  max: number | null;
+  sampleCount: number;
+  missingCount: number;
+  rounds?: number[];
+}
+
+export interface TelemetryBreakdownGroup {
+  uniqueInstalls: number;
+  totalEvents: number;
+  missionWins: number;
+  missionLosses: number;
+  countsPerEvent: Partial<Record<TelemetryEventName, number>>;
+}
+
+export interface TelemetryBreakdowns {
+  byEdition: Record<string, TelemetryBreakdownGroup>;
+  byBuild: Record<string, TelemetryBreakdownGroup>;
+}
+
 export interface TelemetrySummaryResponse {
   retention: ReturnType<typeof retentionSummary>;
   period: {
@@ -67,13 +90,9 @@ export interface TelemetrySummaryResponse {
   uniqueInstalls: number;
   countsPerEvent: Record<TelemetryEventName, number>;
   funnel: FunnelStepSummary[];
-  combatRoundsBeforeMissionLoss: {
-    median: number | null;
-    sampleCount: number;
-    min: number | null;
-    max: number | null;
-    rounds: number[];
-  };
+  combatRoundsBeforeMissionLoss: CombatRoundsLossSummary;
+  breakdown: TelemetryBreakdowns;
+  breakdowns?: TelemetryBreakdowns;
 }
 
 export class TelemetryValidationError extends Error {

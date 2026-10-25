@@ -47,6 +47,8 @@ const fieldsSchema = z
       });
     }
   });
+export const CURRENT_SCHEMA_VERSION = 2;
+
 export type RetentionFields = z.infer<typeof fieldsSchema>;
 export function parseRetentionFields(
   raw: Record<string, unknown>,
@@ -60,6 +62,7 @@ export interface RetentionFilters {
   edition?: 'full' | 'demo';
   build?: string;
   channel?: 'steam' | 'standalone' | 'development';
+  includeLegacy?: boolean;
 }
 export function matchesRetentionFilters(event: StoredTelemetryEvent, filters: RetentionFilters) {
   return (
@@ -67,6 +70,15 @@ export function matchesRetentionFilters(event: StoredTelemetryEvent, filters: Re
     (!filters.build || event.build === filters.build) &&
     (!filters.channel || event.channel === filters.channel)
   );
+}
+export function matchesEventFilters(
+  event: StoredTelemetryEvent,
+  filters: RetentionFilters,
+): boolean {
+  if (!filters.includeLegacy && event.schemaVersion !== CURRENT_SCHEMA_VERSION) {
+    return false;
+  }
+  return matchesRetentionFilters(event, filters);
 }
 export function retentionSummary(
   input: StoredTelemetryEvent[],

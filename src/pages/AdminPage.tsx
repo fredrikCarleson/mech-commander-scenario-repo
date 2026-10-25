@@ -207,6 +207,14 @@ function AdminReviewPanel() {
   if (!signedIn) {
     return (
       <section className="panel admin-panel">
+        <div className="admin-nav-tabs">
+          <Link to="/admin" className="admin-nav-tab active">
+            Review Queue
+          </Link>
+          <Link to="/admin/metrics" className="admin-nav-tab">
+            Telemetry &amp; Metrics
+          </Link>
+        </div>
         <div className="panel__header">
           <div>
             <h2>Admin review</h2>
@@ -240,6 +248,14 @@ function AdminReviewPanel() {
 
   return (
     <section className="panel admin-panel">
+      <div className="admin-nav-tabs">
+        <Link to="/admin" className="admin-nav-tab active">
+          Review Queue
+        </Link>
+        <Link to="/admin/metrics" className="admin-nav-tab">
+          Telemetry &amp; Metrics
+        </Link>
+      </div>
       <div className="panel__header">
         <div>
           <h2>Pending review</h2>
