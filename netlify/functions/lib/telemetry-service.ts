@@ -56,20 +56,39 @@ export interface FunnelStepSummary {
   conversionFromStart: number;
 }
 
+export interface CombatRoundsLossSummary {
+  median: number | null;
+  mean: number | null;
+  min: number | null;
+  max: number | null;
+  sampleCount: number;
+  missingCount: number;
+  totalLosses: number;
+  unknownCount: number;
+  rounds?: number[];
+}
+
+export interface TelemetryBreakdownGroup {
+  uniqueInstalls: number;
+  totalEvents: number;
+  missionWins: number;
+  missionLosses: number;
+  countsPerEvent: Partial<Record<TelemetryEventName, number>>;
+}
+
+export interface TelemetryBreakdowns {
+  byEdition: Record<string, TelemetryBreakdownGroup>;
+  byBuild: Record<string, TelemetryBreakdownGroup>;
+}
+
 export interface TelemetryEventMetrics {
   totalEvents: number;
   uniqueInstalls: number;
   countsPerEvent: Record<TelemetryEventName, number>;
   funnel: FunnelStepSummary[];
-  combatRoundsBeforeMissionLoss: {
-    median: number | null;
-    sampleCount: number;
-    min: number | null;
-    max: number | null;
-    rounds: number[];
-    totalLosses: number;
-    unknownCount: number;
-  };
+  combatRoundsBeforeMissionLoss: CombatRoundsLossSummary;
+  breakdown: TelemetryBreakdowns;
+  breakdowns?: TelemetryBreakdowns;
 }
 
 export interface TelemetrySummaryResponse extends TelemetryEventMetrics {
@@ -80,7 +99,8 @@ export interface TelemetrySummaryResponse extends TelemetryEventMetrics {
     endDate: string;
   };
   filters: {
-    schemaVersion: 2;
+    schemaVersion: 2 | 'all';
+    includeLegacy?: boolean;
     edition?: 'full' | 'demo';
     build?: string;
     channel: 'steam' | 'standalone' | 'development' | 'production';

@@ -55,6 +55,8 @@ export async function handleTelemetrySummaryRequest(
     const edition = url.searchParams.get('edition');
     const channel = url.searchParams.get('channel');
     const build = url.searchParams.get('build');
+    const includeLegacyParam = url.searchParams.get('includeLegacy');
+    const includeLegacy = includeLegacyParam === '1' || includeLegacyParam === 'true';
     if (
       (edition && edition !== 'full' && edition !== 'demo') ||
       (channel && !['steam', 'standalone', 'development'].includes(channel)) ||
@@ -66,6 +68,7 @@ export async function handleTelemetrySummaryRequest(
       edition: (edition as 'full' | 'demo' | undefined) || undefined,
       channel: (channel as 'steam' | 'standalone' | 'development' | undefined) || undefined,
       build: build || undefined,
+      includeLegacy,
     });
 
     return jsonResponse(200, summary, request, 'GET, OPTIONS');

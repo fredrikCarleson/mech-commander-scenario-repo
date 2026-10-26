@@ -56,10 +56,17 @@ older/unclassified records, with explicit filters applied there too. Records wit
 build/edition/channel metadata cannot satisfy a filtered release query. No stored
 records are deleted, migrated or rewritten by reporting.
 
+The admin page's explicit `includeLegacy=1` (or `true`) option still includes
+legacy/unclassified events in primary activity totals for historical inspection.
+The response then identifies `filters.schemaVersion: "all"`; `legacy` stays
+separately inspectable, new-install retention still excludes it, and development
+remains excluded unless explicitly selected. The mean, edition/build breakdowns,
+and `missingCount` compatibility field remain available to the dashboard.
+
 Edition filters separate Demo and Full. Build filters select the initial-install cohort for
 the funnel and returns; later-build activity can still satisfy follow-up. Lesson counts and
 activity totals use the selected build directly. With no build filter, all builds
-are included. The older top-level `funnel` remains an unordered legacy activity summary;
+are included. The top-level `funnel` retains the incoming change's cohort subsets;
 use `retention.funnel` for new-player conversion.
 
 `combatRoundsBeforeMissionLoss` uses a positive integer `rounds`, then `round`, then
@@ -69,6 +76,8 @@ later event. Missing/invalid counts without a matching battle stay unknown:
 `totalLosses` includes all selected losses, `sampleCount` counts known rounds, and
 `unknownCount` counts the rest. Empty samples have null median/min/max. Explicit old
 round-1 values remain as supplied; the server cannot reconstruct their actual rounds.
+`missingCount` aliases `unknownCount` for dashboard compatibility. Mean/median/min/max
+use every known sample; the diagnostic `rounds` list is capped at 50 entries.
 
 ## Development collection
 

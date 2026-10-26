@@ -49,6 +49,19 @@ class MockBlobStore implements BlobStoreLike {
   }
 }
 
+function withV2Metadata(event: Record<string, unknown>) {
+  return {
+    eventId: crypto.randomUUID(),
+    sessionId: crypto.randomUUID(),
+    edition: 'full',
+    channel: 'steam',
+    version: '0.1.17',
+    build: 'test-current',
+    elapsedMs: 0,
+    ...event,
+  };
+}
+
 describe('Telemetry Service & Endpoints', () => {
   let mockStore: MockBlobStore;
   const originalEnv = { ...process.env };
@@ -434,43 +447,128 @@ describe('Telemetry Service & Endpoints', () => {
       const userB = 'bbbbbbbb-2222-2222-2222-222222222222';
       const userC = 'cccccccc-3333-3333-3333-333333333333';
 
-      // Seed events:
+      // Seed events with schemaVersion 2:
       // userA: title_shown, tutorial_step, deploy, combat_round(1..6), mission_loss(rounds: 6), quit
       // userB: title_shown, tutorial_step, deploy, combat_round(1..4), mission_win(rounds: 4), hq_visit
-      // userC: title_shown, deploy, combat_round(1..10), mission_loss(rounds: 10)
+      // userC: title_shown, deploy, combat_round(1..10), mission_loss(rounds: 10) [skipped tutorial_step]
       const events = [
-        { installId: userA, name: 'title_shown', timestamp: `${today}T10:00:00.000Z` },
-        { installId: userA, name: 'tutorial_step', step: 1, timestamp: `${today}T10:01:00.000Z` },
-        { installId: userA, name: 'deploy', missionId: 'm1', timestamp: `${today}T10:02:00.000Z` },
         {
+          schemaVersion: 2,
+          installId: userA,
+          name: 'title_shown',
+          timestamp: `${today}T10:00:00.000Z`,
+          edition: 'full',
+          build: 'b1',
+        },
+        {
+          schemaVersion: 2,
+          installId: userA,
+          name: 'tutorial_step',
+          step: 1,
+          timestamp: `${today}T10:01:00.000Z`,
+          edition: 'full',
+          build: 'b1',
+        },
+        {
+          schemaVersion: 2,
+          installId: userA,
+          name: 'deploy',
+          missionId: 'm1',
+          timestamp: `${today}T10:02:00.000Z`,
+          edition: 'full',
+          build: 'b1',
+        },
+        {
+          schemaVersion: 2,
           installId: userA,
           name: 'mission_loss',
           missionId: 'm1',
           rounds: 6,
           timestamp: `${today}T10:10:00.000Z`,
+          edition: 'full',
+          build: 'b1',
         },
-        { installId: userA, name: 'quit', timestamp: `${today}T10:11:00.000Z` },
-
-        { installId: userB, name: 'title_shown', timestamp: `${today}T11:00:00.000Z` },
-        { installId: userB, name: 'tutorial_step', step: 1, timestamp: `${today}T11:02:00.000Z` },
-        { installId: userB, name: 'deploy', missionId: 'm1', timestamp: `${today}T11:05:00.000Z` },
         {
+          schemaVersion: 2,
+          installId: userA,
+          name: 'quit',
+          timestamp: `${today}T10:11:00.000Z`,
+          edition: 'full',
+          build: 'b1',
+        },
+
+        {
+          schemaVersion: 2,
+          installId: userB,
+          name: 'title_shown',
+          timestamp: `${today}T11:00:00.000Z`,
+          edition: 'demo',
+          build: 'b1',
+        },
+        {
+          schemaVersion: 2,
+          installId: userB,
+          name: 'tutorial_step',
+          step: 1,
+          timestamp: `${today}T11:02:00.000Z`,
+          edition: 'demo',
+          build: 'b1',
+        },
+        {
+          schemaVersion: 2,
+          installId: userB,
+          name: 'deploy',
+          missionId: 'm1',
+          timestamp: `${today}T11:05:00.000Z`,
+          edition: 'demo',
+          build: 'b1',
+        },
+        {
+          schemaVersion: 2,
           installId: userB,
           name: 'mission_win',
           missionId: 'm1',
           rounds: 4,
           timestamp: `${today}T11:15:00.000Z`,
+          edition: 'demo',
+          build: 'b1',
         },
-        { installId: userB, name: 'hq_visit', tab: 'armory', timestamp: `${today}T11:20:00.000Z` },
-
-        { installId: userC, name: 'title_shown', timestamp: `${today}T12:00:00.000Z` },
-        { installId: userC, name: 'deploy', missionId: 'm2', timestamp: `${today}T12:05:00.000Z` },
         {
+          schemaVersion: 2,
+          installId: userB,
+          name: 'hq_visit',
+          tab: 'armory',
+          timestamp: `${today}T11:20:00.000Z`,
+          edition: 'demo',
+          build: 'b1',
+        },
+
+        {
+          schemaVersion: 2,
+          installId: userC,
+          name: 'title_shown',
+          timestamp: `${today}T12:00:00.000Z`,
+          edition: 'full',
+          build: 'b2',
+        },
+        {
+          schemaVersion: 2,
+          installId: userC,
+          name: 'deploy',
+          missionId: 'm2',
+          timestamp: `${today}T12:05:00.000Z`,
+          edition: 'full',
+          build: 'b2',
+        },
+        {
+          schemaVersion: 2,
           installId: userC,
           name: 'mission_loss',
           missionId: 'm2',
           rounds: 10,
           timestamp: `${today}T12:15:00.000Z`,
+          edition: 'full',
+          build: 'b2',
         },
       ];
 
@@ -504,20 +602,199 @@ describe('Telemetry Service & Endpoints', () => {
       expect(summary.countsPerEvent.hq_visit).toBe(1);
       expect(summary.countsPerEvent.quit).toBe(1);
 
-      // Funnel: title_shown -> tutorial_step -> deploy -> mission_win -> hq_visit
+      // Cohort-based funnel: userC skipped tutorial_step so cannot count for deploy
       const funnel = summary.funnel;
       expect(funnel).toHaveLength(5);
       expect(funnel[0]).toMatchObject({ step: 'title_shown', uniqueInstalls: 3 });
       expect(funnel[1]).toMatchObject({ step: 'tutorial_step', uniqueInstalls: 2 });
-      expect(funnel[2]).toMatchObject({ step: 'deploy', uniqueInstalls: 3 });
+      expect(funnel[2]).toMatchObject({ step: 'deploy', uniqueInstalls: 2 });
+      expect(funnel[2].conversionFromPrevious).toBeLessThanOrEqual(1);
       expect(funnel[3]).toMatchObject({ step: 'mission_win', uniqueInstalls: 1 });
       expect(funnel[4]).toMatchObject({ step: 'hq_visit', uniqueInstalls: 1 });
 
-      // Median rounds before loss:
-      // Losses: 6 and 10 -> median is (6 + 10) / 2 = 8
+      // Rounds before loss:
       expect(summary.combatRoundsBeforeMissionLoss.median).toBe(8);
+      expect(summary.combatRoundsBeforeMissionLoss.mean).toBe(8);
+      expect(summary.combatRoundsBeforeMissionLoss.min).toBe(6);
+      expect(summary.combatRoundsBeforeMissionLoss.max).toBe(10);
       expect(summary.combatRoundsBeforeMissionLoss.sampleCount).toBe(2);
+      expect(summary.combatRoundsBeforeMissionLoss.missingCount).toBe(0);
       expect(summary.combatRoundsBeforeMissionLoss.rounds).toEqual([6, 10]);
+
+      // Breakdowns
+      expect(summary.breakdown.byEdition.full.uniqueInstalls).toBe(2);
+      expect(summary.breakdown.byEdition.demo.uniqueInstalls).toBe(1);
+      expect(summary.breakdown.byBuild.b1.uniqueInstalls).toBe(2);
+      expect(summary.breakdown.byBuild.b2.uniqueInstalls).toBe(1);
+    });
+
+    it('enforces cohort-based funnel where each step is <= previous and conversion <= 1', async () => {
+      const today = new Date().toISOString().slice(0, 10);
+      const u1 = '11111111-1111-1111-1111-111111111111';
+      const u2 = '22222222-2222-2222-2222-222222222222';
+      const u3 = '33333333-3333-3333-3333-333333333333';
+
+      // u1: all steps
+      // u2: title_shown, tutorial_step (drops at deploy)
+      // u3: title_shown, deploy (skipped tutorial_step -> should NOT be in deploy cohort)
+      const testEvents = [
+        {
+          schemaVersion: 2,
+          installId: u1,
+          name: 'title_shown',
+          timestamp: `${today}T08:00:00.000Z`,
+        },
+        {
+          schemaVersion: 2,
+          installId: u1,
+          name: 'tutorial_step',
+          timestamp: `${today}T08:01:00.000Z`,
+        },
+        { schemaVersion: 2, installId: u1, name: 'deploy', timestamp: `${today}T08:02:00.000Z` },
+        {
+          schemaVersion: 2,
+          installId: u1,
+          name: 'mission_win',
+          timestamp: `${today}T08:10:00.000Z`,
+        },
+        { schemaVersion: 2, installId: u1, name: 'hq_visit', timestamp: `${today}T08:15:00.000Z` },
+
+        {
+          schemaVersion: 2,
+          installId: u2,
+          name: 'title_shown',
+          timestamp: `${today}T09:00:00.000Z`,
+        },
+        {
+          schemaVersion: 2,
+          installId: u2,
+          name: 'tutorial_step',
+          timestamp: `${today}T09:01:00.000Z`,
+        },
+
+        {
+          schemaVersion: 2,
+          installId: u3,
+          name: 'title_shown',
+          timestamp: `${today}T10:00:00.000Z`,
+        },
+        { schemaVersion: 2, installId: u3, name: 'deploy', timestamp: `${today}T10:05:00.000Z` },
+      ];
+
+      const store = new MockBlobStore();
+      await store.setJSON(`events/${today}/cohort_test.json`, testEvents.map(withV2Metadata));
+
+      const request = new Request('http://localhost/.netlify/functions/telemetry-summary?days=7', {
+        headers: { 'X-Admin-Key': 'test-secret-key-123' },
+      });
+      const response = await handleTelemetrySummaryRequest(request, store);
+      const summary = await response.json();
+
+      const funnel = summary.funnel;
+      expect(funnel[0].uniqueInstalls).toBe(3); // u1, u2, u3
+      expect(funnel[1].uniqueInstalls).toBe(2); // u1, u2
+      expect(funnel[2].uniqueInstalls).toBe(1); // only u1 (u3 skipped tutorial_step)
+      expect(funnel[3].uniqueInstalls).toBe(1); // u1
+      expect(funnel[4].uniqueInstalls).toBe(1); // u1
+
+      for (let i = 1; i < funnel.length; i++) {
+        expect(funnel[i].uniqueInstalls).toBeLessThanOrEqual(funnel[i - 1].uniqueInstalls);
+        expect(funnel[i].conversionFromPrevious).toBeLessThanOrEqual(1.0);
+      }
+    });
+
+    it('filters legacy builds by default and includes them when ?includeLegacy=1', async () => {
+      const today = new Date().toISOString().slice(0, 10);
+      const modernUser = '44444444-4444-4444-4444-444444444444';
+      const legacyUser = '55555555-5555-5555-5555-555555555555';
+
+      const mixedEvents = [
+        {
+          schemaVersion: 2,
+          installId: modernUser,
+          name: 'title_shown',
+          timestamp: `${today}T10:00:00.000Z`,
+        },
+        { installId: legacyUser, name: 'title_shown', timestamp: `${today}T10:05:00.000Z` }, // No schemaVersion (legacy)
+      ];
+
+      const store = new MockBlobStore();
+      await store.setJSON(
+        `events/${today}/legacy_test.json`,
+        mixedEvents.map((event) => (event.schemaVersion === 2 ? withV2Metadata(event) : event)),
+      );
+
+      // Default: only schemaVersion: 2
+      const reqModern = new Request(
+        'http://localhost/.netlify/functions/telemetry-summary?days=7',
+        {
+          headers: { 'X-Admin-Key': 'test-secret-key-123' },
+        },
+      );
+      const resModern = await handleTelemetrySummaryRequest(reqModern, store);
+      const modernSummary = await resModern.json();
+      expect(modernSummary.totalEvents).toBe(1);
+      expect(modernSummary.uniqueInstalls).toBe(1);
+
+      // With ?includeLegacy=1
+      const reqLegacy = new Request(
+        'http://localhost/.netlify/functions/telemetry-summary?days=7&includeLegacy=1',
+        {
+          headers: { 'X-Admin-Key': 'test-secret-key-123' },
+        },
+      );
+      const resLegacy = await handleTelemetrySummaryRequest(reqLegacy, store);
+      const legacySummary = await resLegacy.json();
+      expect(legacySummary.totalEvents).toBe(2);
+      expect(legacySummary.uniqueInstalls).toBe(2);
+    });
+
+    it('excludes mission_loss without rounds from stats and tracks missingCount', async () => {
+      const today = new Date().toISOString().slice(0, 10);
+      const u1 = '66666666-6666-6666-6666-666666666666';
+      const u2 = '77777777-7777-7777-7777-777777777777';
+      const u3 = '88888888-8888-8888-8888-888888888888';
+
+      const lossEvents = [
+        {
+          schemaVersion: 2,
+          installId: u1,
+          name: 'mission_loss',
+          rounds: 4,
+          timestamp: `${today}T12:00:00.000Z`,
+        },
+        {
+          schemaVersion: 2,
+          installId: u2,
+          name: 'mission_loss',
+          rounds: 8,
+          timestamp: `${today}T12:05:00.000Z`,
+        },
+        {
+          schemaVersion: 2,
+          installId: u3,
+          name: 'mission_loss',
+          timestamp: `${today}T12:10:00.000Z`,
+        }, // Missing rounds!
+      ];
+
+      const store = new MockBlobStore();
+      await store.setJSON(`events/${today}/loss_rounds.json`, lossEvents.map(withV2Metadata));
+
+      const request = new Request('http://localhost/.netlify/functions/telemetry-summary?days=7', {
+        headers: { 'X-Admin-Key': 'test-secret-key-123' },
+      });
+      const response = await handleTelemetrySummaryRequest(request, store);
+      const summary = await response.json();
+
+      const lossStats = summary.combatRoundsBeforeMissionLoss;
+      expect(lossStats.sampleCount).toBe(2);
+      expect(lossStats.missingCount).toBe(1);
+      expect(lossStats.median).toBe(6); // (4 + 8) / 2
+      expect(lossStats.mean).toBe(6);
+      expect(lossStats.min).toBe(4);
+      expect(lossStats.max).toBe(8);
+      expect(lossStats.rounds).toEqual([4, 8]);
     });
 
     it('accepts admin key via Authorization Bearer header', async () => {

@@ -105,7 +105,7 @@ it('excludes development from every default metric and keeps legacy data in its 
     mission_loss: 3,
     hq_visit: 1,
   });
-  expect(report.funnel.map((step) => step.uniqueInstalls)).toEqual([3, 0, 1, 0, 1]);
+  expect(report.funnel.map((step) => step.uniqueInstalls)).toEqual([3, 0, 0, 0, 0]);
   expect(report.combatRoundsBeforeMissionLoss).toMatchObject({
     median: 5,
     rounds: [9, 3, 5],
@@ -118,7 +118,24 @@ it('excludes development from every default metric and keeps legacy data in its 
   expect(report.legacy.uniqueInstalls).toBe(1);
   expect(report.legacy.countsPerEvent).toMatchObject({ title_shown: 1, mission_loss: 1 });
   expect(report.legacy.combatRoundsBeforeMissionLoss.median).toBe(1);
+  expect(report.breakdown.byEdition.full.totalEvents).toBe(6);
+  expect(report.breakdown.byEdition.demo.totalEvents).toBe(2);
+  expect(report.breakdown.byBuild['release-a'].totalEvents).toBe(6);
   expect(JSON.stringify(data.get(`events/${day}/fixture.json`))).toBe(snapshot);
+});
+
+it('preserves explicit legacy inclusion for the admin page while still excluding development', async () => {
+  const { store } = memoryStore(mixedTraffic());
+  const report = await generateTelemetrySummary(7, store, { includeLegacy: true });
+  expect(report.filters).toMatchObject({ schemaVersion: 'all', includeLegacy: true });
+  expect(report.totalEvents).toBe(10);
+  expect(report.uniqueInstalls).toBe(4);
+  expect(report.countsPerEvent.mission_loss).toBe(4);
+  expect(report.legacy.totalEvents).toBe(2);
+  expect(report.breakdown.byEdition.unknown.totalEvents).toBe(2);
+  expect(report.combatRoundsBeforeMissionLoss.missingCount).toBe(
+    report.combatRoundsBeforeMissionLoss.unknownCount,
+  );
 });
 
 it('makes development diagnostics available only through an explicit channel filter', async () => {
@@ -213,11 +230,13 @@ it('uses direct outcome counts first and infers missing rounds only within the s
   expect(report.combatRoundsBeforeMissionLoss).toEqual({
     rounds: [3, 9, 6, 4],
     median: 5,
+    mean: 5.5,
     min: 3,
     max: 9,
     sampleCount: 4,
     totalLosses: 7,
     unknownCount: 3,
+    missingCount: 3,
   });
 });
 
@@ -225,12 +244,14 @@ it('reports an unknown loss count explicitly when no attempt can be established'
   const { store } = memoryStore([event('mission_loss')]);
   expect((await generateTelemetrySummary(7, store)).combatRoundsBeforeMissionLoss).toEqual({
     median: null,
+    mean: null,
     min: null,
     max: null,
     sampleCount: 0,
     rounds: [],
     totalLosses: 1,
     unknownCount: 1,
+    missingCount: 1,
   });
 });
 

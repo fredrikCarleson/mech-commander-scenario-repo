@@ -48,6 +48,8 @@ const fieldsSchema = z
       });
     }
   });
+export const CURRENT_SCHEMA_VERSION = 2;
+
 export type RetentionFields = z.infer<typeof fieldsSchema>;
 export function parseRetentionFields(
   raw: Record<string, unknown>,
@@ -61,6 +63,7 @@ export interface RetentionFilters {
   edition?: 'full' | 'demo';
   build?: string;
   channel?: 'steam' | 'standalone' | 'development';
+  includeLegacy?: boolean;
 }
 export function matchesRetentionFilters(event: StoredTelemetryEvent, filters: RetentionFilters) {
   return (
@@ -72,7 +75,7 @@ export function matchesRetentionFilters(event: StoredTelemetryEvent, filters: Re
 /** Legacy/unclassified records stay inspectable without becoming production metrics. */
 export function isVersionedTelemetryEvent(event: StoredTelemetryEvent): boolean {
   return (
-    event.schemaVersion === 2 &&
+    event.schemaVersion === CURRENT_SCHEMA_VERSION &&
     !!event.eventId &&
     !!event.sessionId &&
     !!event.build &&
@@ -83,6 +86,15 @@ export function isVersionedTelemetryEvent(event: StoredTelemetryEvent): boolean 
       event.channel === 'development') &&
     typeof event.elapsedMs === 'number'
   );
+}
+export function matchesEventFilters(
+  event: StoredTelemetryEvent,
+  filters: RetentionFilters,
+): boolean {
+  if (!filters.includeLegacy && !isVersionedTelemetryEvent(event)) {
+    return false;
+  }
+  return matchesRetentionFilters(event, filters);
 }
 export function retentionSummary(
   input: StoredTelemetryEvent[],
