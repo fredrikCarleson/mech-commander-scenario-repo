@@ -428,7 +428,7 @@ describe('Telemetry Service & Endpoints', () => {
       expect(data.error).toContain('TELEMETRY_ADMIN_KEY is not configured');
     });
 
-    it('generates correct summary, funnel, unique installs, and median loss rounds', async () => {
+    it('preserves legacy counts, funnel and loss rounds separately from primary metrics', async () => {
       const today = new Date().toISOString().slice(0, 10);
       const userA = 'aaaaaaaa-1111-1111-1111-111111111111';
       const userB = 'bbbbbbbb-2222-2222-2222-222222222222';
@@ -485,7 +485,13 @@ describe('Telemetry Service & Endpoints', () => {
       const response = await handleTelemetrySummaryRequest(request, mockStore);
       expect(response.status).toBe(200);
 
-      const summary = await response.json();
+      const report = await response.json();
+      expect(report.totalEvents).toBe(0);
+      expect(report.uniqueInstalls).toBe(0);
+      expect(report.countsPerEvent.mission_loss).toBe(0);
+      expect(report.combatRoundsBeforeMissionLoss.median).toBeNull();
+      expect(report.retention.cohortInstalls).toBe(0);
+      const summary = report.legacy;
       expect(summary.totalEvents).toBe(13);
       expect(summary.uniqueInstalls).toBe(3);
 

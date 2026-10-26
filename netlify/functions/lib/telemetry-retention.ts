@@ -27,6 +27,7 @@ const fieldsSchema = z
     firstSession: z.boolean().optional(),
     firstSeenAt: z.iso.datetime().nullable().optional(),
     jobs: count.optional(),
+    mechsLost: count.optional(),
     outcome: z.enum(['victory', 'defeat']).optional(),
     battleId: z.union([z.string().min(1).max(128), z.number().finite()]).optional(),
   })
@@ -65,7 +66,22 @@ export function matchesRetentionFilters(event: StoredTelemetryEvent, filters: Re
   return (
     (!filters.edition || event.edition === filters.edition) &&
     (!filters.build || event.build === filters.build) &&
-    (!filters.channel || event.channel === filters.channel)
+    (filters.channel ? event.channel === filters.channel : event.channel !== 'development')
+  );
+}
+/** Legacy/unclassified records stay inspectable without becoming production metrics. */
+export function isVersionedTelemetryEvent(event: StoredTelemetryEvent): boolean {
+  return (
+    event.schemaVersion === 2 &&
+    !!event.eventId &&
+    !!event.sessionId &&
+    !!event.build &&
+    !!event.version &&
+    (event.edition === 'full' || event.edition === 'demo') &&
+    (event.channel === 'steam' ||
+      event.channel === 'standalone' ||
+      event.channel === 'development') &&
+    typeof event.elapsedMs === 'number'
   );
 }
 export function retentionSummary(
@@ -76,13 +92,11 @@ export function retentionSummary(
   const unique = new Map<string, StoredTelemetryEvent>();
   for (const event of input) {
     if (
-      event.schemaVersion !== 2 ||
-      !event.eventId ||
+      !isVersionedTelemetryEvent(event) ||
       !matchesRetentionFilters(event, { ...filters, build: undefined })
     )
       continue;
-    if (!filters.channel && event.channel === 'development') continue;
-    unique.set(event.eventId, event);
+    unique.set(event.eventId!, event);
   }
   const events = [...unique.values()].sort(
     (a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp),

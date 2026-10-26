@@ -5,11 +5,13 @@ import {
   type StoredTelemetryEvent,
   type TelemetryEventName,
   type TelemetrySummaryResponse,
+  type TelemetryEventMetrics,
   type FunnelStepSummary,
 } from './telemetry-service.ts';
 import {
   retentionSummary,
   matchesRetentionFilters,
+  isVersionedTelemetryEvent,
   type RetentionFilters,
 } from './telemetry-retention.ts';
 
@@ -110,10 +112,21 @@ export async function generateTelemetrySummary(
     }
   }
 
-  // Calculate counts per event
-  const retentionEvents = allEvents.slice();
   const selectedEvents = allEvents.filter((event) => matchesRetentionFilters(event, filters));
-  allEvents.splice(0, allEvents.length, ...selectedEvents);
+  return {
+    retention: retentionSummary(allEvents, filters, now),
+    period: { days: boundedDays, startDate, endDate },
+    filters: { ...filters, schemaVersion: 2, channel: filters.channel ?? 'production' },
+    ...calculateEventMetrics(selectedEvents.filter(isVersionedTelemetryEvent)),
+    legacy: {
+      definition:
+        'Legacy/unclassified events, excluded from primary metrics and new-install retention. Explicit edition/build/channel filters still apply. Development excluded by default. No historical records are modified.',
+      ...calculateEventMetrics(selectedEvents.filter((event) => !isVersionedTelemetryEvent(event))),
+    },
+  };
+}
+
+function calculateEventMetrics(allEvents: StoredTelemetryEvent[]): TelemetryEventMetrics {
   const countsPerEvent: Record<TelemetryEventName, number> = {
     session_start: 0,
     tutorial_start: 0,
@@ -188,16 +201,22 @@ export async function generateTelemetrySummary(
   const lossEvents = allEvents.filter((e) => e.name === 'mission_loss');
 
   for (const loss of lossEvents) {
-    if (typeof loss.rounds === 'number' && Number.isFinite(loss.rounds)) {
+    if (isCombatRound(loss.rounds)) {
       lossRounds.push(loss.rounds);
+    } else if (isCombatRound(loss.round)) {
+      lossRounds.push(loss.round);
     } else {
-      // Look for max round in combat_round events for this installId/missionId
+      const battleId = loss.battleId ?? loss.context?.battleId;
+      if (battleId === undefined) continue;
+      // A mission can be retried. Never borrow from another battle or a future event.
       const relatedCombatRounds = allEvents.filter(
         (e) =>
           e.name === 'combat_round' &&
           e.installId === loss.installId &&
+          (e.battleId ?? e.context?.battleId) === battleId &&
           (!loss.missionId || e.missionId === loss.missionId) &&
-          typeof e.round === 'number',
+          Date.parse(e.timestamp) <= Date.parse(loss.timestamp) &&
+          isCombatRound(e.round),
       );
       if (relatedCombatRounds.length > 0) {
         const maxR = Math.max(...relatedCombatRounds.map((r) => r.round as number));
@@ -211,12 +230,6 @@ export async function generateTelemetrySummary(
   const maxRounds = lossRounds.length > 0 ? Math.max(...lossRounds) : null;
 
   return {
-    retention: retentionSummary(retentionEvents, filters, now),
-    period: {
-      days: boundedDays,
-      startDate,
-      endDate,
-    },
     totalEvents: allEvents.length,
     uniqueInstalls: uniqueInstallIds.size,
     countsPerEvent,
@@ -227,6 +240,12 @@ export async function generateTelemetrySummary(
       min: minRounds,
       max: maxRounds,
       rounds: lossRounds,
+      totalLosses: lossEvents.length,
+      unknownCount: lossEvents.length - lossRounds.length,
     },
   };
+}
+
+function isCombatRound(value: unknown): value is number {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 1;
 }

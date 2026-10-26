@@ -56,13 +56,7 @@ export interface FunnelStepSummary {
   conversionFromStart: number;
 }
 
-export interface TelemetrySummaryResponse {
-  retention: ReturnType<typeof retentionSummary>;
-  period: {
-    days: number;
-    startDate: string;
-    endDate: string;
-  };
+export interface TelemetryEventMetrics {
   totalEvents: number;
   uniqueInstalls: number;
   countsPerEvent: Record<TelemetryEventName, number>;
@@ -73,7 +67,25 @@ export interface TelemetrySummaryResponse {
     min: number | null;
     max: number | null;
     rounds: number[];
+    totalLosses: number;
+    unknownCount: number;
   };
+}
+
+export interface TelemetrySummaryResponse extends TelemetryEventMetrics {
+  retention: ReturnType<typeof retentionSummary>;
+  period: {
+    days: number;
+    startDate: string;
+    endDate: string;
+  };
+  filters: {
+    schemaVersion: 2;
+    edition?: 'full' | 'demo';
+    build?: string;
+    channel: 'steam' | 'standalone' | 'development' | 'production';
+  };
+  legacy: TelemetryEventMetrics & { definition: string };
 }
 
 export class TelemetryValidationError extends Error {

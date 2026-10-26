@@ -158,10 +158,15 @@ curl -H "X-Admin-Key: <TELEMETRY_ADMIN_KEY>" \
 
 The response includes:
 
-- Event counts for all 11 allowed event types (`title_shown`, `campaign_intro`, `tutorial_step`, `tutorial_complete`, `tutorial_skip`, `deploy`, `combat_round`, `mission_win`, `mission_loss`, `hq_visit`, `quit`)
-- Unique install count
-- Drop-off funnel (`title_shown` -> `tutorial_step` -> `deploy` -> `mission_win` -> `hq_visit`) with unique installs, drop-offs, and conversion rates
-- Median combat rounds played before `mission_loss`
+- Event counts and unique installations for classified schema-2 production events
+- The existing activity funnel and the ordered new-player conversion funnel under `retention`
+- Loss-round statistics with explicit unknown counts and battle-scoped inference
+- A separate `legacy` section for older/unclassified records, preserved without rewriting history
+
+Known development traffic is excluded from every section by default. Select
+`channel=development` explicitly for diagnostics. Filter `edition`, `channel` and
+`build` to compare release cohorts. See [the reporting contract](docs/RETENTION_MEASUREMENT.md)
+for exact populations, fields and retention definitions.
 
 ### Local Testing
 

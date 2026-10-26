@@ -62,6 +62,8 @@
  *      -d '{"installId":"550e8400-e29b-41d4-a716-446655440000","timestamp":"2026-10-23T12:00:00.000Z","name":"invalid_event"}'
  */
 
+import { randomUUID } from 'node:crypto';
+
 const BASE_URL = process.env.TELEMETRY_BASE_URL || 'http://localhost:8888';
 const ADMIN_KEY = process.env.TELEMETRY_ADMIN_KEY || 'dev-telemetry-admin-secret-key';
 
@@ -92,12 +94,22 @@ async function run() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      schemaVersion: 2,
       installId,
+      eventId: randomUUID(),
+      sessionId: randomUUID(),
       timestamp: new Date().toISOString(),
+      version: 'telemetry-test',
+      build: 'local-smoke',
+      edition: 'full',
+      channel: 'development',
+      elapsedMs: 0,
       event: {
         type: 'mission_win',
         missionId: 'border_signal',
         rounds: 6,
+        round: 6,
+        mechsLost: 0,
       },
     }),
   });
@@ -120,9 +132,12 @@ async function run() {
   console.log(`4. Summary Unauthorized: Status ${unauthSummary.status} (expected 401)`);
 
   // Test 5: Summary authorized
-  const authSummary = await fetch(`${BASE_URL}/.netlify/functions/telemetry-summary?days=7`, {
-    headers: { 'X-Admin-Key': ADMIN_KEY },
-  });
+  const authSummary = await fetch(
+    `${BASE_URL}/.netlify/functions/telemetry-summary?days=7&channel=development`,
+    {
+      headers: { 'X-Admin-Key': ADMIN_KEY },
+    },
+  );
   console.log(`5. Summary Authorized: Status ${authSummary.status} (expected 200)`);
   if (authSummary.status === 200) {
     const json = await authSummary.json();
